@@ -7,7 +7,9 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <button @click="modal">modal</button>
-      <Modal v-model="visible" />
+      <Modal v-model="visible">
+        <div slot="header">我是头部</div>
+      </Modal>
     </div>
   </div>
 </template>
@@ -20,11 +22,8 @@ export default {
   },
   methods : {
     modal () {
-      this.visible = true;
-      // this.$modal({
-      //   title : '提示',
-      //   content : '这是一段内容描述'
-      // })
+      this.visible = !this.visible;
+      console.log(this.visible)
     }
   }
 }
