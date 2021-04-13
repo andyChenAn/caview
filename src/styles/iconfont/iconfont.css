@@ -1,0 +1,49 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1617973972698'); /* IE9 */
+  src: url('iconfont.eot?t=1617973972698#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAOoAAsAAAAACJgAAANaAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDQAqEGINaATYCJAMYCw4ABCAFhG0HUxuDBxEVnEfIfiTGtgr2gjZpbTNoIpii/Pa/PhZn4uG/Nfb3zcwug2lTSxy6Ry2JJBoJ2WIiFZJ9LWH/zy7/3F0kVFtF8AQd4FbqDrOxWnaLKqio7l58v0075lVWmKhKlsR2+ekZ/2CHlwu0/eF+pkuaSD77NpfO5PGABpSXhdd0YgVyeIJ+j/C6blKNbnzhfgJ9ZrhDR2ExKVAVeFggLitwIdSGS1H0aBXagXMLxCsFNQ2lS+Al+/n4D9uhDJImAx57fhFaAnu/Eh+p3Nl1yklQ2PsZoF9ExhZQiMdB07VchLYI9bmB4gDvN6ok/Uq6r3pQeaS6jl+JgndHpj4D9C+PpGiETLSAmQPgWAqbZ8eOEBK/khAKv6oYrtlvFUAI/lBib1vW7ljZjzcAnwp+65iQZFkaUDdTV4kZ0cdoY5xYUppQVpKEy5JbWDaVYVI4Lo3nM9PGh6WdBqkpo52yEaP01LGdBcO09IkuMqzfMs1g0YGfDifniEkXPSLrlKZPSoeJKZqpDZqM1g9p0oZnNhyCzz15bMQIT8xv6zMH6uoH/epq6plErVjDOgccieRy0RHRE0ZcV32yF+MDqzKrA4xz3/+07KPV7kLXvjdxJoPZuzAhCO/WwFx22xR9foo2gQ6MmFeVDCWgBvsGxMkE1xTdRvsGGrNx9/v26RYV7VuVWdLt7cSaKCq+E/LuCebnWcEZ6E6z7A/IYmyms1vzLwLBM+luytfy+atqIoCP8RoGnN1pgXWs/1GMzf7D2cy+4nFR3RaneVQh0Fr9ogIJfTTHH20bc7OXZJKdSagmK0h6TENWLaELfgsa/XagVe1Cn03hF/cbVy2LogJs6BMQRqxAMuQdshFX6IK/hsaUN2iNhBBUxieO1zw4RWXOgkSRU/qnKuPehlo1efYDxdgmUudmxA/EVV4KvaAdvaOH7HGCm4pI1ZIV7ugmHoa2ZRqEa2TqlapD7Pt26J28jLuZcSYgoSBHUn+kkmE9myxWpvP9D1AYtRIy0dSl/QDhVKuTkCdgoO+intX0Wh7jTAoRpSxiCdYhN2GAlkKMDMO7apBRnnJFYBDz5TDLFXnnS7pPeYnZzMDX2YQACZEIKSBFpASbe3Q8YQ0Rlu03kb7qi1X1OrZs3ZhlcG42AwAA') format('woff2'),
+  url('iconfont.woff?t=1617973972698') format('woff'),
+  url('iconfont.ttf?t=1617973972698') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1617973972698#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-remove:before {
+  content: "\e709";
+}
+
+.icon-error:before {
+  content: "\e651";
+}
+
+.icon-warning:before {
+  content: "\e836";
+}
+
+.icon-info:before {
+  content: "\e652";
+}
+
+.icon-success:before {
+  content: "\e66b";
+}
+
+.icon-info {
+  color: #2d8cf0;
+}
+.icon-error {
+  color: #ed4014;
+}
+.icon-warning {
+  color: #ff9900;
+}
+.icon-success {
+  color: #19be6b;
+}

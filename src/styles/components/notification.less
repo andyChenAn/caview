@@ -1,0 +1,99 @@
+.ca-notification {
+  position: fixed;
+  z-index: 1000;
+  font-size: 14px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 20%);
+  padding: 16px 24px;
+  background-color: #fff;
+  border-radius: 4px;
+  line-height: 1.5;
+  width: 360px;
+  transition: top 0.3s ease , bottom 0.3s ease;
+  .inner {
+    position: relative;
+    .icon-remove {
+      color: #999;
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      right: 0;
+      transition: color 0.3s;
+      &:hover {
+        color: #333;
+      }
+    }
+    .notification-icon {
+      font-size: 24px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      line-height: 1;
+    }
+    .notification {
+      .title {
+        font-size: 16px;
+        margin-bottom: 8px;
+        padding-right: 16px;
+        color: rgba(0,0,0,.85);
+        &.with-icon {
+          margin-left: 40px;
+        }
+      }
+      .content {
+        color: rgba(0,0,0,.85);
+        &.with-icon {
+          margin-left: 40px;
+        }
+      }
+      .btn-box {
+        float: right;
+        margin-top: 16px;
+      }
+    }
+  }
+}
+.topRight-enter-active , .topRight-leave-active {
+  transition: opacity 0.3s ease , transform 0.3s ease;
+}
+.topRight-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.topRight-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.topLeft-enter-active , .topLeft-leave-active {
+  transition: opacity 0.3s ease , transform 0.3s ease;
+}
+.topLeft-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.topLeft-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.bottomLeft-enter-active,  .bottomLeft-leave-active {
+  transition: opacity 0.3s ease , transform 0.3s ease;
+}
+.bottomLeft-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.bottomLeft-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.bottomRight-enter-active , .bottomRight-leave-active {
+  transition: opacity 0.3s ease , transform 0.3s ease;
+}
+.bottomRight-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.bottomRight-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}

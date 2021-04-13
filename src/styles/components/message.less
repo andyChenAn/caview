@@ -1,0 +1,22 @@
+.ca-message {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 20%);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  transition: top 0.3s;
+  .content {
+    margin-left: 5px;
+  }
+}
+.message-fade-enter-active , .message-fade-leave-active {
+  transition: opacity 0.3s , transform 0.3s , top 0.3s;
+}
+.message-fade-enter , .message-fade-leave-to {
+  opacity: 0;
+  transform: translate(-50% , -100%);
+}
