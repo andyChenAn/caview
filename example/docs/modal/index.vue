@@ -13,16 +13,11 @@
         :maskClosable="false"
         zIndex="2000"
         width="1000"
-        @onOk="handleOk"
         loading
       >
         <div slot="content">
           <p>我是内容</p>
         </div>
-      </Modal>
-      <Modal v-model="show">
-        <p slot="header">我是标题3</p>
-        <p slot="content">我是内容</p>
       </Modal>
     </div>
   </div>
@@ -38,11 +33,11 @@ export default {
   methods : {
     modal () {
       this.visible = !this.visible;
-    },
-    handleOk () {
-      setTimeout(() => {
-        this.visible = false;
-      } , 2000)
+      // this.$modal.info({
+      //   title : '这是一个标题',
+      //   content : '这是一段内容',
+      //   transition : 'scale'
+      // })
     }
   }
 }
