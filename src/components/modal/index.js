@@ -1,4 +1,4 @@
-import Modal from './modal.vue';
+import Modal from './modal.js';
 
 document.body.addEventListener('mousedown' , evt => {
   evt.stopPropagation();
@@ -10,7 +10,10 @@ document.body.addEventListener('mousedown' , evt => {
   };
 });
 
-
+Modal.info = function (options) {
+  options.type = 'info';
+  const instance = Modal.createInstance(options);
+}
 
 
 export default Modal;

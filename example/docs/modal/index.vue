@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <button @click="modal">modal</button>
-      <Modal 
+      <!-- <Modal 
         v-model="visible" 
         title="我是一个头部"
         :maskClosable="false"
@@ -18,7 +18,7 @@
         <div slot="content">
           <p>我是内容</p>
         </div>
-      </Modal>
+      </Modal> -->
     </div>
   </div>
 </template>
@@ -32,12 +32,12 @@ export default {
   },
   methods : {
     modal () {
-      this.visible = !this.visible;
-      // this.$modal.info({
-      //   title : '这是一个标题',
-      //   content : '这是一段内容',
-      //   transition : 'scale'
-      // })
+      // this.visible = !this.visible;
+      this.$modal.info({
+        title : '这是一个标题',
+        content : '这是一段内容',
+        transition : 'slide'
+      })
     }
   }
 }

@@ -141,6 +141,9 @@ export default {
           this.disabelBodyScroll();
         }
       }
+    },
+    visible () {
+      this.showContent = true;
     }
   },
   mounted () {
@@ -191,7 +194,6 @@ export default {
     onAfterLeave () {
       this.showContent = false;
       this.showLoading = false;
-      //this.$el.parentNode.removeChild(this.$el);
     },
     clickWrap (evt) {
       const className = evt.target.getAttribute('class');
