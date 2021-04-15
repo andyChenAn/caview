@@ -8,13 +8,13 @@
         <div 
           v-show="visible" 
           ref="modal" 
-          class="modal" 
+          class="modal"
           :style="{width : width + 'px' , transformOrigin : transformOrigin}"
           :class="[fullscreen ? 'modal-fullscreen' : '']"
         >
           <div class="modal-content">
             <i v-if="closable" @click="onCancel" class="iconfont icon-remove"></i>
-            <div class="header">
+            <div v-if="showHeader" class="header">
               <slot name="header">
                 <div class="modal-title" v-html="title"></div>
               </slot>
@@ -24,7 +24,7 @@
                 <div v-html="content"></div>
               </slot>
             </div>
-            <div class="footer">
+            <div v-if="showFooter" class="footer">
               <slot name="footer">
                 <template>
                   <button @click="onCancel" class="cancel">
@@ -126,7 +126,11 @@ export default {
       // 是否显示内容，现在的html结构有点恶心，导致要多加一个这样的属性去判断
       showContent : false,
       // 是否显示loading
-      showLoading : false
+      showLoading : false,
+      // 是否显示modal头部
+      showHeader : false,
+      // 是否显示modal尾部
+      showFooter : false
     }
   },
   watch : {

@@ -11,6 +11,8 @@ let defaults = {
   closable : false,
   type : '',
   lockScroll : true,
+  showHeader : false,
+  showFooter : false
 }
 // 创建实例
 Modal.createInstance = function (options) {

@@ -8,7 +8,7 @@
     <div class="inner">
       <button @click="modal">modal</button>
       <!-- <Modal 
-        v-model="visible" 
+        v-model="visible"
         title="我是一个头部"
         :maskClosable="false"
         zIndex="2000"
@@ -36,7 +36,8 @@ export default {
       this.$modal.info({
         title : '这是一个标题',
         content : '这是一段内容',
-        transition : 'slide'
+        transition : 'slide',
+        okText : 'ok'
       })
     }
   }
