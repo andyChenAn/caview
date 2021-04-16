@@ -30,14 +30,7 @@ const config = {
   type : ''
 };
 
-function once (type , selector , callback) {
-  selector.addEventListener(type , function fn (evt) {
-    selector.removeEventListener(type , fn);
-    callback(evt);
-  })
-}
-
-once('mousedown' , document.body , evt => {
+document.body.addEventListener('mousedown' , evt => {
   evt.stopPropagation();
   evt.preventDefault();
   window.offset = {
@@ -45,14 +38,16 @@ once('mousedown' , document.body , evt => {
     offsetY : evt.clientY,
     clientWidth : document.body.clientWidth
   };
-});
+})
 
 let prefixCls = 'modal-type';
 
 let types = ['info' , 'success' , 'error' , 'warning'];
 
+let instance = null;
+
 Modal.createInstance = function (options) {
-  const instance = new Vue({
+  instance = new Vue({
     data : Object.assign({} , config , options),
     render (h) {
       let header , footer , content;
@@ -86,7 +81,7 @@ Modal.createInstance = function (options) {
             class : prefixCls + '-cancle-btn'
           },
           on : {
-            click : this.onCancel
+            click : this.handleCancel
           }
         } , this.cancelText),
         h('button' , {
@@ -94,7 +89,7 @@ Modal.createInstance = function (options) {
             class : prefixCls + '-confirm-btn'
           },
           on : {
-            click : this.onOk
+            click : this.handleOk
           }
         } , this.okText)
       ]);
@@ -110,7 +105,7 @@ Modal.createInstance = function (options) {
         })
       ]);
       return h(Modal , {
-        props : Object.assign({} , config , options)
+        props : Object.assign({} , config , options),
       } , [
         h('template' , {
           slot : 'content'
@@ -122,11 +117,21 @@ Modal.createInstance = function (options) {
       ])
     },
     methods : {
-      onOk () {
-        this.$children[0].visible = false;
+      handleOk () {
+        const modal = this.$children[0];
+        modal.visible = false;
+        this.remove();
+        if (typeof this.onOk === 'function') {
+          this.onOk();
+        }
       },
-      onCancel () {
-        
+      handleCancel () {
+        const modal = this.$children[0];
+        modal.visible = false;
+        this.remove();
+        if (typeof this.onCancel === 'function') {
+          this.onCancel();
+        }
       },
       show (options) {
         for (let key in options) {
@@ -134,6 +139,12 @@ Modal.createInstance = function (options) {
         };
         const modal = this.$children[0];
         modal.visible = true;
+      },
+      remove () {
+        setTimeout(() => {
+          this.$destroy();
+          document.body.removeChild(this.$el);
+        } , 300)
       }
     }
   });
@@ -145,13 +156,34 @@ Modal.createInstance = function (options) {
 Modal.info = function (options) {
   options.type = 'info';
   const instance = Modal.createInstance(Object.assign({} , {offset : window.offset} , options , {
-    showCancel : false,
+    showCancel : true,
     showFooter : false,
     showHeader : false,
     maskClosable : false
   }));
   instance.show(options);
-}
+};
 
+types.forEach(type => {
+  Modal[type] = function (options) {
+    options.type = type;
+    const instance = Modal.createInstance(Object.assign({} , {offset : window.offset} , options , {
+      showCancel : false,
+      showFooter : false,
+      showHeader : false,
+      maskClosable : false
+    }));
+    instance.show(options);
+  }
+});
+
+Modal.destroy = function () {
+  if (!instance) {
+    return;
+  }
+  const modal = instance.$children[0];
+  modal.visible = false;
+  instance.remove();
+}
 
 export default Modal;

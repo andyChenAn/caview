@@ -6,19 +6,56 @@
     <br>
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
-      <button @click="modal">modal</button>
-      <!-- <Modal 
+      <button @click="info">info</button>
+      <button @click="success">success</button>
+      <button @click="error">error</button>
+      <button @click="warning">warning</button>
+      <button @click="modal1">modal1</button>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <button @click="info">info</button>
+      <button @click="modal1">modal1</button>
+      <Modal 
         v-model="visible"
         title="我是一个头部"
-        :maskClosable="false"
         zIndex="2000"
         width="1000"
         loading
+        transition="slide"
+        @onOk="handleOk"
       >
         <div slot="content">
           <p>我是内容</p>
         </div>
-      </Modal> -->
+      </Modal>
     </div>
   </div>
 </template>
@@ -31,14 +68,30 @@ export default {
     }
   },
   methods : {
-    modal () {
-      // this.visible = !this.visible;
+    info () {
       this.$modal.info({
         title : '这是一个标题',
         content : '这是一段内容',
         transition : 'scale',
-        okText : 'ok'
+        okText : 'ok',
+        scrollable : false,
+        onOk () {
+          console.log('ok')
+        },
+        onCancel () {
+          console.log('cancel');
+        }
       })
+    },
+    success () {
+      this.$modal.success({
+        title : '这是一个成功标题'
+      })
+    },
+    error () {},
+    warning () {},
+    modal1 () {
+      this.visible = !this.visible;
     }
   }
 }

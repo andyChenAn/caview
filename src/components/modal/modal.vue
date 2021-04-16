@@ -84,7 +84,7 @@ export default {
     // 是否锁定页面滚动
     scrollable : {
       type : Boolean,
-      default : true
+      default : false
     },
     // 确定按钮的文本
     okText : {
@@ -121,7 +121,16 @@ export default {
       type : String,
       default : ''
     },
-    offset : {}
+    // 是否显示modal头部
+    showHeader : {
+      type : Boolean,
+      default : true
+    },
+    // 是否显示modal尾部
+    showFooter : {
+      type : Boolean,
+      default : true
+    },
   },
   data () {
     return {
@@ -129,15 +138,12 @@ export default {
       visible : this.value,
       // 过渡位置
       transformOrigin : '',
-      // 是否显示内容，现在的html结构有点恶心，导致要多加一个这样的属性去判断
-      showContent : false,
       // 是否显示loading
       showLoading : false,
-      // 是否显示modal头部
-      showHeader : false,
-      // 是否显示modal尾部
-      showFooter : false,
-      position : {}
+      // 是否显示内容，现在的html结构有点恶心，导致要多加一个这样的属性去判断
+      showContent : false,
+      // 鼠标点击时的位置，主要用于计算弹框的过渡效果(当transition为scale时)
+      offset : window.offset || {}
     }
   },
   watch : {
@@ -148,53 +154,55 @@ export default {
           this.transformOrigin = this.getTransformOrigin();
         }
         this.showContent = true;
-        if (this.scrollable) {
+        if (!this.scrollable) {
           this.disabelBodyScroll();
         }
+        this.offset = window.offset;
       }
     },
-    visible () {
-      this.showContent = true;
-      if (this.transition == 'scale') {
-        this.transformOrigin = this.getTransformOrigin();
+    visible (newVal) {
+      if (newVal) {
+        this.showContent = true;
+        if (this.transition == 'scale') {
+          this.transformOrigin = this.getTransformOrigin();
+        }
+        if (!this.scrollable) {
+          this.disabelBodyScroll();
+        }
+        this.offset = window.offset;
       }
     }
   },
-  mounted () {
-    document.body.addEventListener('mousedown' , evt => {
-      evt.stopPropagation();
-      evt.preventDefault();
-      this.position = {
-        offsetX : evt.clientX,
-        offsetY : evt.clientY,
-        clientWidth : document.body.clientWidth
-      };
-    });
-  },
   methods : {
+    // 计算scale过渡效果时的中心点
     getTransformOrigin () {
       let width = parseInt(this.$refs.modal.style.width);
-      let x = Math.abs(this.offset.clientWidth / 2 - width / 2 - this.offset.offsetX);
-      let y = this.offset.offsetY - 100;
-      if (this.offset.offsetX < this.offset.clientWidth / 2) {
+      let x = (this.offset.clientWidth - width) / 2 - this.offset.offsetX;
+      if (x < 0) {
+        x = Math.abs(x);
+      } else {
         x = -x;
       };
+      let y = this.offset.offsetY - 100;
       return `${x}px ${y}px`;
     },
+    // 关闭modal
     close () {
-      this.enableBodyScroll();
       this.visible = false;
       this.$emit('input' , false);
-      this.$emit('onCancel');
     },
+    // 点击遮罩层
     clickMask () {
       if (this.maskClosable && this.mask) {
         this.close();
       }
     },
+    // 点击取消按钮
     onCancel () {
       this.close();
+      this.$emit('onCancel');
     },
+    // 点击确认按钮
     onOk () {
       if (!this.loading) {
         this.visible = false;
@@ -202,12 +210,14 @@ export default {
       };
       if (this.loading) {
         this.showLoading = true;
-      }
+      };
       this.$emit('onOk');
     },
+    // modal离场过渡结束回调
     onAfterLeave () {
       this.showContent = false;
       this.showLoading = false;
+      this.enableBodyScroll();
     },
     clickWrap (evt) {
       const className = evt.target.getAttribute('class');
@@ -216,7 +226,7 @@ export default {
       }
     },
     disabelBodyScroll () {
-      document.body.setAttribute('style' , 'overflow:hidden;paddingLeft:17px;');
+      document.body.setAttribute('style' , 'overflow:hidden;');
     },
     enableBodyScroll () {
       document.body.setAttribute('style' , '');
