@@ -19,7 +19,7 @@
                 <div class="modal-title" v-html="title"></div>
               </slot>
             </div>
-            <div class="content">
+            <div class="content" :class="[type ? 'content-' + type : '']">
               <slot name="content">
                 <div v-html="content"></div>
               </slot>
@@ -82,7 +82,7 @@ export default {
       default : true
     },
     // 是否锁定页面滚动
-    lockScroll : {
+    scrollable : {
       type : Boolean,
       default : true
     },
@@ -115,7 +115,13 @@ export default {
     loading : {
       type : Boolean,
       default : false
-    }
+    },
+    // modal的类型
+    type : {
+      type : String,
+      default : ''
+    },
+    offset : {}
   },
   data () {
     return {
@@ -130,7 +136,8 @@ export default {
       // 是否显示modal头部
       showHeader : false,
       // 是否显示modal尾部
-      showFooter : false
+      showFooter : false,
+      position : {}
     }
   },
   watch : {
@@ -141,20 +148,23 @@ export default {
           this.transformOrigin = this.getTransformOrigin();
         }
         this.showContent = true;
-        if (this.lockScroll) {
+        if (this.scrollable) {
           this.disabelBodyScroll();
         }
       }
     },
     visible () {
       this.showContent = true;
+      if (this.transition == 'scale') {
+        this.transformOrigin = this.getTransformOrigin();
+      }
     }
   },
   mounted () {
     document.body.addEventListener('mousedown' , evt => {
       evt.stopPropagation();
       evt.preventDefault();
-      this.offset = {
+      this.position = {
         offsetX : evt.clientX,
         offsetY : evt.clientY,
         clientWidth : document.body.clientWidth

@@ -36,7 +36,7 @@ export default {
       this.$modal.info({
         title : '这是一个标题',
         content : '这是一段内容',
-        transition : 'slide',
+        transition : 'scale',
         okText : 'ok'
       })
     }
