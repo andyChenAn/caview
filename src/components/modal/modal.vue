@@ -44,6 +44,7 @@
   </div>
 </template>
 <script>
+let zIndex = 1000;
 export default {
   props : {
     // 是否显示modal
@@ -99,7 +100,7 @@ export default {
     // modal的z-index层级
     zIndex : {
       type : [Number , String],
-      default : 1000
+      default : zIndex++
     },
     // 是否全屏展示
     fullscreen : {

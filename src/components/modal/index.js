@@ -38,7 +38,7 @@ document.body.addEventListener('mousedown' , evt => {
     offsetY : evt.clientY,
     clientWidth : document.body.clientWidth
   };
-})
+});
 
 let prefixCls = 'modal-type';
 
@@ -152,17 +152,6 @@ Modal.createInstance = function (options) {
   document.body.appendChild(instance.$el);
   return instance;
 }
-
-Modal.info = function (options) {
-  options.type = 'info';
-  const instance = Modal.createInstance(Object.assign({} , {offset : window.offset} , options , {
-    showCancel : true,
-    showFooter : false,
-    showHeader : false,
-    maskClosable : false
-  }));
-  instance.show(options);
-};
 
 types.forEach(type => {
   Modal[type] = function (options) {
