@@ -1,10 +1,12 @@
 import Message from './components/message';
 import Notification from './components/notification';
 import Modal from './components/modal';
+import Drawer from './components/drawer';
 const components = {
   Message,
   Notification,
-  Modal
+  Modal,
+  Drawer
 }
 const caview = {
   ...components
