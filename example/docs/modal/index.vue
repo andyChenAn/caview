@@ -178,6 +178,37 @@
         </tbody>
       </table>
     </div>
+    <div class="title2 mb15">Slot</div>
+    <div class="inner">
+      <table>
+        <th>
+          <td>属性</td>
+          <td>说明</td>
+          <td>类型</td>
+          <td>默认值</td>
+        </th>
+        <tbody>
+          <tr>
+            <td>header</td>
+            <td>对话框头部</td>
+            <td>string</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>content</td>
+            <td>对话框内容</td>
+            <td>string</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>footer</td>
+            <td>对话框尾部</td>
+            <td>string</td>
+            <td>-</td>
+          </tr>   
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 <script>

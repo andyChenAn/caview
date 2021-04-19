@@ -13,6 +13,10 @@ const routes = [
   {
     path : '/modal',
     component : () => import('@example/docs/modal')
+  },
+  {
+    path : '/drawer',
+    component : () => import('@example/docs/drawer')
   }
 ];
 const router = new VueRouter({
