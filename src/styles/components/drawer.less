@@ -6,7 +6,7 @@
   height: 100%;
   z-index: 1000;
   .mask {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -14,13 +14,21 @@
     background-color: rgba(0,0,0,0.45);
   }
   .drawer-wrap {
-    position: fixed;
-    top: 0;
+    position: absolute;
     height: 100%;
     width: 100%;
     z-index: 1000;
     &.drawer-right {
       right: 0;
+    }
+    &.drawer-left {
+      left: 0;
+    }
+    &.drawer-top {
+      top: 0;
+    }
+    &.drawer-bottom {
+      bottom: 0;
     }
     .drawer {
       width: 100%;
