@@ -1,6 +1,6 @@
 import Drawer from './drawer';
 //export default Drawer;
-
+import '../../styles/components/drawer.less';
 export default {
   props : {
     // 是否显示drawer
@@ -142,7 +142,15 @@ export default {
     }
   },
   render (h) {
-    return h('div' , {
+    let drawerCount = 1;
+    let slots = this.$slots['default'];
+    for (let i = 0 ; i < slots.length ; i++) {
+      if (slots[i].componentOptions && slots[i].componentOptions.tag == 'Drawer') {
+        drawerCount++;
+      }
+    };
+    let drawers = [];
+    let vnode = h('div' , {
       attrs : {
         class : 'ca-drawer'
       },
@@ -180,7 +188,68 @@ export default {
             }
           ]
         })
+      ]),
+      h('div' , {
+        attrs : {
+          class : 'drawer-wrap' + ' drawer-' + this.placement,
+        },
+        style : this.computedStyle
+      } , [
+        h('transition' , {
+          props : {
+            name : this.placement
+          },
+          on : {
+            'after-leave' : this.onAfterLeave
+          }
+        } , [
+          h('div' , {
+            directives : [
+              {
+                name : 'show',
+                value : this.visible
+              }
+            ],
+            attrs : {
+              class : 'drawer'
+            }
+          } , [
+            h('div' , {
+              attrs : {
+                class : 'content'
+              }
+            } , [
+              h('div' , {
+                attrs : {
+                  class : 'header'
+                }
+              } , [
+                h('div' , {
+                  attrs : {
+                    class : 'title'
+                  },
+                  domProps : {
+                    innerHTML : this.title
+                  }
+                })
+              ]),
+              h('div' , {
+                attrs : {
+                  class : 'body'
+                }
+              } , this.$slots['default'])
+            ])
+          ])
+        ])
       ])
     ])
+    if (drawerCount > 1) {
+      for (let i = 0 ; i < drawerCount ; i++) {
+        drawers.push(vnode)
+      };
+      return h('div' , [...drawers]);
+    } else {
+      return vnode;
+    }
   }
 }
