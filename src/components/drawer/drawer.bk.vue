@@ -1,5 +1,5 @@
 <template>
-  <div v-show="showDrawer" class="ca-drawer" :style="{...positionStyle , ...pushStyle}">
+  <div v-show="showDrawer" class="ca-drawer" :style="{...positionStyle}">
     <transition name="drawer-fade">
       <div @click="clickMask" v-show="visible" class="mask" :style="{...maskStyle}"></div>
     </transition>
@@ -100,13 +100,6 @@ export default {
         this.visible = newVal;
         this.showDrawer = true;
         this.disabelBodyScroll();
-        if (
-          this.$parent.$children.length == 1 && 
-          this.$parent.$children[0].$options._componentTag == 'Drawer'
-          ) {
-          let pushStyle = this.getPushStyle();
-          this.$parent.pushStyle = pushStyle;
-        }
       }
     }
   },
@@ -122,19 +115,6 @@ export default {
     this.positionStyle = this.getPositionStyle();
   },
   methods : {
-    getPushStyle () {
-      let style = {};
-      if (this.placement == 'right') {
-        style.transform = `translateX(-${this.push}px)`;
-      } else if (this.placement == 'right') {
-        style.transform = `translateX(${this.push}px)`;
-      } else if (this.placement == 'top') {
-        style.transform = `translateY(-${this.push}px)`;
-      } else if (this.placement == 'bottom') {
-        style.transform = `translateY(${this.push}px)`;
-      }
-      return style;
-    },
     getPositionStyle () {
       let style = {};
       const target = this.getContainer();

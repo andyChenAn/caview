@@ -8,14 +8,14 @@
       <button @click="open">打开抽屉</button>
       <Drawer
         v-model="visible"
-        title="这是一个标题"
       >
+        <template v-slot:title>这是一个新标题</template>
         <div>这是一个内容...</div>
         <div>这是一个内容...</div>
         <div>这是一个内容...</div>
       </Drawer>
     </div>
-    <div class="inner">
+    <!-- <div class="inner">
       <button @click="top">上</button>
       <button @click="bottom">下</button>
       <button @click="left">左</button>
@@ -60,16 +60,16 @@
     <div class="inner">
       <div id="box" style="position:relative;width:400px;height:300px;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;overflow:hidden">
         <button @click="open1">挂载点</button>
-        <Drawer
-          v-model="visible5"
-          title="这是一个标题"
-          :getContainer="getContainer"
-        >
-          <div>这是一个内容...</div>
-          <div>这是一个内容...</div>
-          <div>这是一个内容...</div>
-        </Drawer>
       </div>
+      <Drawer
+        v-model="visible5"
+        title="这是一个标题"
+        :getContainer="getContainer"
+      >
+        <div>这是一个内容...</div>
+        <div>这是一个内容...</div>
+        <div>这是一个内容...</div>
+      </Drawer>
     </div>
     <div class="inner">
       <button @click="open2">嵌套抽屉</button>
@@ -80,6 +80,7 @@
         push="180"
       >
         <button @click="open3">第二个抽屉</button>
+        <div>这是内容1</div>
         <Drawer
           v-model="visible7"
           title="这是另一个标题"
@@ -91,7 +92,7 @@
           <div>这是一个内容2...</div>
         </Drawer>
       </Drawer>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -105,7 +106,7 @@ export default {
       visible4 : false,
       visible5 : false,
       visible6 : false,
-      visible7 : false
+      visible7 : false,
     }
   },
   methods : {
