@@ -11,10 +11,10 @@
         :visible="visible"
         :handle="getHandler"
       >
-        <!-- <template v-slot:title>这是一个新标题</template>
+        <template v-slot:title>这是一个新标题</template>
         <div>这是一个内容...</div>
         <div>这是一个内容...</div>
-        <div>这是一个内容...</div> -->
+        <div>这是一个内容...</div>
       </Drawer>
     </div>
     <!-- <div class="inner">
@@ -114,7 +114,7 @@ export default {
   },
   methods : {
     open () {
-      this.visible = !this.visible;
+      this.visible = !this.visible
     },
     left () {
       this.visible1 = !this.visible1;
