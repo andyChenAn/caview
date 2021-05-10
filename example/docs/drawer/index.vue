@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    
     <div class="doc-title mb15">Drawer 抽屉</div>
     <div class="doc-desc mb15">屏幕边缘滑出的面板。</div>
     <br>
@@ -7,12 +8,13 @@
     <div class="inner">
       <button @click="open">打开抽屉</button>
       <Drawer
-        v-model="visible"
+        :visible="visible"
+        :handle="getHandler"
       >
-        <template v-slot:title>这是一个新标题</template>
+        <!-- <template v-slot:title>这是一个新标题</template>
         <div>这是一个内容...</div>
         <div>这是一个内容...</div>
-        <div>这是一个内容...</div>
+        <div>这是一个内容...</div> -->
       </Drawer>
     </div>
     <!-- <div class="inner">
@@ -96,6 +98,7 @@
   </div>
 </template>
 <script>
+import { getOptionProps } from '../../../src/components/utils/props';
 export default {
   data () {
     return {
@@ -136,6 +139,10 @@ export default {
     },
     open3 () {
       this.visible7 = !this.visible7;
+    },
+    getHandler () {
+      const h = this.$createElement;
+      return h('div' , ['hello world']);
     }
   }
 }

@@ -1,73 +1,45 @@
-import CaDrawer from './drawer';
-import extend from '../utils/extends';
-import { getInstanceProps , getComponentFormProp } from '../utils/props';
+import _defineProperty from '@babel/runtime/helpers/defineProperty';
+import _objectWithoutProperties from '@babel/runtime/helpers/objectWithoutProperties';
+import _extends from '@babel/runtime/helpers/extends';
+import classnames from 'classnames';
+import omit from 'omit.js';
+import VcDrawer from './drawer';
+import baseMixin from '../utils/baseMixin';
+import PropTypes from '../utils/vue-types';
+import { getOptionProps , getComponentFromProp } from '../utils/props';
 const Drawer = {
   name : 'Drawer',
   props : {
-    value : {
-      type : Boolean,
-      default : false
-    },
-    title : {
-      type : String,
-      default : ''
-    },
-    headerStyle : {
-      type : Object,
-      default () {
-        return {}
-      }
-    },
-    mask : {
-      type : Boolean,
-      default : true
-    },
-    maskClosable : {
-      type : Boolean,
-      default : true
-    },
-    maskStyle : {
-      type : Object,
-      default () {
-        return {}
-      }
-    },
-    getContainer : {
-      type : [Function , String],
-      default : 'body'
-    },
-    width : {
-      type : [String , Number],
-      default : 256
-    },
-    height : {
-      type : [String , Number],
-      default : 256
-    },
-    placement : {
-      type : String,
-      default : 'right'
-    },
-    prefixClass : {
-      type : String,
-      default : 'ca-drawer'
-    },
-    closable : {
-      type : Boolean,
-      default : true
-    },
-    zIndex : {
-      type : [String , Number],
-      default : 1000
-    }
+    closable : PropTypes.bool.def(true),
+    destroyOnClose : PropTypes.bool,
+    getContainer : PropTypes.any,
+    maskClosable : PropTypes.bool.def(true),
+    mask : PropTypes.bool.def(true),
+    maskStyle : PropTypes.object,
+    wrapStyle : PropTypes.object,
+    bodyStyle : PropTypes.object,
+    headerStyle : PropTypes.object,
+    drawerStyle : PropTypes.object,
+    title : PropTypes.any,
+    visible : PropTypes.bool,
+    width : PropTypes.oneOfType([PropTypes.string , PropTypes.number]).def(256),
+    height : PropTypes.oneOfType([PropTypes.string , PropTypes.number]).def(256),
+    zIndex : PropTypes.number,
+    prefixCls : PropTypes.string,
+    placement : PropTypes.oneOf(['top' , 'bottom' , 'left' , 'right']).def('right'),
+    level : PropTypes.any.def(null),
+    wrapClassName : PropTypes.string,
+    handle : PropTypes.any,
+    afterVisibleChange : PropTypes.func,
+    keyboard : PropTypes.bool.def(true)
   },
+  mixins : [baseMixin],
   data () {
+    this.destroyClose = false;
+    this.preVisible = this.$props.visible;
     return {
-      visible : this.value
+      _push : false
     }
-  },
-  provide : {
-    parentDrawer : this
   },
   inject : {
     parentDrawer : {
@@ -76,66 +48,57 @@ const Drawer = {
       }
     }
   },
-  methods : {
-    close () {},
-    // 渲染关闭按钮
-    renderCloseIcon () {
-      const h = this.$createElement;
-      let closable = this.$props.closable;
-      if (closable) {
-        return h('i' , {
-          class : 'iconfont icon-remove ' + this.prefixClass + '-remove',
-          on : {
-            click : this.close
-          }
-        })
-      }
-    },
-    // 渲染drawer头部
-    renderHeader () {
-      const h = this.$createElement;
-      const closable = this.$props.closable;
-      const headerStyle = this.$props.headerStyle;
-      const title = getComponentFormProp(this , 'title');
-      if (!title && !closable) {
-        return null;
-      }
-      return h('div' , {
-        style : headerStyle,
-        class : this.prefixClass + '-header'
-      } , [
-        title && h('div' , {
-          class : this.prefixClass + '-title'
-        } , [title]),
-        closable ? this.renderCloseIcon() : null
-      ])
-    },
-    renderContent () {
-      const h = this.$createElement;
-      return h('div' , {
-        class : this.prefixClass + '-content'
-      } , [this.$slots['default']])
-    },
-    renderBody () {
-      let h = this.$createElement;
-      return h('div' , {
-        class : this.prefixClass + '-body'
-      } , [
-        this.renderHeader(),
-        this.renderContent()
-      ])
-    },
+  provide () {
+    return {
+      parentDrawer : this
+    }
   },
-  render (h) {
-    const props = this.$props;
-    const drawerProps = extend({} , props , {
-      open : this.visible
-    });
-    return h(
-      CaDrawer, 
-      drawerProps, 
-      [this.renderBody()]
-    )
+  mounted () {
+    let visible = this.visible;
+    if (visible && this.parentDrawer) {
+      this.parentDrawer.push();
+    }
+  },
+  methods : {
+    push () {
+      this.setState({
+        _push : true
+      })
+    }
+  },
+  render () {
+    let _classnames;
+    let h = arguments[0];
+    let props = getOptionProps(this);
+    let customizePrefixCls = props.prefixCls,
+        width = props.width,
+        height = props.height,
+        visible = props.visible,
+        placement = props.placement,
+        wrapClassName = props.wrapClassName,
+        mask = props.mask,
+        rest = _objectWithoutProperties(props , ['prefixCls', 'width', 'height', 'visible', 'placement', 'wrapClassName', 'mask'])
+    let haveMask = mask ? '' : 'no-mask';
+    let offsetStyle = {};
+    if (placement == 'left' || placement == 'right') {
+      offsetStyle.width = typeof width == 'number' ? width + 'px' : width;
+    } else {
+      offsetStyle.height = typeof height == 'number' ? height + 'px' : height;
+    };
+    let handler = getComponentFromProp(this , 'handle');
+    let vcDrawerProps = {
+      props : _extends({} , omit(rest , ['closable', 'destroyOnClose', 'drawerStyle', 'headerStyle', 'bodyStyle', 'title', 'push', 'visible', 'getPopupContainer', 'rootPrefixCls', 'getPrefixCls', 'renderEmpty', 'csp', 'pageHeader', 'autoInsertSpaceInButton']) , {
+        handler : handler
+      } , offsetStyle , {
+        prefixCls : 'drawer-',
+        open : visible,
+        showMask : mask,
+        placement : placement,
+        className : classnames((_classnames = {}, _defineProperty(_classnames, wrapClassName, !!wrapClassName), _defineProperty(_classnames, haveMask, !!haveMask), _classnames)),
+      }),
+      
+    };
+    return null;
   }
 };
 export default Drawer;

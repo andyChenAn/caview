@@ -1,11 +1,57 @@
 const currentDrawer = {};
 const Drawer = {
-  data () {
-    let open = this.open ? this.open : false;
-    this.drawerId = Number((Date.now() + Math.random()).toString().replace('.', Math.round(Math.random() * 9))).toString(16);
-    currentDrawer[this.drawerId] = open;
-    return {
-      sOpen : open
+  props : {
+    title : {
+      type : String,
+      default : ''
+    },
+    headerStyle : {
+      type : Object,
+      default () {
+        return {}
+      }
+    },
+    mask : {
+      type : Boolean,
+      default : true
+    },
+    maskClosable : {
+      type : Boolean,
+      default : true
+    },
+    maskStyle : {
+      type : Object,
+      default () {
+        return {}
+      }
+    },
+    getContainer : {
+      type : [Function , String],
+      default : 'body'
+    },
+    width : {
+      type : [String , Number],
+      default : 256
+    },
+    height : {
+      type : [String , Number],
+      default : 256
+    },
+    placement : {
+      type : String,
+      default : 'right'
+    },
+    prefixClass : {
+      type : String,
+      default : 'ca-drawer'
+    },
+    closable : {
+      type : Boolean,
+      default : true
+    },
+    zIndex : {
+      type : [String , Number],
+      default : 1000
     }
   },
   render (h) {
