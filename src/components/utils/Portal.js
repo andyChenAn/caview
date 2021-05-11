@@ -41,12 +41,7 @@ export default {
   render: function render() {
     
     if (this._container) {
-      return cloneElement(this.$props.children, {
-        directives: [{
-          name: 'ca-portal',
-          value: this._container
-        }]
-      });
+      return cloneElement(this.$props.children);
     }
     return null;
   }

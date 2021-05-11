@@ -9,7 +9,6 @@
       <button @click="open">打开抽屉</button>
       <Drawer
         :visible="visible"
-        :handle="getHandler"
       >
         <template v-slot:title>这是一个新标题</template>
         <div>这是一个内容...</div>
@@ -76,7 +75,7 @@
     <div class="inner">
       <button @click="open2">嵌套抽屉</button>
       <Drawer
-        v-model="visible6"
+        :visible="visible6"
         title="这是一个标题"
         width="600"
         push="180"
@@ -84,7 +83,7 @@
         <button @click="open3">第二个抽屉</button>
         <div>这是内容1</div>
         <Drawer
-          v-model="visible7"
+          :visible="visible7"
           title="这是另一个标题"
           width="420"
           push="150"
