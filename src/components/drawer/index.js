@@ -7,6 +7,10 @@ const Drawer = {
       type : Boolean,
       default : true
     },
+    maskClosable : {
+      type : Boolean,
+      default : true
+    },
     getContainer : {
       type : [String , Function],
       default : 'body'

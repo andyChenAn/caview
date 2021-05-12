@@ -1,6 +1,11 @@
+const noop = function () {};
 const CaDrawer = {
   props : {
     closable : {
+      type : Boolean,
+      default : true
+    },
+    maskClosable : {
       type : Boolean,
       default : true
     },
@@ -57,12 +62,39 @@ const CaDrawer = {
       };
       return container;
     },
+    maskClose () {
+
+    },
     getChild () {
       const h = this.$createElement;
+      const { prefixCls , mask , placement , maskClosable , maskStyle } = this.$props;
       const children = this.$slots['default'];
+      const wrapClassName = prefixCls + ' ' + prefixCls + '-' + placement;
       return h(
         'div',
-
+        {
+          class : wrapClassName
+        },
+        [
+          mask && h('div' , {
+            class : prefixCls + '-mask',
+            on : {
+              click : maskClosable ? this.maskClose : noop
+            },
+            style : maskStyle
+          }),
+          h(
+            'div', 
+            {
+              class : prefixCls + '-content-wrap'
+            }, 
+            [
+              h('div' , {
+                class : prefixCls + '-content'
+              } , [children])
+            ]
+          )
+        ]
       )
     }
   },
@@ -72,7 +104,7 @@ const CaDrawer = {
       return null;
     }
     const children = this.getChild();
-    let vnode = h('div' , this.$slots['default']);
+    let vnode = h('div' , [children]);
     this.$nextTick(() => {
       if (this.container) {
         this.container.appendChild(vnode.elm);
