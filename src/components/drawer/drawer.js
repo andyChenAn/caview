@@ -1,4 +1,6 @@
 const noop = function () {};
+import classnames from 'classnames';
+import _defineProperty from '@babel/runtime/helpers/defineProperty';
 const CaDrawer = {
   props : {
     closable : {
@@ -66,10 +68,19 @@ const CaDrawer = {
 
     },
     getChild () {
+      let _classnames;
       const h = this.$createElement;
-      const { prefixCls , mask , placement , maskClosable , maskStyle } = this.$props;
+      const { prefixCls , mask , placement , maskClosable , maskStyle , visible } = this.$props;
       const children = this.$slots['default'];
-      const wrapClassName = prefixCls + ' ' + prefixCls + '-' + placement;
+      const open = visible ? true : false;
+      const wrapClassName = classnames(
+        prefixCls , 
+        (
+          _classnames = {},
+          _defineProperty(_classnames , prefixCls + '-' + placement , true),
+          _defineProperty(_classnames , prefixCls + '-open' , open)
+        )
+      );
       return h(
         'div',
         {
@@ -78,6 +89,7 @@ const CaDrawer = {
         [
           mask && h('div' , {
             class : prefixCls + '-mask',
+            key : open,
             on : {
               click : maskClosable ? this.maskClose : noop
             },
@@ -108,6 +120,7 @@ const CaDrawer = {
     this.$nextTick(() => {
       if (this.container) {
         this.container.appendChild(vnode.elm);
+        
       }
     })
     return vnode;
