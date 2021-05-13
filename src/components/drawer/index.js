@@ -121,14 +121,17 @@ const Drawer = {
       )
     },
     close () {
-
+      this.$emit('close');
     }
   },
   render (h) {
      const props = this.$props;
      const prefixCls = props.prefixCls || 'ca-drawer';
      const CaDrawerProps = {
-       props : props
+       props : props,
+       on : {
+         close : this.close
+       }
      }
      return h(
       CaDrawer,

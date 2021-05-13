@@ -1,4 +1,7 @@
 const noop = function () {};
+import classnames from 'classnames';
+import _defineProperty from '@babel/runtime/helpers/defineProperty';
+import _extends from '@babel/runtime/helpers/extends';
 const CaDrawer = {
   props : {
     closable : {
@@ -50,6 +53,26 @@ const CaDrawer = {
   mounted () {
     this.container = this.defaultGetContainer();
   },
+  watch : {
+    visible (newVal) {
+      this.open = newVal;
+    }
+  },
+  data () {
+    this.preProps = _extends({} , this.$props);
+    return {
+      open : this.visible,
+      firstEnter : false
+    }
+  },
+  updated () {
+    this.$nextTick(() => {
+      if (!this.firstEnter && this.container) {
+        this.$forceUpdate();
+        this.firstEnter = true;
+      }
+    })
+  },
   methods : {
     defaultGetContainer () {
       const props = this.$props;
@@ -63,13 +86,21 @@ const CaDrawer = {
       return container;
     },
     maskClose () {
-
+      this.$emit('close');
     },
     getChild () {
+      let _classnames;
       const h = this.$createElement;
-      const { prefixCls , mask , placement , maskClosable , maskStyle } = this.$props;
+      const { prefixCls , mask , placement , maskClosable , maskStyle , visible } = this.$props;
       const children = this.$slots['default'];
-      const wrapClassName = prefixCls + ' ' + prefixCls + '-' + placement;
+      const wrapClassName = classnames(
+        prefixCls,
+        (
+          _classnames = {},
+          _defineProperty(_classnames , prefixCls + '-' + placement , true),
+          _defineProperty(_classnames , prefixCls + '-open' , this.open)
+        )
+      )
       return h(
         'div',
         {
@@ -100,13 +131,13 @@ const CaDrawer = {
   },
   render (h) {
     const props = this.$props;
-    if (!props.visible) {
+    if (!this.container || !this.open && !this.firstEnter) {
       return null;
     }
     const children = this.getChild();
     let vnode = h('div' , [children]);
     this.$nextTick(() => {
-      if (this.container) {
+      if (this.container && !this.firstEnter) {
         this.container.appendChild(vnode.elm);
       }
     })

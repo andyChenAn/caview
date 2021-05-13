@@ -9,6 +9,7 @@
       <button @click="open">打开抽屉</button>
       <Drawer
         :visible="visible"
+        @close="onClose"
       >
         <template v-slot:title>这是一个新标题</template>
         <div>这是一个内容...</div>
@@ -142,6 +143,9 @@ export default {
     getHandler () {
       const h = this.$createElement;
       return h('div' , ['hello world']);
+    },
+    onClose () {
+      this.visible = false;
     }
   }
 }
