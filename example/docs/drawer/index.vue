@@ -6,15 +6,11 @@
     <br>
     <br>
     <div class="inner">
-      <button @click="open">打开抽屉</button>
+      <button @click="clickOpen">打开抽屉</button>
       <Drawer
         :visible="visible"
-        @close="onClose"
       >
-        <template v-slot:title>这是一个新标题</template>
-        <div>这是一个内容...</div>
-        <div>这是一个内容...</div>
-        <div>这是一个内容...</div>
+
       </Drawer>
     </div>
     <!-- <div class="inner">
@@ -98,51 +94,15 @@
   </div>
 </template>
 <script>
-import { getOptionProps } from '../../../src/components/utils/props';
 export default {
   data () {
     return {
-      visible : false,
-      visible1 : false,
-      visible2 : false,
-      visible3 : false,
-      visible4 : false,
-      visible5 : false,
-      visible6 : false,
-      visible7 : false,
+      visible : false
     }
   },
   methods : {
-    open () {
-      this.visible = !this.visible
-    },
-    left () {
-      this.visible1 = !this.visible1;
-    },
-    right () {
-      this.visible2 = !this.visible2;
-    },
-    top () {
-      this.visible3 = !this.visible3;
-    },
-    bottom () {
-      this.visible4 = !this.visible4;
-    },
-    getContainer () {
-      return document.getElementById('box');
-    },
-    open1 () {
-      this.visible5 = !this.visible5;
-    },
-    open2 () {
-      this.visible6 = !this.visible6;
-    },
-    open3 () {
-      this.visible7 = !this.visible7;
-    },
-    getHandler () {
-      const h = this.$createElement;
-      return h('div' , ['hello world']);
+    clickOpen () {
+      this.visible = true
     },
     onClose () {
       this.visible = false;

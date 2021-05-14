@@ -5,10 +5,26 @@
   width: 100%;
   height: 100%;
   z-index: 1000;
+  & > * {
+    transition: transform .3s cubic-bezier(.7,.3,.1,1),box-shadow .3s cubic-bezier(.7,.3,.1,1);
+  }
+  .ca-drawer-content-wrap {
+    position: absolute;
+    height: 100%;
+    .ca-drawer-content {
+      background-color: #fff;
+      height: 100%;
+      width: 100%;
+    }
+  }
   &.ca-drawer-right {
     right: 0;
     width: 0;
     height: 100%;
+    .ca-drawer-content-wrap {
+      box-shadow: -2px 0 8px rgb(0 0 0 / 15%);
+      right: 0;
+    }
   }
   &-mask {
     position: absolute;
@@ -33,70 +49,3 @@
     }
   }
 }
-
-// .ca-drawer {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   z-index: 1000;
-//   .mask {
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     width: 100%;
-//     height: 100%;
-//     background-color: rgba(0,0,0,0.45);
-//   }
-//   .drawer-wrap {
-//     position: absolute;
-//     height: 100%;
-//     width: 100%;
-//     z-index: 1000;
-//     &.drawer-right {
-//       right: 0;
-//     }
-//     &.drawer-left {
-//       left: 0;
-//     }
-//     &.drawer-top {
-//       top: 0;
-//     }
-//     &.drawer-bottom {
-//       bottom: 0;
-//     }
-//     .drawer {
-//       width: 100%;
-//       height: 100%;
-//       background-color: #fff;
-//       .content {
-//         display: flex;
-//         flex-direction: column;
-//         flex-wrap: nowrap;
-//         width: 100%;
-//         height: 100%;
-//         .header {
-//           position: relative;
-//           padding: 16px 24px;
-//           border-bottom: 1px solid #f0f0f0;
-//           border-radius: 2px 2px 0 0;
-//           .title {
-//             margin: 0;
-//             color: rgba(0,0,0,.85);
-//             font-weight: 500;
-//             font-size: 16px;
-//             line-height: 22px;
-//           }
-//         }
-//         .body {
-//           flex-grow: 1;
-//           padding: 24px;
-//           overflow: auto;
-//           font-size: 14px;
-//           line-height: 1.5715;
-//         }
-//       }
-//     }
-//   }
-// }
