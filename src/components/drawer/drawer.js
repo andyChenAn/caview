@@ -1,7 +1,10 @@
 const noop = function () {};
 import classnames from 'classnames';
 import _defineProperty from '@babel/runtime/helpers/defineProperty';
+<<<<<<< HEAD
 import _extends from '@babel/runtime/helpers/extends';
+=======
+>>>>>>> 4229aaaa4b5c755519e5590269a16a2c65d46311
 const CaDrawer = {
   props : {
     closable : {
@@ -109,6 +112,7 @@ const CaDrawer = {
         [
           mask && h('div' , {
             class : prefixCls + '-mask',
+            key : open,
             on : {
               click : maskClosable ? this.maskClose : noop
             },
@@ -139,6 +143,7 @@ const CaDrawer = {
     this.$nextTick(() => {
       if (this.container && !this.firstEnter) {
         this.container.appendChild(vnode.elm);
+        
       }
     })
     return vnode;
