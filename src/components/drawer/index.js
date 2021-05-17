@@ -1,5 +1,6 @@
 import CaDrawer from './drawer';
 import _extends from '@babel/runtime/helpers/extends';
+import omit from 'omit.js';
 const Drawer = {
   name : 'Drawer',
   props : {
@@ -128,11 +129,13 @@ const Drawer = {
      const props = this.$props;
      const prefixCls = props.prefixCls || 'ca-drawer';
      const CaDrawerProps = {
-       props : props,
+       props : _extends({} , omit(props , ['visible']) , {
+         open : props.visible
+       }),
        on : {
          close : this.close
        }
-     }
+     };
      return h(
       CaDrawer,
       CaDrawerProps,

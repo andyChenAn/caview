@@ -25,7 +25,7 @@ const CaDrawer = {
       default : () => {}
     },
     title : '',
-    visible : {
+    open : {
       type : Boolean,
       default : false
     },
@@ -50,19 +50,17 @@ const CaDrawer = {
       default : 'ca-drawer'
     }
   },
-  mounted () {
-    this.container = this.defaultGetContainer();
-  },
-  watch : {
-    visible (newVal) {
-      this.open = newVal;
+  data () {
+    this.firstEnter = false;
+    return {
+      sOpen : this.open
     }
   },
-  data () {
-    this.preProps = _extends({} , this.$props);
-    return {
-      open : this.visible,
-      firstEnter : false
+  watch : {
+    open (newVal) {
+      if (!this.container) {
+        this.container = this.defaultGetContainer(this.$props);
+      }
     }
   },
   updated () {
@@ -74,8 +72,7 @@ const CaDrawer = {
     })
   },
   methods : {
-    defaultGetContainer () {
-      const props = this.$props;
+    defaultGetContainer (props) {
       const getContainer = props.getContainer;
       let container;
       if (typeof getContainer === 'string') {
@@ -88,19 +85,23 @@ const CaDrawer = {
     maskClose () {
       this.$emit('close');
     },
-    getChild () {
+    getChild (open) {
       let _classnames;
       const h = this.$createElement;
-      const { prefixCls , mask , placement , maskClosable , maskStyle } = this.$props;
+      const { prefixCls , mask , placement , maskClosable , maskStyle , width , height } = this.$props;
       const children = this.$slots['default'];
       const wrapClassName = classnames(
         prefixCls,
         (
           _classnames = {},
           _defineProperty(_classnames , prefixCls + '-' + placement , true),
-          _defineProperty(_classnames , prefixCls + '-open' , this.open)
+          _defineProperty(_classnames , prefixCls + '-open' , open)
         )
-      )
+      );
+      const isHorizontal = placement === 'left' || placement === 'right';
+      const placementName = 'translate' + (isHorizontal ? 'X' : 'Y');
+      const placementPos = placement === 'left' || placement === 'top' ? '-100%' : '100%';
+      const transform = open ? '' : placementName + '(' + placementPos + ')';
       return h(
         'div',
         {
@@ -117,7 +118,11 @@ const CaDrawer = {
           h(
             'div', 
             {
-              class : prefixCls + '-content-wrap'
+              class : prefixCls + '-content-wrap',
+              style : {
+                transform : transform,
+                width : width + 'px',
+              }
             }, 
             [
               h('div' , {
@@ -130,16 +135,16 @@ const CaDrawer = {
     }
   },
   render (h) {
+    const children = this.getChild(this.firstEnter ? this.open : false);
     if (!this.container || !this.open && !this.firstEnter) {
       return null;
-    };
-    const children = this.getChild();
-    let vnode = h('div' , [children]);
+    }
+    const vnode = h('div' , [children]);
     this.$nextTick(() => {
       if (this.container && !this.firstEnter) {
         this.container.appendChild(vnode.elm);
       }
-    })
+    });
     return vnode;
   }
 };

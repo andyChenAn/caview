@@ -9,8 +9,11 @@
       <button @click="clickOpen">打开抽屉</button>
       <Drawer
         :visible="visible"
+        title="这是一个标题"
+        @close="handleClose"
+        :width="300"
       >
-
+        <div>这是内容...</div>
       </Drawer>
     </div>
     <!-- <div class="inner">
@@ -104,7 +107,7 @@ export default {
     clickOpen () {
       this.visible = true
     },
-    onClose () {
+    handleClose () {
       this.visible = false;
     }
   }
