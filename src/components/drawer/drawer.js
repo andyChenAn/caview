@@ -25,7 +25,7 @@ const CaDrawer = {
       default : () => {}
     },
     title : '',
-    open : {
+    visible : {
       type : Boolean,
       default : false
     },
@@ -48,18 +48,26 @@ const CaDrawer = {
     prefixCls : {
       type : String,
       default : 'ca-drawer'
+    },
+    bodyStyle : {
+      type : Object,
+      default : () => {}
+    },
+    headerStyle : {
+      type : Object,
+      default : () => {}
     }
   },
   data () {
-    this.firstEnter = false;
+    this.firstEnter = this.visible;
     return {
-      sOpen : this.open
+      
     }
   },
   watch : {
-    open (newVal) {
+    visible () {
       if (!this.container) {
-        this.container = this.defaultGetContainer(this.$props);
+        this.getDefault(this.$props);
       }
     }
   },
@@ -72,18 +80,35 @@ const CaDrawer = {
     })
   },
   methods : {
-    defaultGetContainer (props) {
-      const getContainer = props.getContainer;
-      let container;
-      if (typeof getContainer === 'string') {
-        container = document.querySelectorAll(getContainer)[0];
-      } else {
-        container = this.getContainer();
-      };
-      return container;
-    },
     maskClose () {
       this.$emit('close');
+    },
+    getDefault (props) {
+      this.getParent(props);
+      if (props.getContainer) {
+        this.container = this.getDefaultContainer();
+      }
+    },
+    getDefaultContainer () {
+      let container = document.createElement('div');
+      this.parent.appendChild(container);
+      return container;
+    },
+    getParent (props) {
+      const getContainer = props.getContainer;
+      if (typeof getContainer === 'string') {
+        let dom = document.querySelectorAll(getContainer)[0];
+        this.parent = dom;
+      }
+      if (typeof getContainer === 'function') {
+        this.parent = getContainer();
+      }
+      if (typeof getContainer === 'object' && getContainer instanceof HTMLElement) {
+        this.parent = getContainer
+      };
+      if (!getContainer && this.container) {
+        this.parent = this.container.parentNode;
+      }
     },
     getChild (open) {
       let _classnames;
@@ -121,7 +146,7 @@ const CaDrawer = {
               class : prefixCls + '-content-wrap',
               style : {
                 transform : transform,
-                width : width + 'px',
+                width : width + 'px'
               }
             }, 
             [
@@ -134,18 +159,18 @@ const CaDrawer = {
       )
     }
   },
-  render (h) {
-    const children = this.getChild(this.firstEnter ? this.open : false);
-    if (!this.container || !this.open && !this.firstEnter) {
+  render () {
+    const h = this.$createElement;
+    const children = this.getChild(this.firstEnter ? this.visible : false);
+    if (!this.container || !this.visible && !this.firstEnter) {
       return null;
-    }
-    const vnode = h('div' , [children]);
-    this.$nextTick(() => {
-      if (this.container && !this.firstEnter) {
-        this.container.appendChild(vnode.elm);
-      }
-    });
-    return vnode;
+    };
+    return h('div' , {
+      directives : [{
+        name : 'ca-portal',
+        value : this.container
+      }]
+    } , [children]);
   }
 };
 export default CaDrawer;

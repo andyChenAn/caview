@@ -129,9 +129,7 @@ const Drawer = {
      const props = this.$props;
      const prefixCls = props.prefixCls || 'ca-drawer';
      const CaDrawerProps = {
-       props : _extends({} , omit(props , ['visible']) , {
-         open : props.visible
-       }),
+       props : props,
        on : {
          close : this.close
        }

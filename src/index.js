@@ -10,7 +10,8 @@ const components = {
 }
 const caview = {
   ...components
-}
+};
+import './components/drawer/portalDirective';
 const install = function (Vue) {
   Object.keys(caview).forEach(key => {
     Vue.component(key , caview[key]);
