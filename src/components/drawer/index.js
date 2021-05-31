@@ -1,3 +1,4 @@
+
 import CaDrawer from './drawer';
 import _extends from '@babel/runtime/helpers/extends';
 import omit from 'omit.js';
@@ -126,19 +127,19 @@ const Drawer = {
     }
   },
   render (h) {
-     const props = this.$props;
-     const prefixCls = props.prefixCls || 'ca-drawer';
-     const CaDrawerProps = {
-       props : props,
-       on : {
-         close : this.close
-       }
-     };
-     return h(
+    const props = this.$props;
+    const prefixCls = props.prefixCls || 'ca-drawer';
+    const CaDrawerProps = {
+      props : props,
+      on : {
+        close : this.close
+      }
+    }
+    return h(
       CaDrawer,
       CaDrawerProps,
       [this.renderBody(prefixCls)]
-     )
+    )
   }
 };
 export default Drawer;

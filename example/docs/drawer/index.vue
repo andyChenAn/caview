@@ -9,11 +9,10 @@
       <button @click="clickOpen">打开抽屉</button>
       <Drawer
         :visible="visible"
-        title="这是一个标题"
-        @close="handleClose"
-        :width="300"
+        @close="onClose"
       >
-        <div>这是内容...</div>
+        <div slot="title">这是标题</div>
+        <div>sdfsfs</div>
       </Drawer>
     </div>
     <!-- <div class="inner">
