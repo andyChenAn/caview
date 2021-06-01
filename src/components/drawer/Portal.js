@@ -3,13 +3,14 @@ export default {
   props : ['getContainer' , 'children'],
   mounted () {
     this.createContainer();
+    console.log(11)
   },
   beforeDestory () {
     this.removeContainer();
   },
   methods : {
     createContainer () {
-      this._container = this.$props.getContainer();
+      this._container = this.$props.getContainer;
       this.$forceUpdate();
     },
     removeContainer () {
@@ -19,12 +20,14 @@ export default {
     }
   },
   render () {
+    const h = this.$createElement;
     if (this._container) {
-      return cloneElement(this.$props.children , {
+      return h('div' , {
         directives : [{
-          
+          name : 'ca-portal',
+          value : this._container
         }]
-      })
+      } , [this.$props.children]);
     }
   }
 }

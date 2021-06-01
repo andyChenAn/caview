@@ -1,8 +1,7 @@
+const noop = function () {};
 import classnames from 'classnames';
 import _defineProperty from '@babel/runtime/helpers/defineProperty';
 import _extends from '@babel/runtime/helpers/extends';
-function noop () {};
-let currentDrawer = {};
 const CaDrawer = {
   props : {
     closable : {
@@ -72,12 +71,13 @@ const CaDrawer = {
       }
     }
   },
-  watch : {
-    visible (newVal) {
-      if (!this.container) {
-        this.mountToParent(this.$props);
+  updated () {
+    this.$nextTick(() => {
+      if (!this.firstEnter && this.container) {
+        this.$forceUpdate();
+        this.firstEnter = true;
       }
-    }
+    })
   },
   methods : {
     maskClose () {
@@ -90,27 +90,25 @@ const CaDrawer = {
       }
     },
     getDefaultContainer () {
-      const container = document.createElement('div');
+      let container = document.createElement('div');
       this.parent.appendChild(container);
       return container;
     },
-    getParentContainer (props) {
+    getParent (props) {
       const getContainer = props.getContainer;
-      if (getContainer) {
-        if (typeof getContainer === 'string') {
-          const dom = document.querySelectorAll(getContainer)[0];
-          this.parent = dom;
-        };
-        if (typeof getContainer === 'function') {
-          this.parent = getContainer();
-        };
-        if (typeof getContainer === 'object' && getContainer instanceof HTMLElement) {
-          this.parent = getContainer;
-        }
+      if (typeof getContainer === 'string') {
+        let dom = document.querySelectorAll(getContainer)[0];
+        this.parent = dom;
+      }
+      if (typeof getContainer === 'function') {
+        this.parent = getContainer();
+      }
+      if (typeof getContainer === 'object' && getContainer instanceof HTMLElement) {
+        this.parent = getContainer
       };
       if (!getContainer && this.container) {
         this.parent = this.container.parentNode;
-      };
+      }
     },
     getChild (open) {
       let _classnames;
@@ -164,6 +162,7 @@ const CaDrawer = {
   render () {
     const h = this.$createElement;
     const children = this.getChild(this.firstEnter ? this.visible : false);
+    console.log(children)
     if (!this.container || !this.visible && !this.firstEnter) {
       return null;
     };
