@@ -1,7 +1,6 @@
 
 import CaDrawer from './drawer';
 import _extends from '@babel/runtime/helpers/extends';
-import omit from 'omit.js';
 const Drawer = {
   name : 'Drawer',
   props : {
@@ -23,7 +22,9 @@ const Drawer = {
     },
     maskStyle : {
       type : Object,
-      default : () => {}
+      default () {
+        return {}
+      }
     },
     title : '',
     visible : {
@@ -32,11 +33,11 @@ const Drawer = {
     },
     width : {
       type : [String , Number],
-      default : 256
+      default : ''
     },
     height : {
       type : [String , Number],
-      default : 256
+      default : ''
     },
     placement : {
       type : String,
@@ -52,14 +53,64 @@ const Drawer = {
     },
     bodyStyle : {
       type : Object,
-      default : () => {}
+      default () {
+        return {}
+      }
     },
     headerStyle : {
       type : Object,
-      default : () => {}
+      default () {
+        return {}
+      }
+    },
+    // 抽屉最外层样式
+    wrapStyle : {
+      type : Object,
+      default () {
+        return {}
+      }
     }
   },
+  data () {
+    return {
+      _push : false
+    }
+  },
+  inject : {
+    parentDrawer : {
+      default () {
+        return null;
+      }
+    }
+  },
+  provide () {
+    return {
+      parentDrawer : this
+    }
+  },
+  mounted () {
+    if (this.visible && this.parentDrawer) {
+      this.parentDrawer.push();
+    }
+  },
+  updated () {
+    this.$nextTick(() => {
+      if (this.parentDrawer) {
+        if (this.visible) {
+          this.parentDrawer.push();
+        } else {
+          this.parentDrawer.pull();
+        }
+      }
+    })
+  },
   methods : {
+    push () {
+      this._push = true;
+    },
+    pull () {
+      this._push = false;
+    },
     renderBody (prefixCls) {
       const h = this.$createElement;
       return h(
@@ -124,13 +175,34 @@ const Drawer = {
     },
     close () {
       this.$emit('close');
+    },
+    getDrawerStlye () {
+      const props = this.$props;
+      const wrapStyle = props.wrapStyle;
+      const placement = props.placement;
+      const zIndex = props.zIndex;
+      return _extends({
+        zIndex,
+        transform : this._push ? this.getTransform(placement) : ''
+      } , wrapStyle);
+    },
+    getTransform (placement) {
+      if (placement === 'left' || placement === 'right') {
+        return 'translateX(' + (placement === 'left' ? 180 : -180) + 'px)';
+      }
+      if (placement === 'top' || placement === 'bottom') {
+        return 'translateY(' + (placement === 'top' ? 180 : -180) + 'px)';
+      }
     }
   },
   render (h) {
     const props = this.$props;
     const prefixCls = props.prefixCls || 'ca-drawer';
     const CaDrawerProps = {
-      props : props,
+      props : {
+        ...props,
+        wrapStyle : this.getDrawerStlye()
+      },
       on : {
         close : this.close
       }

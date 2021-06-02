@@ -11,6 +11,7 @@ const components = {
 const caview = {
   ...components
 };
+// 全局钩子
 import './components/drawer/portalDirective';
 const install = function (Vue) {
   Object.keys(caview).forEach(key => {

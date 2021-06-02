@@ -2,6 +2,9 @@ const noop = function () {};
 import classnames from 'classnames';
 import _defineProperty from '@babel/runtime/helpers/defineProperty';
 import _extends from '@babel/runtime/helpers/extends';
+import ref from 'vue-ref';
+import Vue from 'vue';
+Vue.use(ref , {name : 'ca-ref'});
 const CaDrawer = {
   props : {
     closable : {
@@ -22,7 +25,9 @@ const CaDrawer = {
     },
     maskStyle : {
       type : Object,
-      default : () => {}
+      default () {
+        return {}
+      }
     },
     title : '',
     visible : {
@@ -51,24 +56,42 @@ const CaDrawer = {
     },
     bodyStyle : {
       type : Object,
-      default : () => {}
+      default () {
+        return {}
+      }
     },
     headerStyle : {
       type : Object,
-      default : () => {}
+      default () {
+        return {}
+      }
+    },
+    // 抽屉最外层样式
+    wrapStyle : {
+      type : Object,
+      default () {
+        return {}
+      }
     }
   },
   data () {
     this.firstEnter = this.visible;
+    this.contentDom = null;
+    this.maskDom = null;
+    this.preProps = _extends({} , this.$props);
     return {
       
     }
   },
   watch : {
-    visible () {
-      if (!this.container) {
-        this.getDefault(this.$props);
-      }
+    visible (newVal) {
+      if (newVal !== undefined && newVal !== this.preProps.open) {
+        this.isOpen = true;
+        if (!this.container) {
+          this.getDefault(this.$props);
+        }
+      };
+      this.preProps.open = newVal;
     }
   },
   updated () {
@@ -94,6 +117,19 @@ const CaDrawer = {
       this.parent.appendChild(container);
       return container;
     },
+    setBodyStyle () {
+      const getContainer = this.$props.getContainer;
+      if (getContainer === 'body') {
+        if (this.firstEnter && document.body.style.overflow !== 'hidden') {
+          document.body.style.overflow = 'hidden';
+        };
+      }
+    },
+    onTransitionend () {
+      if (!this.visible) {
+        document.body.style.overflow = '';
+      }
+    },
     getParent (props) {
       const getContainer = props.getContainer;
       if (typeof getContainer === 'string') {
@@ -111,9 +147,19 @@ const CaDrawer = {
       }
     },
     getChild (open) {
+      const self = this;
       let _classnames;
       const h = this.$createElement;
-      const { prefixCls , mask , placement , maskClosable , maskStyle , width , height } = this.$props;
+      const { 
+        prefixCls , 
+        mask , 
+        placement , 
+        maskClosable , 
+        maskStyle , 
+        width , 
+        height ,
+        wrapStyle
+      } = this.$props;
       const children = this.$slots['default'];
       const wrapClassName = classnames(
         prefixCls,
@@ -127,10 +173,23 @@ const CaDrawer = {
       const placementName = 'translate' + (isHorizontal ? 'X' : 'Y');
       const placementPos = placement === 'left' || placement === 'top' ? '-100%' : '100%';
       const transform = open ? '' : placementName + '(' + placementPos + ')';
+      if (this.isOpen === undefined || this.isOpen) {
+        // 这里获取内容的位置信息，目的是为了浏览器重绘，这样就避免第一次点击的时候，抽屉没有过渡动画效果
+        this.contentDom && this.contentDom.getBoundingClientRect();
+        // 设置body样式
+        this.setBodyStyle();
+      }
+      const directivesContentDom = [{
+        name : 'ca-ref',
+        value (c) {
+          self.contentDom = c;
+        }
+      }];
       return h(
         'div',
         {
-          class : wrapClassName
+          class : wrapClassName,
+          style : wrapStyle
         },
         [
           mask && h('div' , {
@@ -146,12 +205,17 @@ const CaDrawer = {
               class : prefixCls + '-content-wrap',
               style : {
                 transform : transform,
-                width : width + 'px'
+                width : width + 'px',
+                height : height + 'px'
+              },
+              on : {
+                transitionend : this.onTransitionend
               }
-            }, 
+            },
             [
               h('div' , {
-                class : prefixCls + '-content'
+                class : prefixCls + '-content',
+                directives : directivesContentDom
               } , [children])
             ]
           )
@@ -162,7 +226,6 @@ const CaDrawer = {
   render () {
     const h = this.$createElement;
     const children = this.getChild(this.firstEnter ? this.visible : false);
-    console.log(children)
     if (!this.container || !this.visible && !this.firstEnter) {
       return null;
     };
