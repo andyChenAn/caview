@@ -72,6 +72,7 @@ const Drawer = {
     }
   },
   data () {
+    this.preVisible = this.$props.visible;
     return {
       _push : false
     }
@@ -95,21 +96,22 @@ const Drawer = {
   },
   updated () {
     this.$nextTick(() => {
-      if (this.parentDrawer) {
+      if (this.preVisible !== this.visible && this.parentDrawer) {
         if (this.visible) {
           this.parentDrawer.push();
         } else {
           this.parentDrawer.pull();
         }
       }
+      this.preVisible = this.visible;
     })
   },
   methods : {
     push () {
-      this._push = true;
+      this.$data._push = true;
     },
     pull () {
-      this._push = false;
+      this.$data._push = false;
     },
     renderBody (prefixCls) {
       const h = this.$createElement;
@@ -183,7 +185,7 @@ const Drawer = {
       const zIndex = props.zIndex;
       return _extends({
         zIndex,
-        transform : this._push ? this.getTransform(placement) : ''
+        transform : this.$data._push ? this.getTransform(placement) : ''
       } , wrapStyle);
     },
     getTransform (placement) {
