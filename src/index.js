@@ -2,11 +2,13 @@ import Message from './components/message';
 import Notification from './components/notification';
 import Modal from './components/modal';
 import Drawer from './components/drawer';
+import Popconfirm from './components/popconfirm';
 const components = {
   Message,
   Notification,
   Modal,
-  Drawer
+  Drawer,
+  Popconfirm
 }
 const caview = {
   ...components

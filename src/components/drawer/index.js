@@ -1,76 +1,10 @@
 
 import CaDrawer from './drawer';
 import _extends from '@babel/runtime/helpers/extends';
+import propDefine from './propDefine';
 const Drawer = {
   name : 'Drawer',
-  props : {
-    closable : {
-      type : Boolean,
-      default : true
-    },
-    maskClosable : {
-      type : Boolean,
-      default : true
-    },
-    getContainer : {
-      type : [String , Function],
-      default : 'body'
-    },
-    mask : {
-      type : Boolean,
-      default : true
-    },
-    maskStyle : {
-      type : Object,
-      default () {
-        return {}
-      }
-    },
-    title : '',
-    visible : {
-      type : Boolean,
-      default : false
-    },
-    width : {
-      type : [String , Number],
-      default : ''
-    },
-    height : {
-      type : [String , Number],
-      default : ''
-    },
-    placement : {
-      type : String,
-      default : 'right'
-    },
-    zIndex : {
-      type : [String , Number],
-      default : 100
-    },
-    prefixCls : {
-      type : String,
-      default : 'ca-drawer'
-    },
-    bodyStyle : {
-      type : Object,
-      default () {
-        return {}
-      }
-    },
-    headerStyle : {
-      type : Object,
-      default () {
-        return {}
-      }
-    },
-    // 抽屉最外层样式
-    wrapStyle : {
-      type : Object,
-      default () {
-        return {}
-      }
-    }
-  },
+  props : propDefine,
   data () {
     this.preVisible = this.$props.visible;
     return {
@@ -108,9 +42,11 @@ const Drawer = {
   },
   methods : {
     push () {
+      // 这里需要注意的我们不能直接this._push = true
       this.$data._push = true;
     },
     pull () {
+      // 这里需要注意的我们不能直接this._push = false
       this.$data._push = false;
     },
     renderBody (prefixCls) {
@@ -135,7 +71,7 @@ const Drawer = {
       if (!title && !closable) {
         return null;
       }
-      const headerClass = title ? prefixCls + '-header' : prefixCls + 'no-title-header';
+      const headerClass = title ? prefixCls + '-header' : prefixCls + '-no-title-header';
       return h(
         'div',
         {

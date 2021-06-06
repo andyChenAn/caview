@@ -5,14 +5,15 @@
     <div class="doc-desc mb15">屏幕边缘滑出的面板。</div>
     <br>
     <br>
+    <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <button @click="clickOpen">打开抽屉</button>
       <Drawer
         :visible="visible"
         @close="onClose"
-        width="200"
+        width="500"
+        title="这是标题"
       >
-        <div slot="title">这是标题</div>
         <div style="height:1000px;">这是一段内容</div>
       </Drawer>
     </div>
