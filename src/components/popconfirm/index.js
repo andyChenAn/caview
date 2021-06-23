@@ -1,54 +1,44 @@
-
 import classnames from 'classnames';
+import _extends from '@babel/runtime/helpers/extends';
+import Popconfirm from './popconfirm';
 export default {
-  name : 'Popconfirm',
-  props : {
+  name: 'Popconfirm',
+  props: {
     // 标题
-    title : '',
+    title: '',
     // 确认按钮的文本描述
-    okText : '确认',
+    okText: '确认',
     // 取消按钮的文本描述
-    cancelText : '取消',
+    cancelText: '取消',
     // 图标
-    icon : '',
+    icon: '',
     // 点击取消按钮的回调
-    cancel : Function,
+    cancel: Function,
     // 点击确认按钮的回调
-    confirm : Function,
+    confirm: Function,
     // 显示与隐藏的回调
-    visibleChange : Function,
+    visibleChange: Function,
     // 位置
-    placement : {
-      type : String,
-      default : 'top'
+    placement: {
+      type: String,
+      default: 'top'
     },
     // 是否显示气泡确认框
-    visible : {
-      type : Boolean,
-      default : false
+    visible: {
+      type: Boolean,
+      default: false
     },
-    prefixCls : {
-      type : String,
-      default : 'ca-popover'
+    prefixCls: {
+      type: String,
+      default: 'ca-popover'
     }
   },
-  mounted () {
-    console.log(this.$slots['default'])
-  },
-  render () {
+  render() {
     const h = this.$createElement;
-    const { visible , prefixCls , placement } = this.$props;
-    if (!visible) {
-      return null;
-    };
-    return h('div' , {
-      class : classnames(
-        prefixCls,
-        `${prefixCls}-${placement}`
-      ),
-      style : {
-        
-      }
-    } , [this.$slots['default']])
+    const props = this.$props;
+    const popconfirmProps = _extends({}, props);
+    return h(Popconfirm, {
+      props: popconfirmProps,
+    }, [this.$slots.default])
   }
 }

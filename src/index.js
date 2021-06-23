@@ -14,7 +14,7 @@ const caview = {
   ...components
 };
 // 全局钩子
-import './components/drawer/portalDirective';
+import './components/utils/portalDirective';
 const install = function (Vue) {
   Object.keys(caview).forEach(key => {
     Vue.component(key , caview[key]);
