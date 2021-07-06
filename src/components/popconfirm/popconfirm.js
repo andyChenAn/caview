@@ -1,3 +1,5 @@
+import _extends from '@babel/runtime/helpers/extends';
+import ContainerRender from './containerRender';
 let noop = function () {};
 export default {
   props : {
@@ -39,10 +41,38 @@ export default {
       default : 'ca-popover'
     }
   },
+  methods : {
+    getPopconfirmContent () {
+      const title = this.$props.title || this.$slots.title;
+      return title || '';
+    }
+  },
   render () {
+    const self = this;
     const h = this.$createElement;
-    return this.$slots.default;
-    //return this.$slots.default;
-    //return h('div' , [ , 'sdfsf'])
+    let children = this.$slots.default.filter(c => {
+      return c.tag || c.text.trim() !== '';
+    });
+    return h(
+      ContainerRender,
+      {
+        attrs : {
+          children (ref) {
+            let renderContainer = ref.renderContainer;
+            self.renderContainer = renderContainer;
+            return children;
+          }
+        }
+      }
+    )
+    // return h(
+    //   Tooltip,
+    //   {
+    //     props : _extends({} , this.$props , {
+    //       content : this.getPopconfirmContent()
+    //     })
+    //   },
+    //   [children]
+    // )
   }
 }

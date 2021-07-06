@@ -33,12 +33,95 @@ export default {
       default: 'ca-popover'
     }
   },
+  methods : {
+    renderContent (prefixCls) {
+      const h = this.$createElement;
+      let { title , icon , okText , cancelText } = this.$props;
+      if (!title) {
+        title = this.$slots.title;
+      };
+      if (!okText) {
+        okText = this.$slots.okText
+      };
+      if (!cancelText) {
+        cancelText = this.$slots.cancelText;
+      }
+      return h(
+        'div',
+        {
+          class : prefixCls + '-content'
+        },
+        [
+          h(
+            'div',
+            {
+              class : prefixCls + '-message'
+            },
+            [
+              h(
+                'i',
+                {
+                  class : 'iconfont icon-' + icon + ' ' + prefixCls + '-' + icon
+                }
+              ),
+              h(
+                'div',
+                {
+                  class : prefixCls + '-title'
+                },
+                [title]
+              )
+            ]
+          ),
+          h(
+            'div',
+            {
+              class : prefixCls + '-button'
+            },
+            [
+              h(
+                'button',
+                {
+                  class : prefixCls + '-ok',
+                  on : {
+                    click : this.confirm
+                  }
+                },
+                [okText]
+              ),
+              h(
+                'button',
+                {
+                  class : prefixCls + '-cancel',
+                  on : {
+                    click : this.cancel
+                  }
+                },
+                [cancelText]
+              )
+            ]
+          )
+        ]
+      )
+    }
+  },
   render() {
     const h = this.$createElement;
-    const props = this.$props;
-    const popconfirmProps = _extends({}, props);
-    return h(Popconfirm, {
-      props: popconfirmProps,
-    }, [this.$slots.default])
+    const { prefixCls } = this.$props;
+    const content = this.renderContent(prefixCls);
+    return h(
+      Popconfirm,
+      {
+        props : this.$props
+      },
+      [
+        h(
+          'template',
+          { slot : 'title' },
+          [content]
+        ),
+        this.$slots.default
+      ]
+    )
   }
 }

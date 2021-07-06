@@ -9,6 +9,7 @@
       <Popconfirm
         :visible="show"
       >
+        <template v-slot:title>are you ok now?</template>
         <button class="btn">点击</button>
       </Popconfirm>
     </div>
