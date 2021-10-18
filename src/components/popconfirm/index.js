@@ -1,55 +1,43 @@
-import classnames from 'classnames';
 import _extends from '@babel/runtime/helpers/extends';
 import Popconfirm from './popconfirm';
+import classNames from 'classnames';
+import omit from 'omit.js';
 export default {
-  name: 'Popconfirm',
-  props: {
-    // 标题
-    title: '',
-    // 确认按钮的文本描述
-    okText: '确认',
-    // 取消按钮的文本描述
-    cancelText: '取消',
-    // 图标
-    icon: '',
-    // 点击取消按钮的回调
-    cancel: Function,
-    // 点击确认按钮的回调
-    confirm: Function,
-    // 显示与隐藏的回调
-    visibleChange: Function,
-    // 位置
-    placement: {
-      type: String,
-      default: 'top'
+  props : {
+    title : String,
+    okText : {
+      type : String,
+      default : '确定'
     },
-    // 是否显示气泡确认框
-    visible: {
-      type: Boolean,
-      default: false
+    cancelText : {
+      type : String,
+      default : '取消'
     },
-    prefixCls: {
-      type: String,
-      default: 'ca-popover'
+    placement : {
+      type : String,
+      default : 'top'
+    },
+    prefixCls : {
+      type : String,
+      default : 'ca-popconfirm'
+    }
+  },
+  data () {
+    return {
+      sVisible : false
     }
   },
   methods : {
     renderContent (prefixCls) {
       const h = this.$createElement;
-      let { title , icon , okText , cancelText } = this.$props;
+      let { title } = this.$props;
       if (!title) {
         title = this.$slots.title;
-      };
-      if (!okText) {
-        okText = this.$slots.okText
-      };
-      if (!cancelText) {
-        cancelText = this.$slots.cancelText;
       }
       return h(
         'div',
         {
-          class : prefixCls + '-content'
+          class : prefixCls + '-inner-content'
         },
         [
           h(
@@ -59,15 +47,9 @@ export default {
             },
             [
               h(
-                'i',
-                {
-                  class : 'iconfont icon-' + icon + ' ' + prefixCls + '-' + icon
-                }
-              ),
-              h(
                 'div',
                 {
-                  class : prefixCls + '-title'
+                  class : prefixCls + '-message-title'
                 },
                 [title]
               )
@@ -76,52 +58,224 @@ export default {
           h(
             'div',
             {
-              class : prefixCls + '-button'
+              class : prefixCls + '-buttons'
             },
             [
               h(
                 'button',
                 {
-                  class : prefixCls + '-ok',
-                  on : {
-                    click : this.confirm
+                  class: prefixCls + '-ok',
+                  on: {
+                    click: this.confirm
                   }
                 },
-                [okText]
+                [this.$props.okText]
               ),
               h(
                 'button',
                 {
-                  class : prefixCls + '-cancel',
-                  on : {
-                    click : this.cancel
+                  class: prefixCls + '-cancel',
+                  on: {
+                    click: this.cancel
                   }
                 },
-                [cancelText]
+                [this.$props.cancelText]
               )
             ]
           )
         ]
       )
+    },
+    confirm () {
+      
+    },
+    cancel () {
+
+    },
+    onVisibleChange (visible) {
+      this.setVisible(visible);
+    },
+    setVisible (visible) {
+      this.sVisible = visible;
+      this.$emit('visibleChange' , visible);
     }
   },
-  render() {
+  render () {
     const h = this.$createElement;
-    const { prefixCls } = this.$props;
-    const content = this.renderContent(prefixCls);
+    const title = this.renderContent(this.$props.prefixCls);
+    const props = omit(this.$props , ['title' , 'okText' , 'cancelText']);
+    const popconfirmProps = {
+      props : _extends({} , props , {
+        visible : this.sVisible
+      }),
+      on : {
+        visibleChange : this.onVisibleChange
+      }
+    }
+
     return h(
       Popconfirm,
-      {
-        props : this.$props
-      },
+      popconfirmProps,
       [
         h(
           'template',
-          { slot : 'title' },
-          [content]
+          {slot : 'title'},
+          [title]
         ),
         this.$slots.default
       ]
     )
   }
-}
+};
+
+
+
+// import _extends from '@babel/runtime/helpers/extends';
+// import Popconfirm from './popconfirm';
+// import classNames from 'classnames';
+// import omit from 'omit.js';
+// export default {
+//   name: 'Popconfirm',
+//   props: {
+//     title: {
+//       type: [String, Object],
+//       default: ''
+//     },
+//     okText: {
+//       type: String,
+//       default: '确定'
+//     },
+//     cancelText: {
+//       type: String,
+//       default: '取消'
+//     },
+//     icon: {
+//       type: [String, Object],
+//       default: 'warning'
+//     },
+//     placement: {
+//       type: String,
+//       default: ''
+//     },
+//     prefixCls: {
+//       type: String,
+//       default: 'ca-popconfirm'
+//     }
+//   },
+//   data() {
+//     return {
+//       visible: false
+//     }
+//   },
+//   methods: {
+//     renderContent(prefixCls) {
+//       let { title, icon, placement } = this.$props;
+//       const h = this.$createElement;
+//       if (!title) {
+//         title = this.$slots.title;
+//       };
+//       return h(
+//         'div',
+//         [
+//           h(
+//             'div',
+//             {
+//               class: classNames(prefixCls, `${prefixCls}-${placement}`),
+//             },
+//             [
+//               h(
+//                 'div',
+//                 {
+//                   class: prefixCls + '-content'
+//                 },
+//                 [
+//                   h(
+//                     'div',
+//                     {
+//                       class: prefixCls + '-message'
+//                     },
+//                     [
+//                       h(
+//                         'i',
+//                         {
+//                           class: 'iconfont icon-' + icon + ' ' + prefixCls + '-' + icon
+//                         }
+//                       ),
+//                       h(
+//                         'div',
+//                         {
+//                           class: prefixCls + '-title'
+//                         },
+//                         [title]
+//                       )
+//                     ]
+//                   ),
+//                   h(
+//                     'div',
+//                     {
+//                       class: prefixCls + '-button'
+//                     },
+//                     [
+//                       h(
+//                         'button',
+//                         {
+//                           class: prefixCls + '-ok',
+//                           on: {
+//                             click: this.confirm
+//                           }
+//                         },
+//                         [this.$props.okText]
+//                       ),
+//                       h(
+//                         'button',
+//                         {
+//                           class: prefixCls + '-cancel',
+//                           on: {
+//                             click: this.cancel
+//                           }
+//                         },
+//                         [this.$props.cancelText]
+//                       )
+//                     ]
+//                   )
+//                 ]
+//               )
+//             ]
+//           )
+//         ]
+//       )
+//     },
+//     onVisibleChange (visible) {
+//       this.visible = visible;
+//       this.$emit('visibleChange' , visible);
+//     }
+//   },
+//   render() {
+//     const h = this.$createElement;
+//     const props = this.$props;
+//     const content = this.renderContent(props.prefixCls);
+//     // 除去这几个属性，因为这几个属性只会在这里会使用到，其他地方用不到
+//     const otherProps = omit(props , ['title' , 'cancelText' , 'okText']);
+//     const popconfirmProps = {
+//       props : _extends({} , otherProps , {
+//         visible : this.visible,
+//         prefixCls : props.prefixCls
+//       }),
+//       on : {
+//         visibleChange : this.onVisibleChange
+//       }
+//     }
+//     return h(
+//       Popconfirm,
+//       popconfirmProps,
+//       [
+//         h(
+//           'template',
+//           {slot : 'title'},
+//           [content]
+//         ),
+//         this.$slots.default
+//       ]
+//     )
+//   }
+// }

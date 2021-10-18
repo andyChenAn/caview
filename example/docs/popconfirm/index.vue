@@ -8,6 +8,8 @@
     <div class="inner">
       <Popconfirm
         :visible="show"
+        @confirm="onConfirm"
+        @cancel="onCancel"
       >
         <template v-slot:title>are you ok now?</template>
         <button class="btn">点击</button>
@@ -24,8 +26,10 @@ export default {
   },
   methods : {
     onClick () {
-      this.show = true;
-    }
+      
+    },
+    onConfirm () {},
+    onCancel () {}
   }
 }
 </script>
