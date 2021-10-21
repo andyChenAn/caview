@@ -4,28 +4,16 @@ export default {
       type : Boolean,
       default : false
     },
-    parent : {
-      type : Object,
-      default : {}
-    },
-    children : {
-      type : Function,
-      default : function () {}
-    },
-    getContainer : {
-      type : Function,
-      default : function () {}
-    },
-    getComponent : {
-      type : Function,
-      default : function () {}
-    }
+    parent : Object,
+    children : Function,
+    getContainer : Function,
+    getComponent : Function
   },
   methods : {
-    renderContainer () {
+    renderComponent () {
       const self = this;
       if (this.visible) {
-        let el = this.componentEl;
+        let el;
         if (!this.container) {
           this.container = this.getContainer();
           el = document.createElement('div');
@@ -36,13 +24,13 @@ export default {
           this._component = new this.$root.constructor({
             el : el,
             render () {
-              return self.getComponent()
+              return self.getComponent();
             }
           })
         }
       }
     },
-    removeContainer () {
+    removeComponent () {
       if (this.container) {
         this._component && this._component.$destroy();
         this.container.parentNode.removeChild(this.container);
@@ -53,8 +41,8 @@ export default {
   },
   render () {
     return this.children({
-      renderContainer : this.renderContainer,
-      removeContainer : this.removeContainer
-    });
+      renderComponent : this.renderComponent,
+      removeComponent : this.removeComponent
+    })
   }
-}
+};
