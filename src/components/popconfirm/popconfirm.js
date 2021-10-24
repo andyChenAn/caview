@@ -1,6 +1,7 @@
 import _extends from "@babel/runtime/helpers/extends";
 import ContainerRender from './containerRender';
-import classNames from "classnames";
+import Popup from './popup';
+import throttle from 'lodash/throttle';
 export default {
   props : {
     placement : {
@@ -18,26 +19,65 @@ export default {
   },
   data () {
     return {
-      sVisible : this.visible
+      transitionName : ''
     }
   },
   watch : {
     visible (newVal) {
-      this.sVisible = newVal;
+      if (!newVal) {
+        window.removeEventListener('resize' , this.handleResize);
+      } else {
+        this.handleResize = throttle(this.handleResize , 200);
+        window.addEventListener('resize' , this.handleResize);
+        document.body.addEventListener('mousedown' , this.handleDocumentClick)
+      }
     }
   },
   mounted () {
     this.$nextTick(() => {
       this.renderComponent();
-    })
+    });
   },
   updated () {
     this.renderComponent();
   },
   methods : {
+    contains (root , node) {
+      while (node) {
+        if (node === root) {
+          return true;
+        }
+        node = node.parentNode;
+      }
+    },
+    handleResize () {
+      this.align();
+    },
+    popupMousedown () {
+      this.hasPopupMousedown = true;
+      clearTimeout(this.mousedownTimeout);
+      this.mousedownTimeout = setTimeout(() => {
+        this.hasPopupMousedown = false;
+      } , 0);
+    },
+    handleDocumentClick (evt) {
+      if (!this.contains(this.$el , evt.target) && !this.hasPopupMousedown) {
+        this.$emit('visibleChange' , false);
+      }
+    },
     handleClick (evt) {
-      this.positionInfo = evt.currentTarget.getBoundingClientRect();
+      this.target = evt.currentTarget;
       this.$emit('visibleChange' , true);
+    },
+    getClickTargetPosition () {
+      const {width , height} = this.target.getBoundingClientRect();
+      const res = {
+        width : width,
+        height : height,
+        left : this.target.offsetLeft,
+        top : this.target.offsetTop
+      };
+      return res;
     },
     getContainer () {
       const container = document.createElement('div');
@@ -51,11 +91,10 @@ export default {
     },
     getComponent () {
       const h = this.$createElement;
-      const { prefixCls , placement } = this.$props;
       let transitionProps = {
         props : {
           appear : true,
-          name : this.transitionName || 'zoomIn'
+          name : 'zoomIn'
         }
       };
       return h(
@@ -63,51 +102,83 @@ export default {
         transitionProps,
         [
           h(
-            'div',
+            Popup,
             {
-              class : classNames(prefixCls , prefixCls + '-placement-' + placement),
+              props : this.$props,
               directives : [
                 {name : 'show' , value : this.visible}
               ],
-              style : this.getComponentStyle(placement)
+              on : {
+                align : this.align,
+                popupMousedown : this.popupMousedown
+              }
             },
-            [
-              h(
-                'div',
-                {
-                  class : prefixCls + '-content'
-                },
-                [
-                  h(
-                    'div',
-                    {
-                      class : prefixCls + '-arrow'
-                    }
-                  ),
-                  h(
-                    'div',
-                    {
-                      class : prefixCls + '-inner'
-                    },
-                    [this.$slots.title]
-                  )
-                ]
-              )
-            ]
+            [this.$slots.title]
           )
         ]
       )
     },
-    getComponentStyle (placement) {
-      let res = {};
-      const {width , left , top , height} = this.positionInfo;
+    align (popupElement) {
+      popupElement = this.popupElement || (this.popupElement = popupElement);
+      const { placement } = this.$props;
+      this.positionInfo = this.getClickTargetPosition();
+      const rect = popupElement.getBoundingClientRect();
+      const popupWidth = this.rectWidth || (this.rectWidth = rect.width * 10);
+      const popupHeight = this.rectHeight || (this.rectHeight = rect.height * 10);
+      const { top , left , width , height } = this.positionInfo;
+      let popupLeft , popupTop = 0 , transformOrigin = '';
       if (placement === 'top') {
-        res = {
-          left : (left + width / 2) + 'px',
-          top : top - 20 + 'px'
-        }
-      };
-      return res;
+        popupLeft = left - popupWidth / 2 + width / 2 + 'px';
+        popupTop = top - popupHeight + 'px';
+        transformOrigin = `50% ${popupHeight}px`;
+      } else if (placement === 'topLeft') {
+        popupLeft = left + 'px';
+        popupTop = top - popupHeight + 'px';
+        transformOrigin = `0px ${popupHeight}px`;
+      } else if (placement === 'topRight') {
+        popupLeft = left - popupWidth + width + 'px';
+        popupTop = top - popupHeight + 'px';
+        transformOrigin = `${popupWidth}px ${popupHeight}px`;
+      } else if (placement === 'leftTop') {
+        popupLeft = left - popupWidth + 'px';
+        popupTop = top + 'px';
+        transformOrigin = `${popupWidth}px 0px`;
+      } else if (placement === 'left') {
+        popupLeft = left - popupWidth + 'px';
+        popupTop = top - popupHeight / 2 + height / 2 + 'px';
+        transformOrigin = `${popupWidth}px 50%`;
+      } else if (placement === 'leftRight') {
+        popupLeft = left - popupWidth + 'px';
+        popupTop = top - popupHeight + height + 'px';
+        transformOrigin = `${popupWidth}px ${popupHeight}px`;
+      } else if (placement === 'bottomLeft') {
+        popupLeft = left + 'px';
+        popupTop = top + height + 'px';
+        transformOrigin = `0px 0px`;
+      } else if (placement === 'bottom') {
+        popupLeft = left - popupWidth / 2 + width / 2 + 'px';
+        popupTop = top + height + 'px';
+        transformOrigin = `50% 0px`;
+      } else if (placement === 'bottomRight') {
+        popupLeft = left + width - popupWidth + 'px';
+        popupTop = top + height + 'px';
+        transformOrigin = `${popupWidth}px 0px`;
+      } else if (placement === 'rightTop') {
+        popupLeft = left + width + 'px';
+        popupTop = top + 'px';
+        transformOrigin = `0px 0px`;
+      } else if (placement === 'right') {
+        popupLeft = left + width + 'px';
+        popupTop = top + height / 2 - popupHeight / 2 + 'px';
+        transformOrigin = `0px 50%`;
+      } else if (placement === 'rightBottom') {
+        popupLeft = left + width + 'px';
+        popupTop = top + height - popupHeight + 'px';
+        transformOrigin = `0 ${popupHeight}px`;
+      }
+      popupElement.style.left = popupLeft;
+      popupElement.style.top = popupTop;
+      popupElement.style.transformOrigin = transformOrigin;
     }
   },
   render (h) {
@@ -116,6 +187,7 @@ export default {
     if (children.length === 0) {
       return null;
     }
+    children[0].data || (children[0].data = {});
     children[0].data.on = {
       click : this.handleClick
     };
@@ -123,7 +195,7 @@ export default {
       ContainerRender,
       {
         props : {
-          visible : this.sVisible,
+          visible : this.visible,
           getContainer : this.getContainer,
           getComponent : this.getComponent,
           children (ref) {

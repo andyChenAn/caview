@@ -85,11 +85,13 @@ export default {
         ]
       )
     },
-    confirm () {
-      this.setVisible(true);
-    },
-    cancel () {
+    confirm (evt) {
       this.setVisible(false);
+      this.$emit('confirm' , evt);
+    },
+    cancel (evt) {
+      this.setVisible(false);
+      this.$emit('cancel' , evt);
     },
     onVisibleChange (visible) {
       this.setVisible(visible);

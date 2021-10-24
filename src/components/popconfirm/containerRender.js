@@ -9,6 +9,9 @@ export default {
     getContainer : Function,
     getComponent : Function
   },
+  beforeDestroy () {
+    this.removeComponent();
+  },
   methods : {
     renderComponent () {
       const self = this;
