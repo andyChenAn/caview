@@ -17,15 +17,11 @@ export default {
       default : false
     }
   },
-  data () {
-    return {
-      transitionName : ''
-    }
-  },
   watch : {
     visible (newVal) {
       if (!newVal) {
         window.removeEventListener('resize' , this.handleResize);
+        document.body.removeEventListener('mousedown' , this.handleDocumentClick);
       } else {
         this.handleResize = throttle(this.handleResize , 200);
         window.addEventListener('resize' , this.handleResize);
@@ -40,6 +36,10 @@ export default {
   },
   updated () {
     this.renderComponent();
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize' , this.handleResize);
+    document.body.removeEventListener('mousedown' , this.handleDocumentClick);
   },
   methods : {
     contains (root , node) {
@@ -147,7 +147,7 @@ export default {
         popupLeft = left - popupWidth + 'px';
         popupTop = top - popupHeight / 2 + height / 2 + 'px';
         transformOrigin = `${popupWidth}px 50%`;
-      } else if (placement === 'leftRight') {
+      } else if (placement === 'leftBottom') {
         popupLeft = left - popupWidth + 'px';
         popupTop = top - popupHeight + height + 'px';
         transformOrigin = `${popupWidth}px ${popupHeight}px`;

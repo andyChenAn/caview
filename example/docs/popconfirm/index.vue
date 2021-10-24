@@ -26,9 +26,9 @@
         <template v-slot:title>Are you sure delete this task?</template>
         <button class="btn">left</button>
       </Popconfirm>
-      <Popconfirm placement="leftRight">
+      <Popconfirm placement="leftBottom">
         <template v-slot:title>Are you sure delete this task?</template>
-        <button class="btn">leftRight</button>
+        <button class="btn">leftBottom</button>
       </Popconfirm>
       <Popconfirm placement="bottomLeft">
         <template v-slot:title>Are you sure delete this task?</template>
@@ -53,6 +53,17 @@
       <Popconfirm placement="rightBottom">
         <template v-slot:title>Are you sure delete this task?</template>
         <button class="btn">rightBottom</button>
+      </Popconfirm>
+    </div>
+    <div class="inner">
+      <Popconfirm
+        title="Are you sure delete this task?"
+        placement="leftTop"
+      >
+        <div style="height:100px;border:1px solid #ddd;width:200px">
+          <span>阿斯顿发拉设计费打算，。阿法法师的</span>
+          <span>sdfasljkfasfa</span>
+        </div>
       </Popconfirm>
     </div>
   </div>
