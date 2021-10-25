@@ -30,10 +30,45 @@
     position: relative;
     color: #333;
     font-size: 14px;
+    &-title {
+      padding-left: 20px;
+      line-height: 1.5;
+    }
   }
   &-buttons {
     margin-bottom: 4px;
     text-align: right;
+  }
+  &-cancel , &-ok {
+    height: 24px;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 0 8px;
+    border: none;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    line-height: 1.5;
+    &:hover {
+      opacity: 0.8;
+      border-color: #1890ff;
+    }
+  }
+  &-ok {
+    background-color: #1890ff;
+    border: 1px solid #1890ff;
+    color: #fff;
+  }
+  &-cancel {
+    background-color: transparent;
+    border: 1px solid #d9d9d9;
+    color: #333;
+  }
+  &-icon {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 6px;
   }
 }
 .ca-popconfirm-placement-top {
@@ -43,6 +78,7 @@
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
     border-color: transparent #fff #fff transparent;
+    box-shadow: 3px 3px 7px rgb(0 0 0 / 7%);
   }
 }
 .ca-popconfirm-placement-topLeft {
@@ -52,6 +88,7 @@
     left: 16px;
     transform: translateX(-50%) rotate(45deg);
     border-color: transparent #fff #fff transparent;
+    box-shadow: 3px 3px 7px rgb(0 0 0 / 7%);
   }
 }
 .ca-popconfirm-placement-topRight {
@@ -61,6 +98,7 @@
     right: 16px;
     transform: translateX(-50%) rotate(45deg);
     border-color: transparent #fff #fff transparent;
+    box-shadow: 3px 3px 7px rgb(0 0 0 / 7%);
   }
 }
 .ca-popconfirm-placement-leftTop {
@@ -70,6 +108,7 @@
     top: 12px;
     transform: translateX(-50%) rotate(45deg);
     border-color: #fff #fff transparent transparent;
+    box-shadow: 3px -3px 7px rgb(0 0 0 / 7%);
   }
 }
 .ca-popconfirm-placement-left {
@@ -79,6 +118,7 @@
     top: calc(50% - 4px);
     transform: translateX(-50%) rotate(45deg);
     border-color: #fff #fff transparent transparent;
+    box-shadow: 3px -3px 7px rgb(0 0 0 / 7%);
   }
 }
 
@@ -89,6 +129,7 @@
     bottom: 12px;
     transform: translateX(-50%) rotate(45deg);
     border-color: #fff #fff transparent transparent;
+    box-shadow: 3px -3px 7px rgb(0 0 0 / 7%);
   }
 }
 .ca-popconfirm-placement-bottomLeft {

@@ -1,6 +1,7 @@
 import _extends from '@babel/runtime/helpers/extends';
 import Popconfirm from './popconfirm';
 import omit from 'omit.js';
+import classNames from 'classnames';
 export default {
   props : {
     title : String,
@@ -19,6 +20,10 @@ export default {
     prefixCls : {
       type : String,
       default : 'ca-popconfirm'
+    },
+    icon : {
+      type : [String , Object],
+      default : 'warning'
     }
   },
   data () {
@@ -46,6 +51,12 @@ export default {
             },
             [
               h(
+                'i',
+                {
+                  class : classNames('iconfont' , `icon-${this.icon}` , prefixCls + '-icon')
+                }
+              ),
+              h(
                 'div',
                 {
                   class : prefixCls + '-message-title'
@@ -63,22 +74,22 @@ export default {
               h(
                 'button',
                 {
-                  class: prefixCls + '-ok',
-                  on: {
-                    click: this.confirm
-                  }
-                },
-                [this.$props.okText]
-              ),
-              h(
-                'button',
-                {
                   class: prefixCls + '-cancel',
                   on: {
                     click: this.cancel
                   }
                 },
                 [this.$props.cancelText]
+              ),
+              h(
+                'button',
+                {
+                  class: prefixCls + '-ok',
+                  on: {
+                    click: this.confirm
+                  }
+                },
+                [this.$props.okText]
               )
             ]
           )

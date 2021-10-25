@@ -123,8 +123,8 @@ export default {
       const { placement } = this.$props;
       this.positionInfo = this.getClickTargetPosition();
       const rect = popupElement.getBoundingClientRect();
-      const popupWidth = this.rectWidth || (this.rectWidth = rect.width * 10);
-      const popupHeight = this.rectHeight || (this.rectHeight = rect.height * 10);
+      const popupWidth = this.rectWidth || (this.rectWidth = rect.width * 2);
+      const popupHeight = this.rectHeight || (this.rectHeight = rect.height * 2);
       const { top , left , width , height } = this.positionInfo;
       let popupLeft , popupTop = 0 , transformOrigin = '';
       if (placement === 'top') {
