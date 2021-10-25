@@ -21,6 +21,10 @@ const routes = [
   {
     path : '/popconfirm',
     component : () => import('@example/docs/popconfirm')
+  },
+  {
+    path : '/loading',
+    component : () => import('@example/docs/loading')
   }
 ];
 const router = new VueRouter({

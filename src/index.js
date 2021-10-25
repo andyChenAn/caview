@@ -3,12 +3,14 @@ import Notification from './components/notification';
 import Modal from './components/modal';
 import Drawer from './components/drawer';
 import Popconfirm from './components/popconfirm';
+import Loading from './components/loading';
 const components = {
   Message,
   Notification,
   Modal,
   Drawer,
-  Popconfirm
+  Popconfirm,
+  Loading
 }
 const caview = {
   ...components
