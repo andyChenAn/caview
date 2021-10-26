@@ -1,5 +1,4 @@
 import classNames from "classnames";
-
 export default {
   props : {
     prefixCls : {
@@ -17,10 +16,16 @@ export default {
       default : ''
     },
     // 加载指示符，我们可以自定义loading效果
-    indicator : Function
+    indicator : Function,
+    // 组件的尺寸，默认为default，可以是small，large，default
+    size : {
+      type : String,
+      default : 'default'
+    }
   },
   methods : {
     renderLoading (prefixCls) {
+      const size = this.$props.size;
       const h = this.$createElement;
       let vnode;
       if (this.indicator && typeof this.indicator === 'function') {
@@ -31,56 +36,84 @@ export default {
         vnode = h(
           'div',
           {
-            class : prefixCls + '-inner'
+            class : classNames(prefixCls + '-content' , prefixCls + '-' + size)
           },
           [
             h(
               'span',
               {
-                class : prefixCls + '-circle'
+                class : classNames(prefixCls + '-icon')
               }
             )
           ]
         )
       }
       return vnode;
+    },
+    renderTip (prefixCls , children) {
+      const { tip } = this.$props;
+      const h = this.$createElement;
+      return tip ? h(
+        'div',
+        {
+          class : classNames(prefixCls + '-tip')
+        },
+        [tip]
+      ) : null;
+    },
+    renderChildren (prefixCls , children) {
+      const h = this.$createElement;
+      const { loading } = this.$props;
+      return h(
+        'div',
+        {
+          class : classNames(prefixCls + '-text' , loading ? prefixCls + '-blur' : null)
+        },
+        children
+      )
     }
   },
   render () {
     const h = this.$createElement;
     const { prefixCls , loading , tip } = this.$props;
-    const children = this.$slots.default;
-    return h(
-      'div',
-      {
-        class : prefixCls + '-wrap'
-      },
-      [
-        loading ? h(
-          'div',
-          {
-            class : prefixCls
-          },
-          [
-            this.renderLoading(prefixCls),
-            tip ? h(
-              'div',
-              {
-                class : prefixCls + '-text'
-              },
-              [tip]
-            ) : null
-          ]
-        ) : null,
-        children ? h(
-          'div',
-          {
-            class : classNames(prefixCls + '-container' , children ? prefixCls + '-blur' : null)
-          },
-          [children]
-        ) : null
-      ]
-    )
-    
+    let children = this.$slots.default || [];
+    // 只渲染第一个子元素
+    children = children.length > 1 ? [children[0]] : children;
+    let vnode = null;
+    if (children.length > 0) {
+      // 存在子元素，只会渲染第一个子元素
+      vnode = h(
+        'div',
+        {
+          class : prefixCls + '-wrap'
+        },
+        [
+          h(
+            'div',
+            {
+              class : classNames(prefixCls , {[prefixCls + '-ing'] : loading , [prefixCls + '-show-text'] : !!tip})
+            },
+            [
+              this.renderLoading(prefixCls),
+              this.renderTip(prefixCls , children)
+            ]
+          ),
+          this.renderChildren(prefixCls , children)
+        ]
+      )
+    } else {
+      // Loading组件没有子元素
+      vnode = h(
+        'div',
+        {
+          class : classNames(prefixCls , {[prefixCls + '-ing'] : loading})
+        },
+        [
+          this.renderLoading(prefixCls),
+          this.renderTip(prefixCls , children)
+        ]
+      )
+    };
+    return vnode;
   }
 }
