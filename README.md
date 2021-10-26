@@ -8,3 +8,4 @@
 - [x] Modal 对话框组件
 - [x] Drawer 抽屉组件
 - [x] Popconfirm 气泡确认框组件
+- [x] Loading 加载中组件
