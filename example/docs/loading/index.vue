@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <Loading tip="loading...">
-        <div class="content">hello andy</div>
+        <!-- <div class="content">这是文本</div> -->
       </Loading>
     </div>
   </div>
@@ -20,5 +20,7 @@ export default {
 <style scoped>
 .content {
   padding: 30px;
+  width: 300px;
+  height: 100px;
 }
 </style>

@@ -1,3 +1,5 @@
+import classNames from "classnames";
+
 export default {
   props : {
     prefixCls : {
@@ -47,21 +49,38 @@ export default {
   render () {
     const h = this.$createElement;
     const { prefixCls , loading , tip } = this.$props;
-    return loading ? h(
+    const children = this.$slots.default;
+    return h(
       'div',
       {
-        class : prefixCls
+        class : prefixCls + '-wrap'
       },
       [
-        this.renderLoading(prefixCls),
-        tip ? h(
+        loading ? h(
           'div',
           {
-            class : prefixCls + '-text'
+            class : prefixCls
           },
-          [tip]
+          [
+            this.renderLoading(prefixCls),
+            tip ? h(
+              'div',
+              {
+                class : prefixCls + '-text'
+              },
+              [tip]
+            ) : null
+          ]
+        ) : null,
+        children ? h(
+          'div',
+          {
+            class : classNames(prefixCls + '-container' , children ? prefixCls + '-blur' : null)
+          },
+          [children]
         ) : null
       ]
-    ) : null
+    )
+    
   }
 }

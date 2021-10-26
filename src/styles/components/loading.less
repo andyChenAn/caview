@@ -1,0 +1,33 @@
+.ca-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% , -50%);
+  &-circle {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border: 3px solid rgba(150, 150, 150, 0);
+    border-radius: 50%;
+    border-top-color: #0057e7;
+    animation: rotate 1s 0s infinite linear normal;
+  }
+  @keyframes rotate {
+    0%   { transform: rotate(0);      }
+    100% { transform: rotate(360deg); }
+  }
+  &-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  &-inner {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+  }
+  &-blur {
+    clear: both;
+    overflow: hidden;
+    opacity: .5;
+  }
+}
