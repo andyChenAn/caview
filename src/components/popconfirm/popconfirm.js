@@ -70,12 +70,14 @@ export default {
       this.$emit('visibleChange' , true);
     },
     getClickTargetPosition () {
-      const {width , height} = this.target.getBoundingClientRect();
+      const {width , height , top , left} = this.target.getBoundingClientRect();
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
       const res = {
         width : width,
         height : height,
-        left : this.target.offsetLeft,
-        top : this.target.offsetTop
+        left : left - scrollLeft,
+        top : top - scrollTop
       };
       return res;
     },
