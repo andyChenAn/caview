@@ -4,13 +4,15 @@ import Modal from './components/modal';
 import Drawer from './components/drawer';
 import Popconfirm from './components/popconfirm';
 import Loading from './components/loading';
+import Progress from './components/progress';
 const components = {
   Message,
   Notification,
   Modal,
   Drawer,
   Popconfirm,
-  Loading
+  Loading,
+  Progress
 }
 const caview = {
   ...components

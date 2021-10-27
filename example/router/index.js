@@ -25,6 +25,10 @@ const routes = [
   {
     path : '/loading',
     component : () => import('@example/docs/loading')
+  },
+  {
+    path : '/progress',
+    component : () => import('@example/docs/progress')
   }
 ];
 const router = new VueRouter({
