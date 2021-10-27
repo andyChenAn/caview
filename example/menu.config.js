@@ -43,5 +43,14 @@ export default [
         path : '/loading'
       }
     ]
+  },
+  {
+    title : '数据展示',
+    children : [
+      {
+        name : 'Avatar 头像',
+        path : '/avatar'
+      }
+    ]
   }
 ]

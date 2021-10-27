@@ -44,7 +44,7 @@
       <div style="width: 400px">
         <Progress :percent="60" :stroke-color="{'0%' : '#108ee9' , '100%' : '#87d068'}" />
         <Progress :percent="60" type="circle" :stroke-color="{'0%' : '#108ee9' , '100%' : '#87d068'}" />
-        <Progress :percent="80" type="circle" :stroke-color="{'0%' : 'red' , '100%' : 'yellow'}" />
+        <Progress :percent="90" type="circle" :stroke-color="{'0%' : 'red' , '100%' : 'yellow'}" />
       </div>
     </div>
   </div>

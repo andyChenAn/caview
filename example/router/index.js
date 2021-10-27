@@ -29,6 +29,10 @@ const routes = [
   {
     path : '/progress',
     component : () => import('@example/docs/progress')
+  },
+  {
+    path : '/avatar',
+    component : () => import('@example/docs/avatar')
   }
 ];
 const router = new VueRouter({

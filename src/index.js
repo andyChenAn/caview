@@ -5,6 +5,7 @@ import Drawer from './components/drawer';
 import Popconfirm from './components/popconfirm';
 import Loading from './components/loading';
 import Progress from './components/progress';
+import Avatar from './components/avatar';
 const components = {
   Message,
   Notification,
@@ -12,7 +13,8 @@ const components = {
   Drawer,
   Popconfirm,
   Loading,
-  Progress
+  Progress,
+  Avatar
 }
 const caview = {
   ...components
