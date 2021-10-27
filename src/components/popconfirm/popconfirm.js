@@ -36,6 +36,9 @@ export default {
   },
   updated () {
     this.renderComponent();
+    if (this.popupElement) {
+      this.align(this.popupElement)
+    }
   },
   beforeDestroy () {
     window.removeEventListener('resize' , this.handleResize);
@@ -71,13 +74,11 @@ export default {
     },
     getClickTargetPosition () {
       const {width , height , top , left} = this.target.getBoundingClientRect();
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
       const res = {
         width : width,
         height : height,
-        left : left - scrollLeft,
-        top : top - scrollTop
+        left : left,
+        top : top
       };
       return res;
     },
@@ -127,8 +128,12 @@ export default {
       const rect = popupElement.getBoundingClientRect();
       const popupWidth = this.rectWidth || (this.rectWidth = rect.width * 2);
       const popupHeight = this.rectHeight || (this.rectHeight = rect.height * 2);
-      const { top , left , width , height } = this.positionInfo;
+      let { top , left , width , height } = this.positionInfo;
+      const scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       let popupLeft , popupTop = 0 , transformOrigin = '';
+      top = top + scrollTop;
+      left = left + scrollLeft;
       if (placement === 'top') {
         popupLeft = left - popupWidth / 2 + width / 2 + 'px';
         popupTop = top - popupHeight + 'px';
