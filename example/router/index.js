@@ -33,6 +33,10 @@ const routes = [
   {
     path : '/avatar',
     component : () => import('@example/docs/avatar')
+  },
+  {
+    path : '/badge',
+    component : () => import('@example/docs/badge')
   }
 ];
 const router = new VueRouter({

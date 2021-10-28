@@ -50,6 +50,10 @@ export default [
       {
         name : 'Avatar 头像',
         path : '/avatar'
+      },
+      {
+        name : 'Badge 徽标数',
+        path : '/badge'
       }
     ]
   }

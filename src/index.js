@@ -6,6 +6,7 @@ import Popconfirm from './components/popconfirm';
 import Loading from './components/loading';
 import Progress from './components/progress';
 import Avatar from './components/avatar';
+import Badge from './components/badge';
 const components = {
   Message,
   Notification,
@@ -14,7 +15,8 @@ const components = {
   Popconfirm,
   Loading,
   Progress,
-  Avatar
+  Avatar,
+  Badge
 }
 const caview = {
   ...components

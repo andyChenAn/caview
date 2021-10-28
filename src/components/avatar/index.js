@@ -1,5 +1,4 @@
 import classNames from "classnames";
-
 export default {
   props : {
     // 图像形状，可以是circle或者square，默认为circle
@@ -17,14 +16,11 @@ export default {
       type : String,
       default : ''
     },
-    // 图标类型
-    icon : {
-      type : String,
-      default : ''
-    },
-    srcSet : String,
     // 处理图片加载失败的回调
-    loadError : Function,
+    loadError : {
+      type : Function,
+      default : function () {}
+    },
     // 图片加载失败时，需要展示的内容
     alt : String,
     prefixCls : {
@@ -34,20 +30,52 @@ export default {
   },
   data () {
     return {
-      scale : 1
+      scale : 1,
+      imgExist : true
+    }
+  },
+  watch : {
+    src () {
+      this.$nextTick(() => {
+        this.scale = 1;
+        this.imgExist = true;
+        this.$forceUpdate();
+      })
     }
   },
   mounted () {
-
+    this.$nextTick(() => {
+      this.setScale();
+    })
+  },
+  updated () {
+    this.$nextTick(() => {
+      this.setScale();
+    })
   },
   methods : {
     setScale () {
-
+      const avatarNode = this.$refs.avatarNode;
+      const avatarChildNode = this.$refs.avatarChildNode;
+      if (!avatarNode || !avatarChildNode) {
+        return;
+      }
+      let avatarWidth = avatarNode.offsetWidth;
+      let avatarChildWidth = avatarChildNode.offsetWidth;
+      if (avatarWidth == 0 || avatarChildWidth == 0 || this.prevAvatarChildWidth == avatarChildWidth && this.prevAvatarWidth == avatarWidth) {
+        return;
+      }
+      this.prevAvatarWidth = avatarWidth;
+      this.prevAvatarChildWidth = avatarChildWidth;
+      this.scale = avatarWidth - 8 < avatarChildWidth ? (avatarWidth - 8) / avatarChildWidth : 1;
     },
     handleError () {
       const { loadError } = this.$props;
       if (loadError && typeof loadError === 'function') {
-        loadError();
+        let flag = loadError();
+        if (flag !== false) {
+          this.imgExist = false;
+        }
       }
     }
   },
@@ -64,7 +92,7 @@ export default {
       }
     };
     let children = this.$slots.default;
-    if (src) {
+    if (src && this.imgExist) {
       children = h(
         'img',
         {
@@ -82,7 +110,10 @@ export default {
         'span',
         {
           class : prefixCls + '-text',
-          ref : 'avatarChildNode'
+          ref : 'avatarChildNode',
+          style : {
+            transform : `scale(${this.scale}) translateX(-50%)`
+          }
         },
         [children]
       )
@@ -90,7 +121,7 @@ export default {
     return h(
       'span',
       {
-        class : classNames(prefixCls , typeof size === 'string' ? prefixCls + '-' + size : null , prefixCls + '-' + shape , src ? prefixCls + '-img' : null),
+        class : classNames(prefixCls , typeof size === 'string' ? prefixCls + '-' + size : null , prefixCls + '-' + shape , src && this.imgExist ? prefixCls + '-img' : null),
         style : sizeStyle,
         ref : 'avatarNode'
       },
