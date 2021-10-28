@@ -7,7 +7,9 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px;">基本使用</div>
-      <Badge></Badge>
+      <Badge>
+        <div style="width:100px;height:100px;background-color: #ccc;"></div>
+      </Badge>
     </div>
   </div>
 </template>
