@@ -1,10 +1,11 @@
+import classNames from 'classnames';
 import omit from 'omit.js';
 import ScrollNumber from './scrollNumber';
 export default {
   props : {
     // 数字
     count : {
-      type : Number,
+      type : [Number , String],
       default : 0
     },
     // 小圆点颜色
@@ -25,20 +26,22 @@ export default {
     },
     // 最大值
     maxCount : {
-      type : Number,
+      type : [Number , String],
       default : 99
     }
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls , count } = this.$props;
-    let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
+    const { prefixCls } = this.$props;
+    let children = null;
+    if (this.$slots.default) {
+      children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
+    }
     const scrollNumberProps = omit(this.$props , ['color' , 'offset' , 'prefixCls']);
-    console.log(scrollNumberProps);
     return h(
       'span',
       {
-        class : prefixCls
+        class : classNames(prefixCls)
       },
       [
         children,

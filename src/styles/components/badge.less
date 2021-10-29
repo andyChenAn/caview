@@ -1,0 +1,30 @@
+.ca-badge {
+  display: inline-block;
+  position: relative;
+  font-size: 14px;
+  line-height: 1;
+  .ca-scroll-number {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+    white-space: nowrap;
+    text-align: center;
+    background-color: #f5222d;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px #fff;
+    transform: translate(50% , -50%);
+    overflow: hidden;
+    &-box {
+      display: inline-block;
+      height: 20px;
+      transition: all .3s cubic-bezier(.645,.045,.355,1);
+    }
+  }
+}
