@@ -1,5 +1,4 @@
 import classNames from "classnames";
-
 function getNumberArray (num) {
   return num ? num.toString().split('').map(i => {
     let current = Number(i);
@@ -20,35 +19,39 @@ export default {
   },
   data () {
     return {
-      sCount : this.count,
+      scrollCount : this.count,
       startAnimate : true
     }
   },
-  updated () {
-    this.timeout = setTimeout(() => {
-      this.sCount = this.count;
-      this.startAnimate = false;
-    })
-  },
   watch : {
-    count (newVal) {
-      this.lastCount = this.sCount;
-      this.startAnimate = true
+    count () {
+      this.lastCount = this.scrollCount;
+      this.startAnimate = true;
+      this.$forceUpdate();
+    }
+  },
+  updated () {
+    if (this.startAnimate) {
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.scrollCount = this.count;
+        this.startAnimate = false;
+      })
     }
   },
   methods : {
     renderNumberElement (prefixCls) {
-      if (this.sCount) {
-        return getNumberArray(this.sCount).map((num , index) => {
+      if (this.scrollCount) {
+        return getNumberArray(this.scrollCount).map((num , index) => {
           return this.renderCurrentNumber(prefixCls , num , index);
         })
       };
-      return this.sCount;
+      return this.scrollCount;
     },
     getNumberPosition (num , index) {
-      let currentCount = Math.abs(Number(this.sCount));
+      let currentCount = Math.abs(Number(this.scrollCount));
       let lastCount = Math.abs(Number(this.lastCount));
-      let currentDigital = Math.abs(getNumberArray(this.sCount)[index]);
+      let currentDigital = Math.abs(getNumberArray(this.scrollCount)[index]);
       let lastDigital = Math.abs(getNumberArray(this.lastCount)[index]);
       if (currentCount > lastCount) {
         if (currentDigital >= lastDigital) {
@@ -65,7 +68,7 @@ export default {
       const h = this.$createElement;
       if (typeof num === 'number') {
         const position = this.getNumberPosition(num , index);
-        const removeTransition = this.startAnimate || getNumberArray(this.lastCount)[index] == undefined;
+        const removeTransition = this.startAnimate || getNumberArray(this.lastCount)[index] === undefined;
         return h(
           'span',
           {
@@ -86,7 +89,8 @@ export default {
         children.push(h(
           'div',
           {
-            class : classNames(prefixCls + '-list' , {current : position === i})
+            class : classNames(prefixCls + '-list' , {current : position === i}),
+            key : i
           },
           [i % 10]
         ))
