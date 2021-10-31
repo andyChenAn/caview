@@ -1,6 +1,6 @@
 import classNames from "classnames";
 function getNumberArray (num) {
-  return num ? num.toString().split('').map(i => {
+  return num ? num.toString().split('').reverse().map(i => {
     let current = Number(i);
     return isNaN(current) ? i : current
   }) : [];
@@ -41,10 +41,11 @@ export default {
   },
   methods : {
     renderNumberElement (prefixCls) {
-      if (this.scrollCount) {
+      // this.scrollCount % 1 === 0这个判断就是用来判断this.scrollCount是否为一个数字，当数字超过maxCount时，this.scrollCount的值为maxCount+，这是一个字符串，所以就不能使用原来的方式进行展示
+      if (this.scrollCount && this.scrollCount % 1 === 0) {
         return getNumberArray(this.scrollCount).map((num , index) => {
           return this.renderCurrentNumber(prefixCls , num , index);
-        })
+        }).reverse()
       };
       return this.scrollCount;
     },
@@ -77,14 +78,25 @@ export default {
               transition : removeTransition ? 'none' : undefined,
               transform : `translateY(${-position * 100 + '%'})`
             },
+            key : index
           },
           [this.renderNumberList(prefixCls , position)]
         )
-      }
+      };
+      // 当数量是负数时，这里渲染的是符号"-"
+      return h(
+        'span',
+        {
+          class : prefixCls + '-symbol',
+          key : 'symbol'
+        },
+        [num]
+      )
     },
     renderNumberList (prefixCls , position) {
       const h = this.$createElement;
       let children = [];
+      // 这里渲染30个标签，是因为当从9变到0时，
       for (let i = 0 ; i < 30 ; i++) {
         children.push(h(
           'div',

@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px;">基本使用</div>
-      <!-- <Badge count="37">
+      <Badge count="37">
         <div style="width:100px;height:100px;background-color: #ccc;"></div>
       </Badge>
       <Badge count="3">
@@ -15,11 +15,11 @@
       </Badge>
       <Badge count="0">
         <div style="width:100px;height:100px;background-color: #ccc;"></div>
-      </Badge> -->
+      </Badge>
     </div>
     <div class="inner">
       <div style="margin-bottom:20px;">添加动画效果</div>
-      <Badge :count="count">
+      <Badge :count="count" maxCount="99">
         <div style="width:100px;height:100px;background-color:#ccc"></div>
       </Badge>
       <button @click="add">加</button>

@@ -30,6 +30,12 @@ export default {
       default : 99
     }
   },
+  methods : {
+    getDisplayCount () {
+      const { count , maxCount } = this.$props;
+      return count > maxCount ? maxCount + '+' : count;
+    }
+  },
   render () {
     const h = this.$createElement;
     const { prefixCls } = this.$props;
@@ -38,6 +44,7 @@ export default {
       children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
     }
     const scrollNumberProps = omit(this.$props , ['color' , 'offset' , 'prefixCls']);
+    scrollNumberProps.count = this.getDisplayCount();
     return h(
       'span',
       {
@@ -45,7 +52,7 @@ export default {
       },
       [
         children,
-        h(
+        scrollNumberProps.count && h(
           ScrollNumber,
           {
             props : scrollNumberProps
