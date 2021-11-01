@@ -7,6 +7,7 @@ import Loading from './components/loading';
 import Progress from './components/progress';
 import Avatar from './components/avatar';
 import Badge from './components/badge';
+import Calendar from './components/calendar';
 const components = {
   Message,
   Notification,
@@ -16,7 +17,8 @@ const components = {
   Loading,
   Progress,
   Avatar,
-  Badge
+  Badge,
+  Calendar
 }
 const caview = {
   ...components
