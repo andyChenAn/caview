@@ -54,6 +54,10 @@ export default [
       {
         name : 'Badge 徽标数',
         path : '/badge'
+      },
+      {
+        name : 'Calendar 日历',
+        path : '/calendar'
       }
     ]
   }

@@ -2,6 +2,7 @@ import classNames from "classnames";
 function getNumberArray (num) {
   return num ? num.toString().split('').reverse().map(i => {
     let current = Number(i);
+    // 这里需要做一下是否为数字的判断，如果不是一个数字，那么就直接返回，主要是处理负数"-"
     return isNaN(current) ? i : current
   }) : [];
 };
@@ -15,7 +16,16 @@ export default {
       type : [Number , String],
       default : 0
     },
-    maxCount : [Number , String]
+    offset : {
+      type : Array,
+      default () {
+        return []
+      }
+    },
+    color : {
+      type : String,
+      default : ''
+    }
   },
   data () {
     return {
@@ -67,6 +77,7 @@ export default {
     },
     renderCurrentNumber (prefixCls , num , index) {
       const h = this.$createElement;
+      // 如果是负数，那么num有可能是‘-’
       if (typeof num === 'number') {
         const position = this.getNumberPosition(num , index);
         const removeTransition = this.startAnimate || getNumberArray(this.lastCount)[index] === undefined;
@@ -112,11 +123,16 @@ export default {
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls } = this.$props;
+    const { prefixCls , color , offset } = this.$props;
     return h(
       'span',
       {
-        class : prefixCls
+        class : prefixCls,
+        style : {
+          backgroundColor : color,
+          top : offset[0] + 'px',
+          right : -offset[1] + 'px'
+        }
       },
       [this.renderNumberElement(prefixCls)]
     )

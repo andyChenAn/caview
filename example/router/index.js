@@ -37,6 +37,10 @@ const routes = [
   {
     path : '/badge',
     component : () => import('@example/docs/badge')
+  },
+  {
+    path : '/calendar',
+    component : () => import('@example/docs/calendar')
   }
 ];
 const router = new VueRouter({
