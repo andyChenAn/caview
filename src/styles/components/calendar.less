@@ -1,3 +1,113 @@
-.ca-calendar-year-select {
-  
+.ca-calendar {
+  &-header {
+    padding: 10px 16px 10px 0;
+    text-align: right;
+  }
+  &-year-select , &-month-select {
+    display: inline-block;
+  }
+  &-month-select {
+    margin-left: 10px;
+  }
+  &-year-inner , &-month-inner {
+    position: relative;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      border-color: #1890ff;
+    }
+  }
+  &-year-text , &-month-text {
+    display: block;
+    margin: 0 24px 0 10px;
+    line-height: 30px;
+  }
+  &-icon {
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    right: 6px;
+  }
+  &-group {
+    display: inline-block;
+    margin-left: 16px;
+  }
+  &-month-lable , &-year-lable {
+    display: inline-block;
+    line-height: 30px;
+    padding: 0 15px;
+    border: 1px solid #d8d8d8;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+  &-month-lable {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-right-width: 0px;
+    &.active {
+      border-color: #1890ff;
+      border-right-width: 1px;
+    }
+  }
+  &-year-lable {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-left-width: 0px;
+    &.active {
+      border-color: #1890ff;
+      border-left-width: 1px;
+    }
+  }
+  &-content {
+    box-sizing: border-box;
+    font-size: 14px;
+    color: rgba(0 , 0, 0 , 0.65);
+  }
+  &-body {
+    padding: 8px 12px;
+  }
+  &-table {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    line-height: 1.5;
+    tr th {
+      background-color: transparent;
+      padding-bottom: 5px;
+      padding-right: 12px;
+      text-align: right;
+    }
+  }
+  &-day {
+    text-align: right;
+  }
+  &-day-box {
+    height: 116px;
+    display: block;
+    margin: 0 4px;
+    padding: 4px 8px;
+    border-top: 2px solid #e8e8e8;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: #e6f7ff;
+    }
+    &.selected {
+      border-top-color: #1890ff;
+    }
+  }
+  &-text-gray {
+    color: rgba(0,0,0,0.25);
+  }
+  &-day-content {
+    height: 88px;
+    overflow-y: auto;
+  }
 }
