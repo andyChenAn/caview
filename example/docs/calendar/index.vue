@@ -7,14 +7,17 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px;">基本使用</div>
-      <Calendar>
-      </Calendar>
+      <Calendar @select="handleSelect" />
     </div>
   </div>
 </template>
 <script>
 export default {
-  
+  methods : {
+    handleSelect (now) {
+      
+    }
+  }
 }
 </script>
 <style scoped>

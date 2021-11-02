@@ -27,16 +27,42 @@ export default {
   },
   data () {
     return {
-      currentLable : '月'
+      currentLable : '月',
+      currentDate : this.value,
+      // 当前日期，用于选中效果
+      currentDay : new Date(this.value),
+      // 月份
+      monthArr : ['1月' , '2月' , '3月' , '4月' , '5月' , '6月' , '7月' , '8月' , '9月' , '10月' , '11月' , '12月'],
+      // 是否展示月份下拉列表
+      showMonthList : false,
+      // 月份的下拉列表的宽度
+      monthWidth : 0
     }
   },
+  watch : {
+    value (newVal) {
+      if (!newVal instanceof Date) {
+        this.$message.warning('不是日期格式的数据');
+        return;
+      }
+      this.currentDate = newVal;
+    }
+  },
+  mounted () {
+    window.addEventListener('click' , this.onBodyClick);
+  },
+  beforeDestroy () {
+    window.removeEventListener('click' , this.onBodyClick);
+  },
   methods : {
+    onBodyClick (evt) {
+      this.showMonthList = false;
+    },
     // 渲染日历头部
     renderCalendarHeader (prefixCls) {
       const h = this.$createElement;
-      const { value } = this.$props;
-      const year = value.getFullYear();
-      const month = value.getMonth() + 1;
+      const year = this.currentDate.getFullYear();
+      const month = this.currentDate.getMonth() + 1;
       return h(
         'div',
         {
@@ -98,7 +124,10 @@ export default {
           h(
             'div',
             {
-              class : classNames(prefixCls + '-month-select')
+              class : classNames(prefixCls + '-month-select'),
+              on : {
+                click : this.clickMonth
+              }
             },
             [
               h(
@@ -145,6 +174,55 @@ export default {
                   )
                 ]
               ),
+              h(
+                'transition',
+                {
+                  attrs : {
+                    name : 'zoom-slide'
+                  }
+                },
+                [
+                  h(
+                    'div',
+                    {
+                      class : classNames(prefixCls + '-month-list-box'),
+                      style : {
+                        width : this.monthWidth + 'px'
+                      },
+                      ref : 'monthListBox',
+                      directives : [
+                        {
+                          name : 'show',
+                          value : this.showMonthList
+                        }
+                      ]
+                    },
+                    [
+                      h(
+                        'ul',
+                        {
+                          class : classNames(prefixCls + '-month-ul'),
+                          ref : 'monthUl'
+                        },
+                        [
+                          this.monthArr.map((item , i) => {
+                            return h(
+                              'li',
+                              {
+                                class : classNames(prefixCls + '-month-list' , month === i + 1 ? 'selected' : null),
+                                on : {
+                                  click : (evt) => this.clickMonthList(evt , i)
+                                }
+                              },
+                              [item]
+                            )
+                          })
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
             ]
           ),
           h(
@@ -177,6 +255,19 @@ export default {
           )
         ]
       )
+    },
+    clickMonthList (evt , month) {
+      evt.stopPropagation();
+      let date = new Date(this.currentDate);
+      date.setMonth(month);
+      this.currentDate = date;
+      this.showMonthList = false;
+    },
+    clickMonth (evt) {
+      evt.stopPropagation();
+      const { width } = evt.currentTarget.getBoundingClientRect();
+      this.monthWidth = width;
+      this.showMonthList = true;
     },
     // 渲染星期一到星期日
     renderTableHeader (prefixCls) {
@@ -215,7 +306,7 @@ export default {
     },
     // 获取当月天数
     getCurrentDays () {
-      let date = this.$props.value;
+      let date = new Date(this.currentDate);
       let currentMonth = date.getMonth();
       date.setMonth(currentMonth + 1);
       date.setDate(0);
@@ -223,7 +314,7 @@ export default {
     },
     // 获取当月第一天是星期几
     getWeekOfFirstDay () {
-      let date = this.$props.value;
+      let date = new Date(this.currentDate);
       date.setDate(1);
       return date.getDay();
     },
@@ -234,23 +325,25 @@ export default {
      */
     getDisplayDays (days , weekOfFirstDay) {
       let displayDays = [];
-      const date = this.$props.value;
+      const date = new Date(this.currentDate);
       date.setDate(0)
       let prevMonthDays = date.getDate();
       // 当月展示的天数
       for (let i = 1 ; i <= days ; i++) {
         displayDays.push({
-          text : i,
+          date : i,
           type : 'current',
-          month : new Date().getMonth()
+          month : this.currentDate.getMonth(),
+          year : this.currentDate.getFullYear(),
         })
       };
       // 上月展示的天数
       for (let i = 1 ; i <= weekOfFirstDay ; i++) {
         displayDays.unshift({
-          text : prevMonthDays,
+          date : prevMonthDays,
           type : 'prev',
-          month : (new Date().getMonth() - 1) < 0 ? 11 : (new Date().getMonth() - 1)
+          month : (this.currentDate.getMonth() - 1) < 0 ? 11 : (this.currentDate.getMonth() - 1),
+          year : (this.currentDate.getMonth() - 1) < 0 ? this.currentDate.getFullYear() - 1 : this.currentDate.getFullYear(),
         });
         prevMonthDays--;
       };
@@ -258,9 +351,10 @@ export default {
       let nextMonthDays = 7 * 6 - displayDays.length;
       for (let i = 1 ; i <= nextMonthDays ; i++) {
         displayDays.push({
-          text : i,
+          date : i,
           type : 'next',
-          month : (new Date().getMonth() + 1) > 11 ? 0 : (new Date().getMonth() + 1)
+          month : (this.currentDate.getMonth() + 1) > 11 ? 0 : (this.currentDate.getMonth() + 1),
+          year : (this.currentDate.getMonth() + 1) > 11 ? this.currentDate.getFullYear() + 1 : this.currentDate.getFullYear()
         });
       };
       return displayDays;
@@ -270,7 +364,8 @@ export default {
       let date = new Date();
       let month = date.getMonth();
       let day = date.getDate();
-      if (month == item.month && day ==item.text) {
+      let year = date.getFullYear();
+      if (month == item.month && day == item.date && year == item.year) {
         return true;
       };
       return false;
@@ -297,7 +392,10 @@ export default {
                 h(
                   'div',
                   {
-                    class : classNames(prefixCls + '-day-box' , this.isCurrentDate(day) ? 'selected' : null)
+                    class : classNames(prefixCls + '-day-box' , this.isCurrentDate(day) ? 'selected' : null),
+                    on : {
+                      click : () => this.selectCalendar(day)
+                    }
                   },
                   [
                     h(
@@ -305,14 +403,14 @@ export default {
                       {
                         class : classNames(prefixCls + '-day-text' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : null)
                       },
-                      [day.text < 10 ? '0' + day.text : day.text]
+                      [day.date < 10 ? '0' + day.date : day.date]
                     ),
                     h(
                       'div',
                       {
                         class : classNames(prefixCls + '-day-content')
                       },
-                      [dateCellRender(this.$props.value)]
+                      [dateCellRender(this.currentDate)]
                     )
                   ]
                 )
@@ -322,6 +420,16 @@ export default {
         ))
       };
       return rows;
+    },
+    // 点击选择某个日历
+    selectCalendar (item) {
+      let date = new Date();
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      let seconds = date.getSeconds();
+      let now = new Date(item.year , item.month , item.date , hours , minutes , seconds);
+      this.currentDate = now;
+      this.$emit('select' , now);
     },
     // 渲染table内容
     renderTableBody (prefixCls) {
@@ -340,6 +448,61 @@ export default {
         ]
       )
     },
+    renderMonthTableBody (prefixCls) {
+      const h = this.$createElement;
+      let monthArr = JSON.parse(JSON.stringify(this.monthArr));
+      let rows = [];
+      let monthCellRender = this.$scopedSlots.monthCellRender || noop;
+      for (let i = 0 ; i < 4 ; i++) {
+        rows.push(
+          h(
+            'tr',
+            {
+              class : classNames(prefixCls + '-month-rows')
+            },
+            monthArr.slice(i * 3 , (i + 1) * 3).map(month => {
+              return h(
+                'td',
+                {
+                  class : classNames(prefixCls + '-month-td')
+                },
+                [
+                  h(
+                    'div',
+                    {
+                      class : classNames(prefixCls + '-month-box'),
+                      on : {
+                        click : () => this.selectMonthCalendar(month)
+                      }
+                    },
+                    [
+                      h(
+                        'div',
+                        {
+                          class : classNames(prefixCls + '-month-texts')
+                        },
+                        [month]
+                      ),
+                      h(
+                        'div',
+                        {
+                          class : classNames(prefixCls + '-month-content')
+                        },
+                        [monthCellRender(this.currentDate)]
+                      )
+                    ]
+                  )
+                ]
+              )
+            })
+          )
+        )
+      }
+      return rows;
+    },
+    selectMonthCalendar (month) {
+
+    },
     // 渲染日历内容
     renderCalendarContent (prefixCls) {
       const h = this.$createElement;
@@ -355,7 +518,7 @@ export default {
               class : classNames(prefixCls + '-body')
             },
             [
-              h(
+              this.currentLable === '月' ? h(
                 'table',
                 {
                   class : classNames(prefixCls + '-table'),
@@ -367,6 +530,23 @@ export default {
                   this.renderTableHeader(prefixCls),
                   this.renderTableBody(prefixCls)
                 ]
+              ) : h(
+                'table',
+                {
+                  class : classNames(prefixCls + '-month-table'),
+                  attrs : {
+                    cellspacing : '0'
+                  }
+                },
+                [
+                  h(
+                    'tbody',
+                    {
+                      class : classNames(prefixCls + '-month-tbody')
+                    },
+                    [this.renderMonthTableBody(prefixCls)]
+                  )
+                ]
               )
             ]
           )
@@ -375,12 +555,12 @@ export default {
     },
     clickLable (lableName) {
       this.currentLable = lableName;
+
     }
   },
   render () {
     const h = this.$createElement;
     const { prefixCls , fullscreen } = this.$props;
-    console.log(this.$scopedSlots)
     return h(
       'div',
       {

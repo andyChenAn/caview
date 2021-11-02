@@ -5,9 +5,11 @@
   }
   &-year-select , &-month-select {
     display: inline-block;
+    position: relative;
   }
   &-month-select {
     margin-left: 10px;
+    min-width: 80px;
   }
   &-year-inner , &-month-inner {
     position: relative;
@@ -23,6 +25,7 @@
     display: block;
     margin: 0 24px 0 10px;
     line-height: 30px;
+    text-align: left;
   }
   &-icon {
     position: absolute;
@@ -68,7 +71,7 @@
   &-body {
     padding: 8px 12px;
   }
-  &-table {
+  &-table , &-month-table {
     background-color: transparent;
     margin: 0;
     padding: 0;
@@ -83,12 +86,13 @@
       padding-bottom: 5px;
       padding-right: 12px;
       text-align: right;
+      font-weight: 400;
     }
   }
   &-day {
     text-align: right;
   }
-  &-day-box {
+  &-day-box , &-month-box {
     height: 116px;
     display: block;
     margin: 0 4px;
@@ -101,14 +105,65 @@
     }
     &.selected {
       border-top-color: #1890ff;
-      background-color: #e6f7ff;
+      //background-color: #e6f7ff;
     }
+  }
+  &-day-text , &-month-texts {
+    height: 24px;
+    line-height: 24px;
   }
   &-text-gray {
     color: rgba(0,0,0,0.25);
   }
-  &-day-content {
+  &-day-content , &-month-content {
     height: 88px;
     overflow-y: auto;
+    text-align: left;
+  }
+  &-week {
+    color: rgba(0 , 0, 0 , 0.65);
+  }
+  &-month-td {
+    text-align: right;
+  }
+  &-month-list-box {
+    position: absolute;
+    left: 0;
+    transform-origin: center top;
+  }
+  .zoom-slide-enter-active , .zoom-slide-leave-active {
+    transition: all 0.3s cubic-bezier(.62,0,.29,.99);
+  }
+  .zoom-slide-enter , .zoom-slide-leave-to {
+    transform: scale(1 , 0);
+    opacity: 0;
+  }
+  &-month-ul {
+    max-height: 250px;
+    padding: 4px 0;
+    overflow: auto;
+    background-color: #fff;
+  }
+  &-month-list {
+    display: block;
+    padding: 5px 10px;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 22px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: left;
+    color: rgba(0 , 0, 0 , 0.55);
+    font-weight: 400;
+    &:hover {
+      background-color: #e6f7ff;
+    }
+    &.selected {
+      background-color: #fafafa;
+      font-weight: 600;
+      color: rgba(0 , 0, 0 , 0.65);
+    }
   }
 }

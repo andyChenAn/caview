@@ -26,7 +26,7 @@ export default {
   height: 100%;
   .content {
     display: flex;
-    height: 100%;
+    height: calc(100% - 64px);
     .inner {
       flex: 1;
       overflow: auto;
