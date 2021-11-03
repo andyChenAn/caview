@@ -41,6 +41,10 @@ const routes = [
   {
     path : '/calendar',
     component : () => import('@example/docs/calendar')
+  },
+  {
+    path : '/carousel',
+    component : () => import('@example/docs/carousel')
   }
 ];
 const router = new VueRouter({

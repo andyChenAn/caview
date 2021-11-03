@@ -58,6 +58,10 @@ export default [
       {
         name : 'Calendar 日历',
         path : '/calendar'
+      },
+      {
+        name : 'Carousel 跑马灯',
+        path : '/carousel'
       }
     ]
   }
