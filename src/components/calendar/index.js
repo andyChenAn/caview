@@ -19,6 +19,16 @@ export default {
     prefixCls : {
       type : String,
       default : 'ca-calendar'
+    },
+    // 以当前时间的年为准，选择年的左右间隔
+    yearOffset : {
+      type : Number,
+      default : 10
+    },
+    // 总共需要展示多少年数据
+    yearTotal : {
+      type : Number,
+      default : 20
     }
   },
   model : {
@@ -36,7 +46,13 @@ export default {
       // 是否展示月份下拉列表
       showMonthList : false,
       // 月份的下拉列表的宽度
-      monthWidth : 0
+      monthWidth : 0,
+      // 年份的下拉列表的宽度
+      yearWidth : 0,
+      // 是否展示年份下拉列表
+      showYearList : false,
+      // 年份数据
+      yearArr : []
     }
   },
   watch : {
@@ -57,12 +73,24 @@ export default {
   methods : {
     onBodyClick (evt) {
       this.showMonthList = false;
+      this.showYearList = false;
+    },
+    getYearRender () {
+      let currentYear = this.currentDate.getFullYear();
+      let start = currentYear - this.yearOffset;
+      let end = start + this.yearTotal;
+      let res = [];
+      for (let index = start ; index < end ; index++) {
+        res.push(index);
+      };
+      return res;
     },
     // 渲染日历头部
     renderCalendarHeader (prefixCls) {
       const h = this.$createElement;
       const year = this.currentDate.getFullYear();
       const month = this.currentDate.getMonth() + 1;
+      let yearArr = this.getYearRender();
       return h(
         'div',
         {
@@ -72,7 +100,10 @@ export default {
           h(
             'div',
             {
-              class : classNames(prefixCls + '-year-select')
+              class : classNames(prefixCls + '-year-select'),
+              on : {
+                click : this.clickYear
+              }
             },
             [
               h(
@@ -119,9 +150,58 @@ export default {
                   )
                 ]
               ),
+              h(
+                'transition',
+                {
+                  attrs : {
+                    name : 'zoom-slide'
+                  }
+                },
+                [
+                  h(
+                    'div',
+                    {
+                      class : classNames(prefixCls + '-year-list-box'),
+                      style : {
+                        width : this.yearWidth + 'px'
+                      },
+                      ref : 'yearListBox',
+                      directives : [
+                        {
+                          name : 'show',
+                          value : this.showYearList
+                        }
+                      ]
+                    },
+                    [
+                      h(
+                        'ul',
+                        {
+                          class : classNames(prefixCls + '-year-ul'),
+                          ref : 'yearUl'
+                        },
+                        [
+                          yearArr.map(item => {
+                            return h(
+                              'li',
+                              {
+                                class : classNames(prefixCls + '-year-list' , this.currentDate.getFullYear() === item ? 'selected' : null),
+                                on : {
+                                  click : (evt) => this.clickYearList(evt , item)
+                                }
+                              },
+                              [item + '年']
+                            )
+                          })
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
             ]
           ),
-          h(
+          this.currentLable === '月' ? h(
             'div',
             {
               class : classNames(prefixCls + '-month-select'),
@@ -224,7 +304,7 @@ export default {
                 ]
               )
             ]
-          ),
+          ) : null,
           h(
             'div',
             {
@@ -256,6 +336,20 @@ export default {
         ]
       )
     },
+    clickYearList (evt , year) {
+      evt.stopPropagation();
+      let date = new Date(this.currentDate);
+      date.setFullYear(year);
+      this.currentDate = date;
+      this.showYearList = false;
+    },
+    clickYear (evt) {
+      evt.stopPropagation();
+      const { width } = evt.currentTarget.getBoundingClientRect();
+      this.yearWidth = width;
+      this.showYearList = true;
+      this.showMonthList = false;
+    },
     clickMonthList (evt , month) {
       evt.stopPropagation();
       let date = new Date(this.currentDate);
@@ -268,6 +362,7 @@ export default {
       const { width } = evt.currentTarget.getBoundingClientRect();
       this.monthWidth = width;
       this.showMonthList = true;
+      this.showYearList = false;
     },
     // 渲染星期一到星期日
     renderTableHeader (prefixCls) {
@@ -370,6 +465,30 @@ export default {
       };
       return false;
     },
+    isActiveDay (item) {
+      const month = this.currentDate.getMonth();
+      const day = this.currentDate.getDate();
+      if (item.date === day && month === item.month) {
+        return true;
+      }
+      return false;
+    },
+    isActiveMonth (month) {
+      month = parseInt(month);
+      let currentMonth = this.currentDate.getMonth();
+      if (currentMonth === month) {
+        return true;
+      };
+      return false;
+    },
+    isCurrentMonth (month) {
+      month = parseInt(month);
+      let year = this.currentDate.getFullYear();
+      if (month === new Date().getMonth() && year === new Date().getFullYear()) {
+        return true;
+      }
+      return false;
+    },
     // 渲染日历天数
     renderCalendar (prefixCls , days , weekOfFirstDay) {
       const h = this.$createElement;
@@ -392,7 +511,7 @@ export default {
                 h(
                   'div',
                   {
-                    class : classNames(prefixCls + '-day-box' , this.isCurrentDate(day) ? 'selected' : null),
+                    class : classNames(prefixCls + '-day-box' , this.isCurrentDate(day) ? 'selected' : null , this.isActiveDay(day) ? 'actived' : null),
                     on : {
                       click : () => this.selectCalendar(day)
                     }
@@ -410,7 +529,7 @@ export default {
                       {
                         class : classNames(prefixCls + '-day-content')
                       },
-                      [dateCellRender(this.currentDate)]
+                      [dateCellRender(new Date(day.year , day.month , day.date))]
                     )
                   ]
                 )
@@ -470,7 +589,7 @@ export default {
                   h(
                     'div',
                     {
-                      class : classNames(prefixCls + '-month-box'),
+                      class : classNames(prefixCls + '-month-box' , this.isCurrentMonth(month) ? 'selected' : null , this.isActiveMonth(month) ? 'actived' : null),
                       on : {
                         click : () => this.selectMonthCalendar(month)
                       }
@@ -488,7 +607,7 @@ export default {
                         {
                           class : classNames(prefixCls + '-month-content')
                         },
-                        [monthCellRender(this.currentDate)]
+                        [monthCellRender(new Date(this.currentDate.getFullYear() , parseInt(month)))]
                       )
                     ]
                   )
@@ -501,7 +620,16 @@ export default {
       return rows;
     },
     selectMonthCalendar (month) {
-
+      let date = this.currentDate;
+      let year = date.getFullYear();
+      month = parseInt(month);
+      let day = date.getDate();
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      let seconds = date.getSeconds();
+      let now = new Date(year , month , day , hours , minutes , seconds);
+      this.currentDate = now;
+      this.$emit('select' , now);
     },
     // 渲染日历内容
     renderCalendarContent (prefixCls) {
@@ -555,7 +683,6 @@ export default {
     },
     clickLable (lableName) {
       this.currentLable = lableName;
-
     }
   },
   render () {
@@ -564,7 +691,7 @@ export default {
     return h(
       'div',
       {
-        class : classNames(prefixCls , fullscreen ? prefixCls + '-fullscreen' : null)
+        class : classNames(prefixCls , fullscreen ? prefixCls + '-fullscreen' : prefixCls + '-no-fullscreen')
       },
       [this.renderCalendarHeader(prefixCls) , this.renderCalendarContent(prefixCls)]
     )
