@@ -1,0 +1,64 @@
+.ca-carousel {
+  box-sizing: border-box;
+  &-inner {
+    position: relative;
+  }
+  &-slide {
+    position: relative;
+    overflow: hidden;
+    &-inner {
+      overflow: hidden;
+      position: relative;
+    }
+  }
+  &-horizontal {
+    float: left;
+  }
+  &-prev-btn {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    font-size: 24px;
+    color: #fff;
+    z-index: 1;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  &-next-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    font-size: 24px;
+    color: #fff;
+    z-index: 1;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  &-dot {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+  }
+  &-dot-bottom {
+    bottom: 12px;
+  }
+  &-dot-item {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: #fff;
+    }
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

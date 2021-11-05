@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px">基本使用</div>
-      <Carousel :arrow='true'>
+      <Carousel :arrow='true' dotPosition="bottom">
         <div class="slide">
           <span>1</span>
         </div>

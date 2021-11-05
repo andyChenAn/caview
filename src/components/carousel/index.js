@@ -41,7 +41,26 @@ export default {
     dotClass : {
       type : String,
       default : ''
+    },
+    speed : {
+      type : [Number , String],
+      default : 500
     }
+  },
+  data () {
+    return {
+      options : {}
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      const { height } = this.$el.querySelector('.ca-carousel-slide-list').getBoundingClientRect();
+      const { width } = this.$el.getBoundingClientRect();
+      this.options = _extends({} , {
+        slideWidth : width,
+        slideHeight : height
+      });
+    })
   },
   render () {
     const h = this.$createElement;
@@ -50,20 +69,39 @@ export default {
     if (props.effect === 'fade') {
       props.fade = true;
     };
-    props.vertical = props.dotPosition === 'top' || props.dotPosition === 'bottom';
+    props.vertical = props.dotPosition === 'left' || props.dotPosition === 'left';
     let dotClass = prefixCls + '-dot';
     props.dotClass = classNames(dotClass , dotClass + '-' + dotPosition , {[this.dotClass] : !!this.dotClass})
+    let children = this.$slots.default || [];
+    children = children.filter(c => c.tag || c.text.trim() !== '');
+    let newChildren = [];
+    for (let i = 0 ; i < children.length ; i++) {
+      let vnode = children[i];
+      vnode.data = _extends({} , vnode.data , {
+        style : {
+          width : '100%'
+        }
+      });
+      newChildren.push(h(
+        'div',
+        {
+          class : classNames(prefixCls + '-slide-list' , props.vertical ? prefixCls + '-vertical' : prefixCls + '-horizontal'),
+        },
+        [vnode]
+      ));
+    };
     const slideProps = {
-      props : _extends({} , props),
+      props : _extends({} , props , {
+        children : newChildren,
+        ...this.options
+      }),
       scopedSlots : this.$scopedSlots,
       ref : 'slide'
     };
-    let children = this.$slots.default || [];
-    children = children.filter(c => c.tag || c.text.trim() !== '');
     return h(
       Slide,
       slideProps,
-      [children]
+      [newChildren]
     )
   }
 }

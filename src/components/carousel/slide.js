@@ -48,24 +48,73 @@ export default {
     vertical : {
       type : Boolean,
       default : false
+    },
+    children : {
+      type : Array,
+      defualt () {
+        return []
+      }
+    },
+    slideWidth : {
+      type : Number,
+      default : 0
+    },
+    slideHeight : {
+      type : Number,
+      default : 0
+    },
+    speed : {
+      type : [Number , String],
+      default : 500
     }
   },
   data () {
     return {
-      options : {}
+      // 是否执行过渡动画
+      isAnimate : false,
+      // 当前的索引，用于跳转到哪个slide
+      currentIndex : 1,
+      // 是否停止点击
+      stop : false,
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      const { height } = this.$el.querySelector('.slide').getBoundingClientRect();
-      const { width } = this.$el.getBoundingClientRect();
-      this.options = _extends({} , this.$props , {
-        slideWidth : width,
-        slideHeight : height
-      });
-    })
-  },
   methods : {
+    clickPrev () {
+      if (this.stop) {
+        return;
+      };
+      this.stop = true;
+      const slideCount = this.children.length;
+      if (this.currentIndex > 0) {
+        this.currentIndex--;
+      } else {
+        this.currentIndex = slideCount - 1;
+      }
+      this.isAnimate = true;
+    },
+    clickNext () {
+      if (this.stop) {
+        return;
+      };
+      this.stop = true;
+      const slideCount = this.children.length;
+      if (this.currentIndex <= slideCount) {
+        this.currentIndex++;
+      } else {
+        this.currentIndex = 1;
+      }
+      this.isAnimate = true;
+    },
+    onTransitionend () {
+      this.isAnimate = false;
+      this.stop = false;
+      const slideCount = this.children.length;
+      if (this.currentIndex === slideCount + 1) {
+        this.currentIndex = 1;
+      } else if (this.currentIndex === 0) {
+        this.currentIndex = slideCount;
+      }
+    },
     renderPrevArrow (prefixCls) {
       const h = this.$createElement;
       const { arrow } = this.$props;
@@ -75,7 +124,10 @@ export default {
         return h(
           'span',
           {
-            class : classNames('iconfont icon-arrow-left' , prefixCls + '-prev-btn')
+            class : classNames('iconfont icon-arrow-left' , prefixCls + '-prev-btn'),
+            on : {
+              click : this.clickPrev
+            }
           }
         )
       };
@@ -90,7 +142,10 @@ export default {
         return h(
           'span',
           {
-            class : classNames('iconfont icon-arrow-right' , prefixCls + '-next-btn')
+            class : classNames('iconfont icon-arrow-right' , prefixCls + '-next-btn'),
+            on : {
+              click : this.clickNext
+            }
           }
         )
       };
@@ -120,31 +175,67 @@ export default {
     },
     renderSlideContent (prefixCls) {
       const h = this.$createElement;
-      this.$slots.default = this.$slots.default.map(item => {
-        item.data = _extends(item.data , {
-          style : this.getSlideStyle(this.options)
+      const slideCount = this.children.length;
+      let newChildren = [];
+      let firstNode , lastNode;
+      for (let i = 0 ; i < slideCount ; i++) {
+        let slide = this.children[i];
+        slide.data = _extends({} , slide.data , {
+          style : {
+            width : this.slideWidth + 'px'
+          }
         });
-        return item;
-      });
+        newChildren.push(slide);
+        if (i === 0) {
+          firstNode = slide;
+        } else if (i === slideCount - 1) {
+          lastNode = slide
+        }
+      };
+      newChildren.unshift(lastNode);
+      newChildren.push(firstNode);
       return h(
         'div',
         {
           class : classNames(prefixCls + '-slide'),
-          ref : 'aa'
+          style : this.getSlideBoxStyle()
         },
         [
           h(
             'div',
             {
-              class : classNames(prefixCls + '-slide-inner')
+              class : classNames(prefixCls + '-slide-inner'),
+              style : this.getSlideInnerStyle(newChildren),
+              on : {
+                transitionend : this.onTransitionend
+              }
             },
-            this.$slots.default
+            newChildren
           )
         ]
       )
     },
-    getSlideStyle (options) {
-      console.log(options);
+    getSlideBoxStyle () {
+      let style = {};
+      const { vertical , slideHeight } = this.$props;
+      vertical && (style.height = slideHeight + 'px');
+      return style;
+    },
+    getSlideInnerStyle (newChildren) {
+      let style = {};
+      const { vertical } = this.$props;
+      if (vertical) {
+        style.height = newChildren.length * this.slideHeight + 'px';
+      } else {
+        style.width = newChildren.length * this.slideWidth + 'px';
+      }
+      style.transform = `translate3d(${!vertical ? -this.slideWidth * this.currentIndex : 0}px , ${vertical ? -this.slideHeight * this.currentIndex : 0}px , 0)`;
+      if (this.isAnimate) {
+        style.transition = `transform ${this.speed}ms ease`;
+      } else {
+        style.transition = 'none';
+      }
+      return style;
     }
   },
   render () {
