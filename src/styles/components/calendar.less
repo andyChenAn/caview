@@ -106,6 +106,9 @@
         .ca-calendar-day-text {
           color: #1890ff;
         }
+        .ca-calendar-month-texts {
+          color: #1890ff;
+        }
       }
     }
     .ca-calendar-day-content , .ca-calendar-month-content {
@@ -173,9 +176,16 @@
         .ca-calendar-day-text {
           box-shadow: 0 0 0 1px #1890ff inset;
         }
+        .ca-calendar-month-texts {
+          box-shadow: 0 0 0 1px #1890ff inset;
+        }
       }
       &.actived {
         .ca-calendar-day-text {
+          color: #fff;
+          background-color: #1890ff;
+        }
+        .ca-calendar-month-texts {
           color: #fff;
           background-color: #1890ff;
         }
@@ -191,6 +201,22 @@
       transition: all 0.3s ease;
       border-radius: 2px;
       cursor: pointer;
+      transition: background-color 0.3s ease 0s;
+      &:hover {
+        background-color: #e6f7ff;
+      }
+    }
+    .ca-calendar-month-texts {
+      width: 48px;
+      margin: 0 auto;
+      height: 24px;
+      line-height: 24px;
+      border-radius: 2px;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      &:hover {
+        background-color: #e6f7ff;
+      }
     }
   }
 

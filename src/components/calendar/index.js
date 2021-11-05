@@ -42,7 +42,7 @@ export default {
       // 当前日期，用于选中效果
       currentDay : new Date(this.value),
       // 月份
-      monthArr : ['1月' , '2月' , '3月' , '4月' , '5月' , '6月' , '7月' , '8月' , '9月' , '10月' , '11月' , '12月'],
+      monthArr : [0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 , 11],
       // 是否展示月份下拉列表
       showMonthList : false,
       // 月份的下拉列表的宽度
@@ -163,7 +163,7 @@ export default {
                     {
                       class : classNames(prefixCls + '-year-list-box'),
                       style : {
-                        width : this.yearWidth + 'px'
+                        minWidth : this.yearWidth + 'px'
                       },
                       ref : 'yearListBox',
                       directives : [
@@ -294,7 +294,7 @@ export default {
                                   click : (evt) => this.clickMonthList(evt , i)
                                 }
                               },
-                              [item]
+                              [item + 1 + '月']
                             )
                           })
                         ]
@@ -505,7 +505,8 @@ export default {
             return h(
               'td',
               {
-                class : classNames(prefixCls + '-day')
+                class : classNames(prefixCls + '-day'),
+                key : day
               },
               [
                 h(
@@ -583,12 +584,14 @@ export default {
               return h(
                 'td',
                 {
-                  class : classNames(prefixCls + '-month-td')
+                  class : classNames(prefixCls + '-month-td'),
+                  key : i
                 },
                 [
                   h(
                     'div',
                     {
+                      // 因为monthArr是从一月开始的，而月份是从0开始，所以需要加1
                       class : classNames(prefixCls + '-month-box' , this.isCurrentMonth(month) ? 'selected' : null , this.isActiveMonth(month) ? 'actived' : null),
                       on : {
                         click : () => this.selectMonthCalendar(month)
@@ -600,7 +603,7 @@ export default {
                         {
                           class : classNames(prefixCls + '-month-texts')
                         },
-                        [month]
+                        [(month + 1) + '月']
                       ),
                       h(
                         'div',
