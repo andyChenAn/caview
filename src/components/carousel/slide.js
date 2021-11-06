@@ -20,12 +20,12 @@ export default {
     // 动画效果
     easing : {
       type : String,
-      default : 'linear'
+      default : 'ease'
     },
-    // 动画方式，可以是scrollX , fade
+    // 动画方式，可以是scroll , fade
     effect : {
       type : String,
-      default : 'scrollX'
+      default : 'scroll'
     },
     prefixCls : {
       type : String,
@@ -63,9 +63,13 @@ export default {
       type : Number,
       default : 0
     },
-    speed : {
+    duration : {
       type : [Number , String],
       default : 500
+    },
+    interval : {
+      type : [Number , String],
+      default : 3000
     }
   },
   data () {
@@ -76,51 +80,99 @@ export default {
       currentIndex : 1,
       // 是否停止点击
       stop : false,
+      // 底部选中的小圆点的索引
+      dotIndex : 0,
+      // 鼠标放上去是否显示箭头
+      showArrow : true
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.play();
+    })
+  },
   methods : {
+    play () {
+      const { autoPlay } = this.$props;
+      if (autoPlay) {
+        const { interval } = this.$props;
+        clearInterval(this.timeout);
+        this.timeout = setInterval(() => {
+          this.clickNext();
+        } , interval);
+      }
+    },
     clickPrev () {
       if (this.stop) {
         return;
       };
       this.stop = true;
+      this.isAnimate = true;
+      const { effect } = this.$props;
       const slideCount = this.children.length;
       if (this.currentIndex > 0) {
         this.currentIndex--;
+        if (this.currentIndex <= 0) {
+          this.dotIndex = slideCount - 1;
+          if (effect === 'fade') {
+            this.currentIndex = slideCount;
+          }
+        } else {
+          this.dotIndex--;
+        }
       } else {
         this.currentIndex = slideCount - 1;
       }
-      this.isAnimate = true;
     },
     clickNext () {
       if (this.stop) {
         return;
       };
       this.stop = true;
+      this.isAnimate = true;
+      const { effect } = this.$props;
       const slideCount = this.children.length;
       if (this.currentIndex <= slideCount) {
         this.currentIndex++;
+        if (this.currentIndex > slideCount) {
+          this.dotIndex = 0;
+          if (effect === 'fade') {
+            this.currentIndex = 1;
+          }
+        } else {
+          this.dotIndex++;
+        }
       } else {
         this.currentIndex = 1;
       }
-      this.isAnimate = true;
+    },
+    clickDot (evt) {
+      const index = Number(evt.currentTarget.dataset.index);
+      if (this.dotIndex !== index) {
+        this.dotIndex = index;
+        this.currentIndex = index + 1;
+        this.isAnimate = true;
+      }
     },
     onTransitionend () {
+      const { effect } = this.$props;
       this.isAnimate = false;
       this.stop = false;
-      const slideCount = this.children.length;
-      if (this.currentIndex === slideCount + 1) {
-        this.currentIndex = 1;
-      } else if (this.currentIndex === 0) {
-        this.currentIndex = slideCount;
+      if (effect === 'scroll') {
+        const slideCount = this.children.length;
+        if (this.currentIndex === slideCount + 1) {
+          this.currentIndex = 1;
+        } else if (this.currentIndex === 0) {
+          this.currentIndex = slideCount;
+        }
       }
     },
     renderPrevArrow (prefixCls) {
       const h = this.$createElement;
-      const { arrow } = this.$props;
+      const { arrow , vertical } = this.$props;
       if (arrow && this.$slots.prevArrow) {
         return this.$slots.prevArrow;
-      } else if (arrow) {
+      } else if (arrow && !vertical) {
         return h(
           'span',
           {
@@ -135,10 +187,10 @@ export default {
     },
     renderNextArrow (prefixCls) {
       const h = this.$createElement;
-      const { arrow } = this.$props;
+      const { arrow , vertical } = this.$props;
       if (arrow && this.$slots.nextArrow) {
         return this.$slots.nextArrow;
-      } else if (arrow) {
+      } else if (arrow && !vertical) {
         return h(
           'span',
           {
@@ -157,14 +209,38 @@ export default {
       let children = this.$slots.default || [];
       let dotLength = children.length;
       let dotNodes = [];
-      for (let i = 0 ; i < dotLength ; i++) {
-        dotNodes.push(h(
-          'span',
-          {
-            class : classNames(prefixCls + '-dot-item')
-          }
-        ))
-      };
+      if (this.$scopedSlots.dot) {
+        for (let i = 0 ; i < dotLength ; i++) {
+          let vnode = this.$scopedSlots.dot({i})[0];
+          vnode.data = _extends({} , vnode.data , {
+            attrs : {
+              'data-index' : i
+            },
+            on : {
+              click : this.clickDot
+            }
+          })
+          dotNodes.push(vnode)
+        }
+      } else {
+        for (let i = 0 ; i < dotLength ; i++) {
+          dotNodes.push(h(
+            'span',
+            {
+              class : classNames(prefixCls + '-dot-item' , this.dotIndex == i ? 'actived' : null),
+              attrs : {
+                'data-index' : i
+              },
+              style : {
+                'transition-duration' : `${this.$props.duration}ms`
+              },
+              on : {
+                click : this.clickDot
+              }
+            }
+          ))
+        };
+      }
       return h(
         'div',
         {
@@ -223,28 +299,89 @@ export default {
     },
     getSlideInnerStyle (newChildren) {
       let style = {};
-      const { vertical } = this.$props;
-      if (vertical) {
-        style.height = newChildren.length * this.slideHeight + 'px';
-      } else {
+      const { vertical , effect , duration , easing } = this.$props;
+      if (effect === 'scroll') {
+        if (vertical) {
+          style.height = newChildren.length * this.slideHeight + 'px';
+        } else {
+          style.width = newChildren.length * this.slideWidth + 'px';
+        };
+        style.transform = `translate3d(${!vertical ? -this.slideWidth * this.currentIndex : 0}px , ${vertical ? -this.slideHeight * this.currentIndex : 0}px , 0)`;
+        if (this.isAnimate) {
+          style.transition = `transform ${duration}ms ease`;
+        } else {
+          style.transition = 'none';
+        }
+      } else if (effect === 'fade') {
         style.width = newChildren.length * this.slideWidth + 'px';
-      }
-      style.transform = `translate3d(${!vertical ? -this.slideWidth * this.currentIndex : 0}px , ${vertical ? -this.slideHeight * this.currentIndex : 0}px , 0)`;
-      if (this.isAnimate) {
-        style.transition = `transform ${this.speed}ms ease`;
-      } else {
-        style.transition = 'none';
+        // 懒得改了，就这样吧，这里的写法应该是通过修改数据来实现样式的，不应该直接修改样式
+        if (this.$el) {
+          const slideNodes = this.$el.querySelectorAll('.ca-carousel-slide-list');
+          if (slideNodes.length > 0) {
+            slideNodes.forEach((node , index) => {
+              node.style.position = 'relative';
+              node.style.left = -(index * this.slideWidth) + 'px';
+              node.style.opacity = `${this.currentIndex === (index + 1) ? 1 : 0}`;
+              node.style.transition = `opacity ${duration}ms ${easing} , visibility ${duration}ms ${easing}`
+            });
+          }
+        }
       }
       return style;
+    },
+    handleMouseover () {
+      clearInterval(this.timeout);
+    },
+    handleMouseleave () {
+      this.play();
+    },
+    // 渲染渐显效果时的dom
+    renderSlideFadeContent (prefixCls) {
+      const { children } = this.$props;
+      const h = this.$createElement;
+      const slideCount = children.length;
+      let newChildren = [];
+      for (let i = 0 ; i < slideCount ; i++) {
+        let slide = children[i];
+        slide.data = _extends({} , slide.data , {
+          style : {
+            width : this.slideWidth + 'px'
+          }
+        });
+        newChildren.push(slide);
+      };
+      return h(
+        'div',
+        {
+          class : classNames(prefixCls + '-slide')
+        },
+        [
+          h(
+            'div',
+            {
+              class : classNames(prefixCls + '-slide-inner'),
+              style : this.getSlideInnerStyle(newChildren),
+              on : {
+                transitionend : this.onTransitionend
+              }
+            },
+            newChildren
+          )
+        ]
+      )
     }
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls } = this.$props;
+    const { prefixCls , effect } = this.$props;
     return h(
       'div',
       {
-        class : classNames(prefixCls)
+        class : classNames(prefixCls),
+        on : {
+          mouseover : this.handleMouseover,
+          mouseleave : this.handleMouseleave
+        }
       },
       [
         h(
@@ -254,7 +391,7 @@ export default {
           },
           [
             this.renderPrevArrow(prefixCls),
-            this.renderSlideContent(prefixCls),
+            effect === 'scroll' ? this.renderSlideContent(prefixCls) : this.renderSlideFadeContent(prefixCls),
             this.renderNextArrow(prefixCls),
             this.renderDot(prefixCls) 
           ]

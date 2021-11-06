@@ -14,51 +14,150 @@
   &-horizontal {
     float: left;
   }
+  &-fade {
+    float: left;
+    opacity: 0;
+  }
   &-prev-btn {
     position: absolute;
     top: 50%;
     left: 10px;
-    font-size: 24px;
-    color: #fff;
+    font-size: 20px;
+    color: rgba(255,255,255,0.6);
     z-index: 1;
     transform: translateY(-50%);
     cursor: pointer;
+    width: 24px;
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: rgba(0,0,0,0.5);
+      color: rgba(255,255,255,0.8);
+    }
   }
   &-next-btn {
     position: absolute;
     top: 50%;
     right: 10px;
-    font-size: 24px;
-    color: #fff;
+    font-size: 20px;
+    color: rgba(255,255,255,0.6);
     z-index: 1;
     transform: translateY(-50%);
     cursor: pointer;
-  }
-  &-dot {
-    position: absolute;
-    width: 100%;
+    width: 24px;
     text-align: center;
-  }
-  &-dot-bottom {
-    bottom: 12px;
-  }
-  &-dot-item {
-    width: 8px;
-    height: 8px;
-    display: inline-block;
-    background-color: rgba(255,255,255,0.5);
+    height: 24px;
+    line-height: 24px;
     border-radius: 50%;
-    margin: 0 5px;
-    cursor: pointer;
+    background-color: rgba(0,0,0,0.25);
     transition: all 0.3s ease;
     &:hover {
-      background-color: #fff;
+      background-color: rgba(0,0,0,0.5);
+      color: rgba(255,255,255,0.8);
     }
-    &:first-child {
-      margin-left: 0;
+  }
+  &-dot-bottom {
+    bottom: 10px;
+    &.ca-carousel-dot {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      .ca-carousel-dot-item {
+        width: 16px;
+        height: 3px;
+        display: inline-block;
+        background-color: rgba(255,255,255,0.5);
+        margin: 0 2px;
+        vertical-align: top;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &.actived {
+          background-color: #fff;
+          width: 24px;
+        }
+        &:hover {
+          background-color: #fff;
+        }
+      }
     }
-    &:last-child {
-      margin-right: 0;
+  }
+  &-dot-top {
+    top: 10px;
+    &.ca-carousel-dot {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      .ca-carousel-dot-item {
+        width: 16px;
+        height: 3px;
+        display: inline-block;
+        background-color: rgba(255,255,255,0.5);
+        margin: 0 2px;
+        vertical-align: top;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &.actived {
+          background-color: #fff;
+          width: 24px;
+        }
+        &:hover {
+          background-color: #fff;
+        }
+      }
+    }
+  }
+  .ca-carousel-dot-left {
+    left : 10px;
+    &.ca-carousel-dot {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: auto;
+      .ca-carousel-dot-item {
+        display: block;
+        width: 3px;
+        height: 16px;
+        background-color: rgba(255,255,255,0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 5px 0;
+        &.actived {
+          background-color: #fff;
+          height: 24px;
+        }
+        &:hover {
+          background-color: #fff;
+        }
+      }
+    }
+  }
+  .ca-carousel-dot-right {
+    right : 10px;
+    &.ca-carousel-dot {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: auto;
+      .ca-carousel-dot-item {
+        display: block;
+        width: 3px;
+        height: 16px;
+        background-color: rgba(255,255,255,0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 5px 0;
+        &.actived {
+          background-color: #fff;
+          height: 24px;
+        }
+        &:hover {
+          background-color: #fff;
+        }
+      }
     }
   }
 }

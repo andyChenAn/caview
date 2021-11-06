@@ -23,10 +23,10 @@ export default {
       type : String,
       default : 'linear'
     },
-    // 动画方式，可以是scrollX , fade
+    // 动画方式，可以是scroll , fade
     effect : {
       type : String,
-      default : 'scrollX'
+      default : 'scroll'
     },
     prefixCls : {
       type : String,
@@ -42,7 +42,7 @@ export default {
       type : String,
       default : ''
     },
-    speed : {
+    duration : {
       type : [Number , String],
       default : 500
     }
@@ -54,22 +54,22 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      const { height } = this.$el.querySelector('.ca-carousel-slide-list').getBoundingClientRect();
-      const { width } = this.$el.getBoundingClientRect();
-      this.options = _extends({} , {
-        slideWidth : width,
-        slideHeight : height
-      });
+      const slideDom = this.$el.querySelector('.ca-carousel-slide-list');
+      if (slideDom) {
+        const { height } =  slideDom.getBoundingClientRect();
+        const { width } = this.$el.getBoundingClientRect();
+        this.options = _extends({} , {
+          slideWidth : width || 0,
+          slideHeight : height || 0
+        });
+      }
     })
   },
   render () {
     const h = this.$createElement;
     const props = _extends({} , this.$props);
     const { dotPosition , prefixCls } = this.$props;
-    if (props.effect === 'fade') {
-      props.fade = true;
-    };
-    props.vertical = props.dotPosition === 'left' || props.dotPosition === 'left';
+    props.vertical = props.dotPosition === 'left' || props.dotPosition === 'right';
     let dotClass = prefixCls + '-dot';
     props.dotClass = classNames(dotClass , dotClass + '-' + dotPosition , {[this.dotClass] : !!this.dotClass})
     let children = this.$slots.default || [];
@@ -85,7 +85,7 @@ export default {
       newChildren.push(h(
         'div',
         {
-          class : classNames(prefixCls + '-slide-list' , props.vertical ? prefixCls + '-vertical' : prefixCls + '-horizontal'),
+          class : classNames(prefixCls + '-slide-list' , props.effect === 'scroll' ? props.vertical ? prefixCls + '-vertical' : prefixCls + '-horizontal' : prefixCls + '-fade')
         },
         [vnode]
       ));
@@ -95,8 +95,7 @@ export default {
         children : newChildren,
         ...this.options
       }),
-      scopedSlots : this.$scopedSlots,
-      ref : 'slide'
+      scopedSlots : this.$scopedSlots
     };
     return h(
       Slide,
