@@ -1,5 +1,5 @@
 # caview
-一个基于Vue2.x的PC端组件库，参考了目前主流的Vue组件库来实现
+一个基于Vue2.x的PC端组件库，参考了目前主流的Vue组件库来实现。
 
 #### 目前已经完成的组件
 
@@ -9,3 +9,6 @@
 - [x] Drawer 抽屉组件
 - [x] Popconfirm 气泡确认框组件
 - [x] Loading 加载中组件
+- [x] Avatar 头像组件
+- [x] Calendar 日历组件
+- [x] Carousel 走马灯组件

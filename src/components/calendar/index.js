@@ -506,7 +506,7 @@ export default {
               'td',
               {
                 class : classNames(prefixCls + '-day'),
-                key : day
+                key : day.date
               },
               [
                 h(
