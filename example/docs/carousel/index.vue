@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div class="doc-title mb15">Carousel 跑马灯</div>
+    <div class="doc-title mb15">Carousel 走马灯</div>
     <div class="doc-desc mb15">轮播</div>
     <br />
     <br />

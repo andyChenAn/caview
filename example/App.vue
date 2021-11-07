@@ -30,7 +30,7 @@ export default {
     .inner {
       flex: 1;
       overflow: auto;
-      height: calc(100% - 64px);
+      height: 100%;
     }
   }
 }

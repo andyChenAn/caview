@@ -34,7 +34,7 @@ export default {
   max-width: 15%;
   min-width: 250px;
   overflow: auto;
-  height: calc(100% - 64px);
+  height: 100%;
   position: relative;
   box-sizing: border-box;
   &:after {

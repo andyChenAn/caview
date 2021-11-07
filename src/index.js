@@ -9,6 +9,7 @@ import Avatar from './components/avatar';
 import Badge from './components/badge';
 import Calendar from './components/calendar';
 import Carousel from './components/carousel';
+import Collapse from './components/collapse';
 const components = {
   Message,
   Notification,
@@ -20,7 +21,8 @@ const components = {
   Avatar,
   Badge,
   Calendar,
-  Carousel
+  Carousel,
+  Collapse
 }
 const caview = {
   ...components

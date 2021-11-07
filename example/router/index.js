@@ -45,6 +45,10 @@ const routes = [
   {
     path : '/carousel',
     component : () => import('@example/docs/carousel')
+  },
+  {
+    path : '/collapse',
+    component : () => import('@example/docs/collapse')
   }
 ];
 const router = new VueRouter({

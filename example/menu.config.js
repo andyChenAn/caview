@@ -62,6 +62,10 @@ export default [
       {
         name : 'Carousel 走马灯',
         path : '/carousel'
+      },
+      {
+        name : 'Collapse 折叠面板',
+        path : '/collapse'
       }
     ]
   }
