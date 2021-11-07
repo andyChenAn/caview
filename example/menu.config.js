@@ -60,7 +60,7 @@ export default [
         path : '/calendar'
       },
       {
-        name : 'Carousel 跑马灯',
+        name : 'Carousel 走马灯',
         path : '/carousel'
       }
     ]

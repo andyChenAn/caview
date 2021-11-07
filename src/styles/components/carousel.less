@@ -16,49 +16,44 @@
   }
   &-fade {
     float: left;
-    opacity: 0;
   }
-  &-prev-btn {
+  &-arrow-icon {
     position: absolute;
+    z-index: 1;
+    transition: all 0.3s ease;
+    background-color: rgba(0,0,0,0.25);
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    width: 24px;
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 50%;
+    font-size: 20px;
+    &:hover {
+      background-color: rgba(0,0,0,0.5);
+      color: rgba(255,255,255,0.8);
+    }
+  }
+  .icon-arrow-up {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .icon-arrow-down {
+    bottom: 10px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+  .icon-arrow-left {
     top: 50%;
     left: 10px;
-    font-size: 20px;
-    color: rgba(255,255,255,0.6);
-    z-index: 1;
     transform: translateY(-50%);
-    cursor: pointer;
-    width: 24px;
-    text-align: center;
-    height: 24px;
-    line-height: 24px;
-    border-radius: 50%;
-    background-color: rgba(0,0,0,0.25);
-    transition: all 0.3s ease;
-    &:hover {
-      background-color: rgba(0,0,0,0.5);
-      color: rgba(255,255,255,0.8);
-    }
   }
-  &-next-btn {
-    position: absolute;
+  .icon-arrow-right {
     top: 50%;
     right: 10px;
-    font-size: 20px;
-    color: rgba(255,255,255,0.6);
-    z-index: 1;
     transform: translateY(-50%);
-    cursor: pointer;
-    width: 24px;
-    text-align: center;
-    height: 24px;
-    line-height: 24px;
-    border-radius: 50%;
-    background-color: rgba(0,0,0,0.25);
-    transition: all 0.3s ease;
-    &:hover {
-      background-color: rgba(0,0,0,0.5);
-      color: rgba(255,255,255,0.8);
-    }
   }
   &-dot-bottom {
     bottom: 10px;
@@ -66,6 +61,7 @@
       position: absolute;
       width: 100%;
       text-align: center;
+      height: 3px;
       .ca-carousel-dot-item {
         width: 16px;
         height: 3px;

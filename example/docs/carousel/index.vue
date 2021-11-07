@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px">基本使用</div>
-      <Carousel :arrow='true' dotPosition="bottom">
+      <Carousel :arrow='true'>
         <div class="slide">
           <span>1</span>
         </div>
@@ -33,7 +33,7 @@
         <button @click="changeDot('left')">left</button>
         <button @click="changeDot('right')">right</button>
       </div>
-      <Carousel :arrow='false' :dotPosition="dotPosition">
+      <Carousel :dotPosition="dotPosition">
         <div class="slide">
           <span>1</span>
         </div>
@@ -73,7 +73,7 @@
     </div>
     <div class="inner">
       <div style="margin-bottom:20px">自动轮播</div>
-      <Carousel autoPlay>
+      <Carousel autoplay>
         <div class="slide">
           <span>1</span>
         </div>
@@ -92,10 +92,10 @@
       </Carousel>
     </div>
     <div class="inner">
-      <div style="margin-bottom:20px">自定义小圆点</div>
-      <Carousel dotClass="dot-slide">
+      <div style="margin-bottom:20px">自定义指示点</div>
+      <Carousel :arrow="false" dotClass="dot-slide">
         <div slot="dot" slot-scope="props">
-          <img :src="getImgUrl(props.i)">
+          <img :src="getImgUrl(props.index)">
         </div>
         <div>
           <img src="https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/abstract01.jpg" alt="">
@@ -108,6 +108,57 @@
         </div>
         <div>
           <img src="https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/abstract04.jpg" alt="">
+        </div>
+      </Carousel>
+    </div>
+    <div class="inner">
+      <div style="margin-bottom:20px">自定义箭头</div>
+       <Carousel>
+         <div slot="prevArrow" class="prev-arrow">
+           <div class="left-text">左箭头</div>
+         </div>
+         <div slot="nextArrow" class="next-arrow">
+           <div class="right-text">右箭头</div>
+         </div>
+        <div class="slide">
+          <span>1</span>
+        </div>
+        <div class="slide">
+          <span>2</span>
+        </div>
+        <div class="slide">
+          <span>3</span>
+        </div>
+        <div class="slide">
+          <span>4</span>
+        </div>
+        <div class="slide">
+          <span>5</span>
+        </div>
+      </Carousel>
+    </div>
+    <div class="inner">
+      <div style="margin-bottom:20px">上一页，下一页，指定某一页</div>
+      <div style="margin-bottom:20px">
+        <button @click="next">next</button>
+        <button @click="prev">prev</button>
+        <button @click="moveTo">moveTo</button>
+      </div>
+      <Carousel ref="carousel">
+        <div class="slide">
+          <span>1</span>
+        </div>
+        <div class="slide">
+          <span>2</span>
+        </div>
+        <div class="slide">
+          <span>3</span>
+        </div>
+        <div class="slide">
+          <span>4</span>
+        </div>
+        <div class="slide">
+          <span>5</span>
         </div>
       </Carousel>
     </div>
@@ -130,6 +181,16 @@ export default {
     getImgUrl(i) {
       return `${baseUrl}abstract0${i + 1}.jpg`;
     },
+    prev () {
+      this.$refs.carousel.prev();
+    },
+    next () {
+      this.$refs.carousel.next();
+    },
+    moveTo () {
+      const index = Math.ceil(Math.random() * 4);
+      this.$refs.carousel.goTo(index);
+    }
   }
 }
 </script>
@@ -154,8 +215,13 @@ img {
   width: 23%;
   display: inline-block;
 }
+.inner {
+  padding-bottom: 50px;
+}
 /deep/.ca-carousel {
   .dot-slide {
+    height: auto;
+    bottom: -50px;
     div {
       width: 60px;
       height: 45px;
@@ -163,7 +229,36 @@ img {
     }
     img {
       border: none;
+      width: 100%;
+      height: 100%;
     }
   }
-} 
+}
+.prev-arrow {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    line-height: 1;
+    div {
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  }
+  .next-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    line-height: 1;
+    div {
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  }
+
 </style>
