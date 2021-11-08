@@ -54,7 +54,7 @@ export default {
   methods : {
     getCollapseItems () {
       let newChildren = [];
-      const { accordion , prefixCls , expandIcon } = this.$props;
+      const { accordion , prefixCls } = this.$props;
       let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
       children.forEach((child , index) => {
         let key = child.key || String(index);
@@ -66,11 +66,22 @@ export default {
         }
         child.componentOptions.propsData = _extends({} , child.componentOptions.propsData , {
           isActive : isActive,
-          prefixCls : prefixCls
+          prefixCls : prefixCls,
+          panelKey : key
         });
+        child.data.key = key;
+        child.componentOptions.listeners = _extends({} , child.componentOptions.listeners , {
+          itemClick : this.onClickItem
+        })
         newChildren.push(child);
       });
       return newChildren;
+    },
+    onClickItem (key) {
+      const { accordion } = this.$props;
+      if (accordion) {
+        this.currentActiveKey = this.currentActiveKey[0] === key ? [] : [key];
+      }
     }
   },
   render () {

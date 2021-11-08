@@ -1,5 +1,4 @@
 import classNames from "classnames";
-const noop = function () {};
 export default {
   props : {
     header : {
@@ -18,28 +17,34 @@ export default {
       type : Boolean,
       default : false
     },
-    expandIcon : {
-      type : Function,
-      default : noop
-    }
-  },
-  data () {
-    return {
-
-    }
+    expandIcon : Function,
+    panelKey : String
   },
   methods : {
+    getIcon () {
+      const { expandIcon , isActive , prefixCls } = this.$props;
+      const h = this.$createElement;
+      let icon = h('span' , { class : classNames('iconfont icon-arrow-right' , prefixCls + '-arrow' , isActive ? 'active' : null) });
+      if (typeof expandIcon === 'function') {
+        icon = expandIcon(this.$props);
+      };
+      return icon;
+    },
     renderCollapseHeader (prefixCls) {
       const h = this.$createElement;
       let { header } = this.$props;
       header = header || this.$slots.header;
+      let icon = this.getIcon();
       if (header) {
         return h(
           'div',
           {
-            class : classNames(prefixCls + '-header')
+            class : classNames(prefixCls + '-header'),
+            on : {
+              click : this.clickHeader
+            }
           },
-          [header]
+          [icon , header]
         )
       };
       return null;
@@ -51,7 +56,8 @@ export default {
         'transition',
         {
           attrs : {
-            name : 'collapse-slide'
+            name : 'collapse-slide',
+            appear : true
           }
         },
         [
@@ -78,9 +84,14 @@ export default {
           )
         ]
       )
+    },
+    clickHeader () {
+      const { panelKey } = this.$props;
+      this.$emit('itemClick' , panelKey);
     }
   },
   render () {
+    console.log(23424)
     const { prefixCls } = this.$props;
     const h = this.$createElement;
     return h(

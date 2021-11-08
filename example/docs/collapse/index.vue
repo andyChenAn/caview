@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px">基本使用</div>
-      <Collapse :activeKey="aa">
+      <Collapse accordion :activeKey="aa">
         <CollapsePanel key="1" header="这是一个标题1">
           <div>这是内容区域1</div>
         </CollapsePanel>
@@ -22,7 +22,7 @@
 export default {
   data () {
     return {
-      aa : "1"
+      aa : ""
     }
   }
 }
