@@ -91,7 +91,6 @@ export default {
     }
   },
   render () {
-    console.log(23424)
     const { prefixCls } = this.$props;
     const h = this.$createElement;
     return h(
