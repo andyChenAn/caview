@@ -2,15 +2,16 @@ const noop = function () {};
 import _extends from '@babel/runtime/helpers/extends';
 import _toArray from '@babel/runtime/helpers/toArray';
 import classNames from 'classnames';
+
+// 调用这个方法的目的是为了克隆一个新的vnode，不然的话通过propsData传递的数据，当数据发生变化时，组件不会更新
+// 该方法来自ant-vue-design
 function cloneVNode(vnode) {
   var componentOptions = vnode.componentOptions;
   var data = vnode.data;
-
   var listeners = {};
   if (componentOptions && componentOptions.listeners) {
     listeners = _extends({}, componentOptions.listeners);
   }
-
   var on = {};
   if (data && data.on) {
     on = _extends({}, data.on);
@@ -105,6 +106,13 @@ export default {
       const { accordion } = this.$props;
       if (accordion) {
         this.currentActiveKey = this.currentActiveKey[0] === key ? [] : [key];
+      } else {
+        const index = this.currentActiveKey.indexOf(key);
+        if (index == -1) {
+          this.currentActiveKey.push(key);
+        } else {
+          this.currentActiveKey.splice(index , 1);
+        }
       }
     }
   },
