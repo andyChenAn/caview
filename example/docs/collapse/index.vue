@@ -12,7 +12,7 @@
           <div>这是内容区域1</div>
         </CollapsePanel>
         <CollapsePanel key="b" header="这是一个标题2">
-          <div>这是内容区域2</div>
+          <div>这是内容区域2这是内容区域2这是内容区域2这是内容区域2这是内容区域2这是内容区域2这是内容区域2</div>
         </CollapsePanel>
       </Collapse>
     </div>

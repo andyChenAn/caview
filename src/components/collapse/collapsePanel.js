@@ -20,6 +20,22 @@ export default {
     expandIcon : Function,
     panelKey : String
   },
+  updated () {
+    const dom = this.$refs.content;
+    if (dom.classList.contains('ca-collapse-content-active')) {
+      let { height } = dom.getBoundingClientRect();
+      height = parseInt(height);
+      if (!this.height && height && this.height !== height) {
+        this.height = height;
+      }
+      dom.style.height = '0px';
+      setTimeout(() => {
+        dom.style.height = this.height + 'px';
+      })
+    } else if (parseInt(dom.style.height) == this.height) {
+      dom.style.height = '0px';
+    }
+  },
   methods : {
     getIcon () {
       const { expandIcon , isActive , prefixCls } = this.$props;
@@ -70,7 +86,8 @@ export default {
                   value : isActive
                 }
               ],
-              class : classNames(prefixCls + '-content')
+              class : classNames(prefixCls + '-content' , isActive ? prefixCls + '-content-active' : null),
+              ref : 'content'
             },
             [
               h(
@@ -85,7 +102,7 @@ export default {
         ]
       )
     },
-    clickHeader () {
+    clickHeader (evt) {
       const { panelKey } = this.$props;
       this.$emit('itemClick' , panelKey);
     }
