@@ -40,7 +40,8 @@ export default {
   render () {
     const h = this.$createElement;
     const collpaseProps = {
-      props : _extends({} , this.$props)
+      props : _extends({} , this.$props),
+      scopedSlots : this.$scopedSlots
     };
     let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '')
     return h(

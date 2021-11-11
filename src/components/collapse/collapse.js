@@ -97,6 +97,7 @@ export default {
         child.componentOptions.listeners = _extends({} , child.componentOptions.listeners , {
           itemClick : this.onClickItem
         });
+        child.data.scopedSlots = this.$scopedSlots;
         child = cloneVNode(child);
         newChildren.push(child);
       });
@@ -118,11 +119,11 @@ export default {
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls , expandIconPosition } = this.$props;
+    const { prefixCls , expandIconPosition , border } = this.$props;
     return h(
       'div',
       {
-        class : classNames(prefixCls , prefixCls + '-' + expandIconPosition)
+        class : classNames(prefixCls , prefixCls + '-' + expandIconPosition , !border ? prefixCls + '-no-border' : null)
       },
       [this.getCollapseItems()]
     )
