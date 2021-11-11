@@ -49,6 +49,10 @@ const routes = [
   {
     path : '/collapse',
     component : () => import('@example/docs/collapse')
+  },
+  {
+    path : '/list',
+    component : () => import('@example/docs/list')
   }
 ];
 const router = new VueRouter({

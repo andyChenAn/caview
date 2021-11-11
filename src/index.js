@@ -11,6 +11,7 @@ import Calendar from './components/calendar';
 import Carousel from './components/carousel';
 import Collapse from './components/collapse';
 import CollapsePanel from './components/collapse/collapsePanel';
+import List from './components/list';
 const components = {
   Message,
   Notification,
@@ -24,7 +25,8 @@ const components = {
   Calendar,
   Carousel,
   Collapse,
-  CollapsePanel
+  CollapsePanel,
+  List
 }
 const caview = {
   ...components

@@ -77,7 +77,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="less">
 .content {
   padding: 30px;
   height: 100px;

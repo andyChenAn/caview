@@ -66,6 +66,10 @@ export default [
       {
         name : 'Collapse 折叠面板',
         path : '/collapse'
+      },
+      {
+        name : 'List 列表',
+        path : '/list'
       }
     ]
   }
