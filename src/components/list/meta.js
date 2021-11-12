@@ -31,10 +31,25 @@ export default {
     },
     renderTitle (prefixCls) {
       const h = this.$createElement;
-      
+      let title = this.$props.title || this.$slots.title;
+      return title ? h(
+        'div',
+        {
+          class : classNames(prefixCls + '-item-meta-title')
+        },
+        [title]
+      ) : null
     },
     renderDescription (prefixCls) {
-
+      const h = this.$createElement;
+      let description = this.$props.description || this.$slots.description;
+      return description ? h(
+        'div',
+        {
+          class : classNames(prefixCls + '-item-meta-description')
+        },
+        [description]
+      ) : null
     }
   },
   render () {

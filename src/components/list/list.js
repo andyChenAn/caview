@@ -17,6 +17,10 @@ export default {
     border : {
       type : Boolean,
       default : false
+    },
+    split : {
+      type : Boolean,
+      default : true
     }
   },
   methods : {
@@ -41,11 +45,11 @@ export default {
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls , border } = this.$props;
+    const { prefixCls , border , split } = this.$props;
     return h(
       'div',
       {
-        class : classNames(prefixCls , border ? prefixCls + '-border' : null)
+        class : classNames(prefixCls , border ? prefixCls + '-border' : null , split ? prefixCls + '-split' : null)
       },
       [this.getListItems(prefixCls)]
     )

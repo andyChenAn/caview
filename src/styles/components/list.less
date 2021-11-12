@@ -1,6 +1,43 @@
 .ca-list {
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
   &-border {
     border: 1px solid #d8d8d8;
     border-radius: 4px;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    &-meta {
+      display: flex;
+      flex: 1;
+      align-items: flex-start;
+      &-avatar {
+        margin-right: 16px;
+      }
+      &-content {
+        flex: 1;
+      }
+      &-title {
+        margin-bottom: 4px;
+        line-height: 22px;
+        font-size: 14px;
+        color: #333;
+      }
+      &-description {
+        font-size: 14px;
+        color: #999;
+        line-height: 22px;
+      }
+    }
+  }
+  &-split {
+    .ca-list-item {
+      border-bottom: 1px solid #d8d8d8;
+    }
   }
 }

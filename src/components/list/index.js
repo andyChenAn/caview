@@ -17,6 +17,10 @@ export default {
     border : {
       type : Boolean,
       default : false
+    },
+    split : {
+      type : Boolean,
+      default : true
     }
   },
   render () {
