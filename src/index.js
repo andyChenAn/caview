@@ -12,6 +12,8 @@ import Carousel from './components/carousel';
 import Collapse from './components/collapse';
 import CollapsePanel from './components/collapse/collapsePanel';
 import List from './components/list';
+import ListItem from './components/list/item';
+import ListItemMeta from './components/list/meta';
 const components = {
   Message,
   Notification,
@@ -26,7 +28,9 @@ const components = {
   Carousel,
   Collapse,
   CollapsePanel,
-  List
+  List,
+  ListItem,
+  ListItemMeta
 }
 const caview = {
   ...components
