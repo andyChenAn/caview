@@ -17,10 +17,7 @@ export default {
   methods : {
     renderAvatar (prefixCls) {
       const h = this.$createElement;
-      let avatar = '';
-      if (this.$slots.avatar) {
-        avatar = this.$slots.avatar;
-      };
+      const avatar = this.$slots.avatar || null;
       return avatar ? h(
         'div',
         {
@@ -50,29 +47,32 @@ export default {
         },
         [description]
       ) : null
+    },
+    renderMetaContent (prefixCls) {
+      const h = this.$createElement;
+      return h(
+        'div',
+        {
+          class : classNames(prefixCls + '-item-meta')
+        },
+        [
+          this.renderAvatar(prefixCls),
+          h(
+            'div',
+            {
+              class : classNames(prefixCls + '-item-meta-content')
+            },
+            [
+              this.renderTitle(prefixCls),
+              this.renderDescription(prefixCls)
+            ]
+          )
+        ]
+      )
     }
   },
   render () {
-    const h = this.$createElement;
     const { prefixCls } = this.$props;
-    return h(
-      'div',
-      {
-        class : classNames(prefixCls + '-item-meta')
-      },
-      [
-        this.renderAvatar(prefixCls),
-        h(
-          'div',
-          {
-            class : classNames(prefixCls + '-item-meta-content')
-          },
-          [
-            this.renderTitle(prefixCls),
-            this.renderDescription(prefixCls)
-          ]
-        )
-      ]
-    )
+    return this.renderMetaContent(prefixCls);
   }
 }

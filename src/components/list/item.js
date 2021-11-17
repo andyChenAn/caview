@@ -5,19 +5,30 @@ export default {
     prefixCls : {
       type : String,
       default : 'ca-list'
+    },
+    extra : {
+      type : String,
+      default : ''
     }
   },
   methods : {
-    getListItemMeta (prefixCls) {
-      let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
-      let newChildren = [];
-      children.forEach(child => {
-        child.componentOptions.propsData = _extends({} , (child.componentOptions.propsData || {}) , {
-          prefixCls : prefixCls
-        });
-        newChildren.push(child);
-      });
-      return newChildren;
+    renderItemContent (prefixCls) {
+      const h = this.$createElement;
+      const extra = this.$props.extra || this.$slots.extra;
+      if (extra) {
+        return h(
+          'div',
+          {
+            class : classNames(prefixCls + '-item-main')
+          },
+          [
+            this.$slots.default,
+            extra
+          ]
+        )
+      } else {
+        return this.$slots.default;
+      }
     }
   },
   render () {
@@ -28,7 +39,9 @@ export default {
       {
         class : classNames(prefixCls + '-item')
       },
-      [this.$slots.default]
+      [
+        this.renderItemContent(prefixCls)
+      ]
     )
   }
 }

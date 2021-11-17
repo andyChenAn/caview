@@ -21,18 +21,38 @@ export default {
     split : {
       type : Boolean,
       default : true
+    },
+    dataSource : {
+      type : Array,
+      default () {
+        return [];
+      }
+    },
+    size : {
+      type : String,
+      default : 'default'
+    },
+    extra : {
+      type : [String , Object],
+      default : ''
+    },
+    loadMore : {
+      type : [String , Array],
+      default : ''
     }
   },
   render () {
     const h = this.$createElement;
     const listProps = {
-      props : _extends({} , this.$props),
+      props : _extends({} , this.$props , {
+        loadMore : this.$props.loadMore || this.$slots.loadMore
+      }),
       scopedSlots : this.$scopedSlots
-    }
+    };
     return h(
       List,
       listProps,
       [this.$slots.default]
-    )    
+    )
   }
 }
