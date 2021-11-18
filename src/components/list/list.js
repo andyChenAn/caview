@@ -111,7 +111,6 @@ export default {
     renderLoadMore (prefixCls) {
       const h =this.$createElement;
       const loadMore = this.$props.loadMore;
-      console.log(loadMore)
       return loadMore ? h(
         'div',
         {

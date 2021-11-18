@@ -84,10 +84,10 @@
     </div>
     <div class="inner">
       <div style="margin-bottom:20px;">加载更多</div>
-      <List :data-source="list">
-        <div slot="loadMore" :style="{ textAlign: 'center', height: '32px', lineHeight: '32px' , border : '1px solid #007aff' , width : '80px' , margin : '0 auto' , marginTop: '12px', cursor : 'pointer'}">
+      <List :data-source="list1">
+        <div slot="loadMore" :style="{ textAlign: 'center', height: '32px', lineHeight: '32px' , margin : '0 auto' , marginTop: '12px', cursor : 'pointer'}">
           <Loading v-if="loadingMore" />
-          <span v-else>加载更多</span>
+          <span v-else @click="onClick">加载更多</span>
         </div>
         <ListItem slot="renderItem" slot-scope="item , index" :key="index">
           <ListItemMeta>
@@ -100,6 +100,7 @@
   </div>
 </template>
 <script>
+let count = 4;
 export default {
   data () {
     return {
@@ -109,7 +110,27 @@ export default {
         {title : '这是一个标题3' , description : '这是一段描述内容3' , avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'},
         {title : '这是一个标题4' , description : '这是一段描述内容4' , avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'},
       ],
+      list1 : [
+        {title : '这是一个标题1' , description : '这是一段描述内容1' , avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'},
+        {title : '这是一个标题2' , description : '这是一段描述内容2' , avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'},
+        {title : '这是一个标题3' , description : '这是一段描述内容3' , avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'},
+        {title : '这是一个标题4' , description : '这是一段描述内容4' , avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'},
+      ],
       loadingMore : false
+    }
+  },
+  methods : {
+    onClick () {
+      this.loadingMore = true;
+      setTimeout(() => {
+        count++;
+        this.loadingMore = false;
+        this.list1.push({
+          title : '这是一个标题' + count,
+          description : '这是一段描述内容' + count,
+          avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+        })
+      } , 2000)
     }
   }
 }
