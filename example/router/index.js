@@ -53,6 +53,10 @@ const routes = [
   {
     path : '/list',
     component : () => import('@example/docs/list')
+  },
+  {
+    path : '/popover',
+    component : () => import('@example/docs/popover')
   }
 ];
 const router = new VueRouter({

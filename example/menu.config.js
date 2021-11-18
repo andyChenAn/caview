@@ -70,6 +70,10 @@ export default [
       {
         name : 'List 列表',
         path : '/list'
+      },
+      {
+        name : 'Popover 气泡卡片',
+        path : '/popover'
       }
     ]
   }

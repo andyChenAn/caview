@@ -14,6 +14,7 @@ import CollapsePanel from './components/collapse/collapsePanel';
 import List from './components/list';
 import ListItem from './components/list/item';
 import ListItemMeta from './components/list/meta';
+import Popover from './components/popover';
 const components = {
   Message,
   Notification,
@@ -30,7 +31,8 @@ const components = {
   CollapsePanel,
   List,
   ListItem,
-  ListItemMeta
+  ListItemMeta,
+  Popover
 }
 const caview = {
   ...components
