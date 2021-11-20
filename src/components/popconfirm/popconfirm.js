@@ -1,5 +1,5 @@
 import _extends from "@babel/runtime/helpers/extends";
-import ContainerRender from './containerRender';
+import ContainerRender from '../utils/containerRender';
 import Popup from './popup';
 import throttle from 'lodash/throttle';
 export default {

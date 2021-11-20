@@ -585,7 +585,7 @@ export default {
                 'td',
                 {
                   class : classNames(prefixCls + '-month-td'),
-                  key : i
+                  key : month
                 },
                 [
                   h(

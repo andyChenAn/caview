@@ -18,6 +18,8 @@ export default {
     }
   },
   render () {
+    const h = this.$createElement;
+    const content = this.renderContent();
     return this.$slots.default
   }
 }
