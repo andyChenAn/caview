@@ -23,6 +23,7 @@ export default {
   methods : {
     popupVisibleChange (visible) {
       this.$emit('visibleChange' , visible);
+      this.$emit('visibleChange1' , visible);
     }
   },
   render () {

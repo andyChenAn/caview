@@ -30,14 +30,70 @@
       </Popover>
     </div>
     <div class="inner">
-      <div style="margin-bottom:20px">使用visible属性来控制弹框展示</div>
-      <Popover v-model="visible" title="这是一个标题">
+      <div style="margin-bottom:20px">使用visible(v-model)属性来控制popover显示</div>
+      <Popover :visible="visible1" title="这是一个标题" @visileChange="visibleChange1">
         <button>click me</button>
         <div slot="content">
           <div>这是一个popover组件的内容</div>
-          <button @click="aa">close popover</button>
+          <button @click="hide">close popover</button>
         </div>
       </Popover>
+      <Popover :visible="visible2" title="这是一个标题" @visileChange="visibleChange2">
+        <button>click me</button>
+        <div slot="content">
+          <div>这是一个popover组件的内容</div>
+          <button @click="hide">close popover</button>
+        </div>
+      </Popover>
+    </div>
+    <div class="inner">
+      <div style="margin-bottom:20px;">位置方向</div>
+      <div style="position:relative;width:460px;">
+        <div style="margin-left: 90px">
+          <Popover trigger="hover" placement="topLeft" title="这是标题" content="这是内容">
+            <button class="btn">topLeft</button>
+          </Popover>
+          <Popover trigger="hover" title="这是标题" content="这是内容">
+            <button class="btn">top</button>
+          </Popover>
+          <Popover trigger="hover" placement="topRight" title="这是标题" content="这是内容">
+            <button class="btn">topRight</button>
+          </Popover>
+        </div>
+        <div style="width: 80px">
+          <Popover trigger="hover" placement="leftTop" title="这是标题" content="这是内容">
+            <button class="btn">leftTop</button>
+          </Popover>
+          <Popover trigger="hover" placement="left" title="这是标题" content="这是内容">
+            <button class="btn">left</button>
+          </Popover>
+          <Popover trigger="hover" placement="leftBottom" title="这是标题" content="这是内容">
+            <button class="btn">leftBottom</button>
+          </Popover>
+        </div>
+        <div style="margin-left: 90px">
+          <Popover trigger="hover" placement="bottomLeft" title="这是标题" content="这是内容">
+            <button class="btn">bottomLeft</button>
+          </Popover>
+          <Popover trigger="hover" placement="bottom" title="这是标题" content="这是内容">
+            <button class="btn">bottom</button>
+          </Popover>
+          <Popover trigger="hover" placement="bottomRight" title="这是标题" content="这是内容">
+            <button class="btn">bottomRight</button>
+          </Popover>
+        </div>
+        <div style="width: 90px;position:absolute;right:0;top:30px">
+          <Popover trigger="hover" placement="rightTop" title="这是标题" content="这是内容">
+            <button class="btn">rightTop</button>
+          </Popover>
+          <Popover trigger="hover" placement="right" title="这是标题" content="这是内容">
+            <button class="btn">right</button>
+          </Popover>
+          <Popover trigger="hover" placement="rightBottom" title="这是标题" content="这是内容">
+            <button class="btn">rightBottom</button>
+          </Popover>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -45,19 +101,29 @@
 export default {
   data () {
     return {
-      visible : false
+      visible1 : false,
+      visible2 : false
     }
   },
   methods : {
-    aa () {
-      this.visible = false;
+    hide () {
+      this.visible1 = false;
+      this.visible2 = false;
     },
-    change (visible) {
-      console.log(visible)
+    visibleChange1 (visible) {
+      this.visible2 = false;
+      this.visible1 = visible;
+    },
+    visibleChange2 (visible) {
+      this.visible1 = false;
+      this.visible2 = visible;
     }
   }
 }
 </script>
 <style lang="less" scoped>
-
+.btn {
+  width: 90px;
+  height: 30px;
+}
 </style>

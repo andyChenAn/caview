@@ -16,9 +16,10 @@ export default {
       type : String,
       default : 'top'
     },
+    // 这里允许visible的类型为布尔值和字符串，主要是因为我要通过这个visible来区分组件是不是使用了v-model
     visible : {
-      type : Boolean,
-      default : false
+      type : [Boolean , String],
+      default : ''
     },
     prefixCls : {
       type : String,
@@ -34,7 +35,7 @@ export default {
     event : 'visibleChange'
   },
   data () {
-    let visible = this.visible || false;
+    let visible = this.visible === false ? this.visible : false;
     return {
       sVisible : visible
     }
@@ -76,21 +77,27 @@ export default {
         [content]
       ) : null;
     },
-    visibleChange (visible) {
+    visibleChange1 (visible) {
       this.sVisible = visible;
+      this.$emit('visileChange' , visible);
     }
   },
   render () {
     const h = this.$createElement;
     const { prefixCls } = this.$props;
     const popup = this.renderPopup(prefixCls);
+    // 这里又来区分组件是否有使用v-model
+    let visible = this.visible;
+    if (visible !== false) {
+      visible = this.sVisible;
+    }
     const popoverProps = {
       props : _extends({} , omit(this.$props , ['title' , 'content']) , {
-        visible : this.sVisible
+        visible : visible
       }),
-      on : {
-        visibleChange : this.visibleChange
-      }
+      on : _extends({} , this.$listeners , {
+        visibleChange1 : this.visibleChange1
+      })
     }
     return h(
       Popover,
