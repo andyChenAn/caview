@@ -1,24 +1,37 @@
-import _extends from "@babel/runtime/helpers/extends";
-import ContainerRender from '../utils/containerRender';
+import _extends from '@babel/runtime/helpers/extends';
+import classNames from 'classnames';
+import omit from 'omit.js';
+import ContainerRender from './containerRender';
 import Popup from './popup';
 import throttle from 'lodash/throttle';
+//const HANDLERS = ['click' , 'mousedown' , 'mouseenter' , 'mouseleave' , 'focus' , 'blur' , 'contextmenu'];
 export default {
-  props : {
-    placement : {
+  props: {
+    action: {
       type : String,
-      default : 'top'
-    },
-    prefixCls : {
-      type : String,
-      default : 'ca-popconfirm'
+      default : ''
     },
     visible : {
       type : Boolean,
       default : false
+    },
+    prefixCls : {
+      type : String,
+      default : 'ca-popover'
+    },
+    placement : {
+      type : String,
+      default : 'top'
+    }
+  },
+  data () {
+    return {
+      popupVisible : this.visible
     }
   },
   watch : {
     visible (newVal) {
+      this.popupVisible = newVal;
       if (!newVal) {
         window.removeEventListener('resize' , this.handleResize);
         document.body.removeEventListener('mousedown' , this.handleDocumentClick);
@@ -32,17 +45,13 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.renderComponent();
-    });
+    })
   },
   updated () {
     this.renderComponent();
     if (this.popupElement) {
       this.align(this.popupElement)
     }
-  },
-  beforeDestroy () {
-    window.removeEventListener('resize' , this.handleResize);
-    document.body.removeEventListener('mousedown' , this.handleDocumentClick);
   },
   methods : {
     contains (root , node) {
@@ -64,61 +73,9 @@ export default {
       } , 0);
     },
     handleDocumentClick (evt) {
-      if (!this.contains(this.$el , evt.target) && !this.hasPopupMousedown) {
-        this.$emit('visibleChange' , false);
+      if (!this.contains(this.popupElement , evt.target) && !this.hasPopupMousedown && !this.contains(this.$el , evt.target)) {
+        this.$emit('popupVisibleChange' , false);
       }
-    },
-    handleClick (evt) {
-      this.target = evt.currentTarget;
-      this.$emit('visibleChange' , true);
-    },
-    getClickTargetPosition () {
-      const {width , height , top , left} = this.target.getBoundingClientRect();
-      const res = {
-        width : width,
-        height : height,
-        left : left,
-        top : top
-      };
-      return res;
-    },
-    getContainer () {
-      const container = document.createElement('div');
-      container.style.position = 'absolute';
-      container.style.top = '0';
-      container.style.left = '0';
-      container.style.width = '100%';
-      document.body.appendChild(container);
-      return container;
-    },
-    getComponent () {
-      const h = this.$createElement;
-      let transitionProps = {
-        props : {
-          appear : true,
-          name : 'zoomIn'
-        }
-      };
-      return h(
-        'transition',
-        transitionProps,
-        [
-          h(
-            Popup,
-            {
-              props : this.$props,
-              directives : [
-                {name : 'show' , value : this.visible}
-              ],
-              on : {
-                align : this.align,
-                popupMousedown : this.popupMousedown
-              }
-            },
-            [this.$slots.title]
-          )
-        ]
-      )
     },
     align (popupElement) {
       popupElement = this.popupElement || (this.popupElement = popupElement);
@@ -185,25 +142,141 @@ export default {
       popupElement.style.left = popupLeft;
       popupElement.style.top = popupTop;
       popupElement.style.transformOrigin = transformOrigin;
+    },
+    getClickTargetPosition () {
+      const {width , height , top , left} = this.$el.getBoundingClientRect();
+      const res = {
+        width : width,
+        height : height,
+        left : left,
+        top : top
+      };
+      return res;
+    },
+    getComponent () {
+      const h = this.$createElement;
+      const popupProps = {
+        props : _extends({} , this.$props , omit(this.$props , ['action'])),
+        on : {
+          align : this.align,
+          popupMousedown : this.popupMousedown
+        },
+        directives : [
+          {
+            name : 'show',
+            value : this.popupVisible
+          }
+        ]
+      }
+      return h(
+        'transition',
+        {
+          props : {
+            name : 'zoomIn',
+            appear : true
+          }
+        },
+        [
+          h(
+            Popup,
+            popupProps,
+            [this.$slots.popup]
+          )
+        ]
+      )
+    },
+    getContainer () {
+      const container = document.createElement('div');
+      container.style.position = 'absolute';
+      container.style.top = '0';
+      container.style.left = '0';
+      container.style.width = '100%';
+      document.body.appendChild(container);
+      return container;
+    },
+    isClickToShow () {
+      const { action } = this.$props;
+      return action.indexOf('click') !== -1;
+    },
+    isMouseEnterToShow () {
+      const { action } = this.$props;
+      return action.indexOf('hover') !== -1;
+    },
+    isMouseLeaveToShow () {
+      const { action } = this.$props;
+      return action.indexOf('hover') !== -1;
+    },
+    isFocusToShow () {
+      const { action } = this.$props;
+      return action.indexOf('focus') !== -1;
+    },
+    isBlurToShow () {
+      const { action } = this.$props;
+      return action.indexOf('focus') !== -1;
+    },
+    isContextmenuToShow () {
+      const { action } = this.$props;
+      return action.indexOf('contextmenu') !== -1;
+    },
+    onClick () {
+      this.popupVisible = !this.popupVisible;
+      this.$emit('popupVisibleChange' , this.popupVisible);
+    },
+    onMouseenter () {
+      this.popupVisible = !this.popupVisible;
+      this.$emit('popupVisibleChange' , this.popupVisible);
+    },
+    onMouseleave () {
+      this.popupVisible = !this.popupVisible;
+      this.$emit('popupVisibleChange' , this.popupVisible);
+    },
+    onFocus () {
+      this.popupVisible = !this.popupVisible;
+      this.$emit('popupVisibleChange' , this.popupVisible);
+    },
+    onBlur () {
+      this.popupVisible = !this.popupVisible;
+      this.$emit('popupVisibleChange' , this.popupVisible);
+    },
+    onContextmenu (evt) {
+      evt.preventDefault();
+      this.popupVisible = !this.popupVisible;
+      this.$emit('popupVisibleChange' , this.popupVisible);
     }
   },
-  render (h) {
+  render () {
     const self = this;
-    let children = (this.$slots.default || []).filter(c => c.tag || c.text.trim());
-    if (children.length === 0) {
-      return null;
-    }
-    children[0].data || (children[0].data = {});
-    children[0].data.on = {
-      click : this.handleClick
+    const h = this.$createElement;
+    let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
+    children = children.length >= 1 ? children[0] : children;
+    children.data = children.data || {};
+    children.data.on = {};
+    if (this.isClickToShow()) {
+      children.data.on.click = this.onClick;
     };
+    if (this.isMouseEnterToShow()) {
+      children.data.on.mouseenter = this.onMouseenter;
+    };
+    if (this.isMouseLeaveToShow()) {
+      children.data.on.mouseleave = this.onMouseleave;
+    };
+    if (this.isFocusToShow()) {
+      children.data.on.focus = this.onFocus
+    };
+    if (this.isBlurToShow()) {
+      children.data.on.blur = this.onBlur;
+    }
+    if (this.isContextmenuToShow()) {
+      children.data.on.contextmenu = this.onContextmenu;
+    }
     return h(
       ContainerRender,
       {
         props : {
-          visible : this.visible,
-          getContainer : this.getContainer,
+          parent : this,
+          visible : this.popupVisible,
           getComponent : this.getComponent,
+          getContainer : this.getContainer,
           children (ref) {
             self.renderComponent = ref.renderComponent;
             return children;
@@ -212,4 +285,4 @@ export default {
       }
     )
   }
-};
+}

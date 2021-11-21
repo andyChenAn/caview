@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px">基本使用</div>
-      <Popover title="这是标题" content="这是内容">
+      <Popover trigger="contextmenu" title="这是标题" content="这是内容">
         <button>hover me</button>
       </Popover>
     </div>
@@ -15,7 +15,11 @@
 </template>
 <script>
 export default {
-  
+  data () {
+    return {
+      visible : true
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
