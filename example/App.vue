@@ -3,22 +3,22 @@
     <Header />
     <div class="content">
       <Menu />
-    <div class="inner">
-      <router-view></router-view>
-    </div>
+      <div class="inner">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import Header from '@example/components/header';
-import Menu from '@example/components/menu';
+import Header from "@example/components/header";
+import Menu from "@example/components/menu";
 export default {
-  name : 'App',
-  components : {
+  name: "App",
+  components: {
     Header,
-    Menu
-  }
-}
+    Menu,
+  },
+};
 </script>
 <style lang="scss" scoped>
 .main {

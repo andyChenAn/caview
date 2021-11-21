@@ -4,7 +4,6 @@ import omit from 'omit.js';
 import ContainerRender from './containerRender';
 import Popup from './popup';
 import throttle from 'lodash/throttle';
-//const HANDLERS = ['click' , 'mousedown' , 'mouseenter' , 'mouseleave' , 'focus' , 'blur' , 'contextmenu'];
 export default {
   props: {
     action: {
@@ -73,7 +72,7 @@ export default {
       } , 0);
     },
     handleDocumentClick (evt) {
-      if (!this.contains(this.popupElement , evt.target) && !this.hasPopupMousedown && !this.contains(this.$el , evt.target)) {
+      if (!this.contains(this.popupElement , evt.target) && !this.hasPopupMousedown && !this.contains(this.$el , evt.target) && this.popupVisible && evt.button !== 2) {
         this.$emit('popupVisibleChange' , false);
       }
     },
@@ -219,29 +218,32 @@ export default {
       return action.indexOf('contextmenu') !== -1;
     },
     onClick () {
-      this.popupVisible = !this.popupVisible;
-      this.$emit('popupVisibleChange' , this.popupVisible);
+      this.setVisible(!this.popupVisible);
     },
     onMouseenter () {
-      this.popupVisible = !this.popupVisible;
-      this.$emit('popupVisibleChange' , this.popupVisible);
+      this.setVisible(!this.popupVisible);
     },
     onMouseleave () {
-      this.popupVisible = !this.popupVisible;
-      this.$emit('popupVisibleChange' , this.popupVisible);
+      this.timer && clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.setVisible(!this.popupVisible);
+        clearTimeout(this.timer);
+        this.timer = null;
+      } , 100)
     },
     onFocus () {
-      this.popupVisible = !this.popupVisible;
-      this.$emit('popupVisibleChange' , this.popupVisible);
+      this.setVisible(!this.popupVisible);
     },
     onBlur () {
-      this.popupVisible = !this.popupVisible;
-      this.$emit('popupVisibleChange' , this.popupVisible);
+      this.setVisible(!this.popupVisible);
     },
     onContextmenu (evt) {
       evt.preventDefault();
-      this.popupVisible = !this.popupVisible;
-      this.$emit('popupVisibleChange' , this.popupVisible);
+      this.setVisible(!this.popupVisible);
+    },
+    setVisible (visible) {
+      this.popupVisible = visible;
+      this.$emit('popupVisibleChange' , visible);
     }
   },
   render () {
