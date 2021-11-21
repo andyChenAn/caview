@@ -32,7 +32,6 @@ const config = {
 
 document.body.addEventListener('mousedown' , evt => {
   evt.stopPropagation();
-  evt.preventDefault();
   window.offset = {
     offsetX : evt.clientX,
     offsetY : evt.clientY,

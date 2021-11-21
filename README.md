@@ -14,3 +14,4 @@
 - [x] Carousel 走马灯组件
 - [x] Collapse 折叠面板组件
 - [x] List 列表组件
+- [x] Popover 气泡卡片组件

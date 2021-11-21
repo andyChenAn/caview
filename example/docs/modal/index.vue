@@ -271,5 +271,7 @@ textarea {
   margin-top: 20px;
   margin-left: -55px;
   overflow: hidden;
+  outline: none;
+  border: none;
 }
 </style>
