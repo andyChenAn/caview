@@ -1,0 +1,113 @@
+.ca-card {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  color: rgba(0,0,0,0.65);
+  line-height: 1.5;
+  background-color: #fff;
+  box-sizing: border-box;
+  position: relative;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  &-border {
+    border: 1px solid #e8e8e8;
+  }
+  &-hover {
+    cursor: pointer;
+    &:hover {
+      border-color: rgba(0,0,0,0.2);
+      box-shadow: 0 0 8px 1px rgba(0 ,0,0,0.2);
+    }
+  }
+  &-cover > * {
+    width: 100%;
+    display: block;
+  }
+  &-cover {
+    img {
+      border-radius: 2px 2px 0 0;
+    }
+  }
+  &-head {
+    min-height: 48px;
+    padding: 0 24px;
+    color: rgba(0,0,0,0.85);
+    font-weight: 500;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: -1px;
+    border-radius: 2px 2px 0 0;
+    overflow: hidden;
+    font-size: 14px;
+    &-box {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+    }
+    &-title {
+      flex: 1;
+      padding: 16px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  &-extra {
+    float: right;
+    padding: 16px 0;
+    color: rgba(0,0,0,0.65);
+    font-weight: normal;
+    font-size: 14px;
+  }
+  &-body {
+    padding: 24px;
+  }
+  &-loading {
+    text-align: center;
+  }
+  &-small {
+    .ca-card-head {
+      padding: 0 12px;
+      min-height: 36px;
+      font-size: 14px;
+    }
+    .ca-card-head-title {
+      padding: 8px 0;
+    }
+    .ca-card-extra {
+      padding: 8px 0;
+    }
+  }
+  &-meta {
+    margin: -2px 0;
+    &-inner {
+      overflow: hidden;
+      & > div:not(:last-child) {
+        margin-bottom: 8px;
+      }
+    }
+    &-title {
+      font-size: 16px;
+      color: rgba(0,0,0,0.85);
+      font-weight: 500;
+    }
+    &-description {
+      color: rgba(0,0,0,0.45);
+    }
+  }
+  &-actions {
+    border-top: 1px solid #e8e8e8;
+    background-color: #fafafa;
+    display: flex;
+    align-items: center;
+    & > li {
+      margin: 12px 0;
+      flex: 1;
+      text-align: center;
+      line-height: 1;
+    }
+    & > li:not(:last-child) {
+      border-right: 1px solid #e8e8e8;
+    }
+  }
+}

@@ -74,6 +74,10 @@ export default [
       {
         name : 'Popover 气泡卡片',
         path : '/popover'
+      },
+      {
+        name : 'Card 卡片',
+        path : '/card'
       }
     ]
   }

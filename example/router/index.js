@@ -57,6 +57,10 @@ const routes = [
   {
     path : '/popover',
     component : () => import('@example/docs/popover')
+  },
+  {
+    path : '/card',
+    component : () => import('@example/docs/card')
   }
 ];
 const router = new VueRouter({
