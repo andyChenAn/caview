@@ -17,6 +17,7 @@ import ListItemMeta from './components/list/meta';
 import Popover from './components/popover';
 import Card from './components/card';
 import CardMeta from './components/card/meta';
+import Statistic from './components/statistic';
 const components = {
   Message,
   Notification,
@@ -36,7 +37,8 @@ const components = {
   ListItemMeta,
   Popover,
   Card,
-  CardMeta
+  CardMeta,
+  Statistic
 }
 const caview = {
   ...components

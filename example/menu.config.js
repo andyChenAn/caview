@@ -78,6 +78,10 @@ export default [
       {
         name : 'Card 卡片',
         path : '/card'
+      },
+      {
+        name : 'Statistic 统计数字',
+        path : '/statistic'
       }
     ]
   }
