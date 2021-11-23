@@ -28,6 +28,18 @@ export default {
     hoverable : {
       type : Boolean,
       default : false
+    },
+    headerStyle : {
+      type : Object,
+      default () {
+        return {};
+      }
+    },
+    bodyStyle : {
+      type : Object,
+      default () {
+        return {};
+      }
     }
   },
   methods : {
@@ -38,7 +50,8 @@ export default {
       return title ? h(
         'div',
         {
-          class : classNames(prefixCls + '-head')
+          class : classNames(prefixCls + '-head'),
+          style : this.$props.headerStyle
         },
         [
           h(
@@ -72,7 +85,8 @@ export default {
       return h(
         'div',
         {
-          class : classNames(prefixCls + '-body')
+          class : classNames(prefixCls + '-body'),
+          style : this.$props.bodyStyle
         },
         [
           loading ? h(

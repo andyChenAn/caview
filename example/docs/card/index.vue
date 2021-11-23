@@ -84,6 +84,13 @@
         </Card>
       </div>
     </div>
+    <div class="inner">
+      <div style="margin-bottom:20px">简易卡片</div>
+      <Card style="width:300px;">
+        <div>这是内容</div>
+        <div>这是内容</div>
+      </Card>
+    </div>
   </div>
 </template>
 <script>
