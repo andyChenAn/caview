@@ -32,7 +32,7 @@ export default {
     // 数值的精确度
     precision : {
       type : [Number , String],
-      default : ''
+      default : 0
     },
     prefixCls : {
       type : String,
@@ -70,27 +70,52 @@ export default {
     getSeparatorValue (value) {
       const { separator } = this.$props;
       value = String(value);
-      value = value.split('').reverse().join('');
-      const count = Math.ceil(value.length / 3);
+      if (value.indexOf('.') > -1) {
+        let arr = value.split('.');
+        value = arr[0];
+        value = value.split('').reverse().join('');
+      } else {
+        value = value.split('').reverse().join('');
+      }
+      const count = value.length < 3 ? 0 : Math.ceil(value.length / 3);
       let res = [];
       for (let i = 0 ; i < count ; i++) {
         res.push(value.slice(i * 3 , (i + 1) * 3).split('').reverse().join(''))
       };
-      return res.reverse().join(separator);
+      if (res.length > 0) {
+        return res.reverse().join(separator);
+      } else {
+        return value;
+      }
     },
     renderPrecision (prefixCls) {
       const h = this.$createElement;
-      const { precision } = this.$props;
-      let res = '.';
-      for (let i = 0 ; i < precision ; i++) {
-        res += '0';
+      const { precision , value } = this.$props;
+      let hasDecimalPoint = String(value).indexOf('.') > -1;
+      let pointStr = '';
+      if (hasDecimalPoint) {
+        pointStr = String(value).split('.')[1];
+        let count = pointStr.length;
+        if (precision && count > precision) {
+          pointStr = pointStr.slice(0 , -(count - precision));
+        } else if (precision && count < precision) {
+          for (let i = 0 ; i < precision - count ; i++) {
+            pointStr += '0';
+          }
+        };
+        pointStr = '.' + pointStr;
+      } else {
+        pointStr = '.';
+        for (let i = 0 ; i < precision ; i++) {
+          pointStr += '0';
+        }
       };
       return precision ? h(
         'span',
         {
           class : classNames(prefixCls + '-value-precision')
         },
-        [res]
+        [pointStr]
       ) : null
     },
     renderValue (prefixCls) {
@@ -100,7 +125,8 @@ export default {
       return value ? h(
         'div',
         {
-          class : classNames(prefixCls + '-value')
+          class : classNames(prefixCls + '-value'),
+          style : this.$props.valueStyle
         },
         [
           this.renderPrefix(prefixCls),
@@ -109,7 +135,13 @@ export default {
             {
               class : classNames(prefixCls + '-value-content')
             },
-            [value , this.renderPrecision(prefixCls)]
+            [h(
+              'span',
+              {
+                class : classNames(prefixCls + '-value-int')
+              },
+              [value]
+            ) , this.renderPrecision(prefixCls)]
           ),
           this.renderSuffix(prefixCls)
         ]
