@@ -82,6 +82,10 @@ export default [
       {
         name : 'Statistic 统计数字',
         path : '/statistic'
+      },
+      {
+        name :'Table 表格',
+        path : '/table'
       }
     ]
   }

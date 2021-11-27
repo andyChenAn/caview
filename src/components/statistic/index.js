@@ -1,49 +1,53 @@
 import classNames from "classnames";
 
-export default {
-  props : {
-    // 标题
-    title : {
-      type : String,
-      default : ''
-    },
-    // 数值
-    value : {
-      type : [String , Number],
-      default : ''
-    },
-    // 数值的样式
-    valueStyle : {
-      type : Object,
-      default () {
-        return {};
-      }
-    },
-    // 数值的前缀
-    prefix : {
-      type : String,
-      default : ''
-    },
-    // 数值的后缀
-    suffix : {
-      type : String,
-      default : ''
-    },
-    // 数值的精确度
-    precision : {
-      type : [Number , String],
-      default : 0
-    },
-    prefixCls : {
-      type : String,
-      default : 'ca-statistic'
-    },
-    // 千分位分隔符
-    separator : {
-      type : String,
-      default : ','
+export const statisticProps = {
+  // 标题
+  title : {
+    type : String,
+    default : ''
+  },
+  // 数值
+  value : {
+    type : [String , Number],
+    default : ''
+  },
+  // 数值的样式
+  valueStyle : {
+    type : Object,
+    default () {
+      return {};
     }
   },
+  // 数值的前缀
+  prefix : {
+    type : String,
+    default : ''
+  },
+  // 数值的后缀
+  suffix : {
+    type : String,
+    default : ''
+  },
+  // 数值的精确度
+  precision : {
+    type : [Number , String],
+    default : 0
+  },
+  prefixCls : {
+    type : String,
+    default : 'ca-statistic'
+  },
+  // 千分位分隔符
+  separator : {
+    type : String,
+    default : ','
+  },
+  // 格式化数据，主要用于countdown组件
+  formatter : Function
+};
+
+export default {
+  props : statisticProps,
   methods : {
     renderTitle (prefixCls) {
       const h = this.$createElement;
@@ -121,7 +125,12 @@ export default {
     renderValue (prefixCls) {
       const h = this.$createElement;
       let value = this.$props.value;
-      value = this.getSeparatorValue(value);
+      const { formatter } = this.$props;
+      if (formatter && typeof formatter === 'function') {
+        value = formatter({value , h})
+      } else {
+        value = this.getSeparatorValue(value);
+      }
       return value ? h(
         'div',
         {

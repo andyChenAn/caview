@@ -18,6 +18,8 @@ import Popover from './components/popover';
 import Card from './components/card';
 import CardMeta from './components/card/meta';
 import Statistic from './components/statistic';
+import Countdown from './components/statistic/countdown';
+import Table from './components/table';
 const components = {
   Message,
   Notification,
@@ -38,7 +40,9 @@ const components = {
   Popover,
   Card,
   CardMeta,
-  Statistic
+  Statistic,
+  Countdown,
+  Table
 }
 const caview = {
   ...components

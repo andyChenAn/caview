@@ -65,6 +65,10 @@ const routes = [
   {
     path : '/statistic',
     component : () => import('@example/docs/statistic')
+  },
+  {
+    path : '/table',
+    component : () => import('@example/docs/table')
   }
 ];
 const router = new VueRouter({

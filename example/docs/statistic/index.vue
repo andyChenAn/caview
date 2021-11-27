@@ -110,10 +110,28 @@
         </div>
       </div>
     </div>
+    <div class="inner">
+      <div style="margin-bottom:20px">倒计时</div>
+      <Countdown title="结束时间" @finish="finish" :value="time1" />
+      <Countdown title="距离开始时间" :value="time" format="D 天 H 时 m 分 s 秒" />
+      <Countdown title="距离结束时间，毫秒级" :value="time" format="HH:mm:ss:SSS" />
+    </div>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data () {
+    return {
+      time : Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30,
+      time1 : Date.now() + 1000 * 10
+    }
+  },
+  methods : {
+    finish () {
+      console.log('finished')
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
 </style>
