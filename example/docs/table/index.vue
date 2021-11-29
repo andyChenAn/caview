@@ -19,6 +19,7 @@ export default {
         {
           title: "Name",
           key: "name",
+          sorter : true
         },
         {
           title: "Age",

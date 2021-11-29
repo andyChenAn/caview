@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import _extends from '@babel/runtime/helpers/extends';
 import Loading from '../loading';
+import THead from './tHead';
+import TBody from './tBody';
 export default {
   props : {
     columns : {
@@ -32,18 +34,9 @@ export default {
     loading : {
       type : [Object , Boolean],
       default : false
-    }
+    },
   },
   methods : {
-    renderContent (prefixCls) {
-      const h = this.$createElement;
-      return h(
-        'template',
-        [
-          this.renderTable(prefixCls)
-        ]
-      )
-    },
     renderTable (prefixCls) {
       const h = this.$createElement;
       const { size } = this.$props;
@@ -77,7 +70,42 @@ export default {
       )
     },
     renderTableBody (prefixCls) {
-      
+      const h = this.$createElement;
+      return h(
+        'table',
+        [
+          this.renderTableTHead(prefixCls),
+          this.renderTableTbody(prefixCls)
+        ]
+      )
+    },
+    renderTableTHead (prefixCls) {
+      const h = this.$createElement;
+      const { columns } = this.$props;
+      const tHeadProps = {
+        props : {
+          columns : columns,
+          prefixCls : prefixCls
+        }
+      }
+      return h(
+        THead,
+        tHeadProps
+      )
+    },
+    renderTableTbody (prefixCls) {
+      const h = this.$createElement;
+      const { dataSource } = this.$props;
+      const tBodyProps = {
+        props : {
+          dataSource : dataSource,
+          prefixCls : prefixCls
+        }
+      }
+      return h(
+        TBody,
+        tBodyProps
+      )
     },
     renderTableFooter (prefixCls) {
       const h = this.$createElement;
@@ -91,19 +119,14 @@ export default {
     const loadingProps = {
       props : _extends({} , typeof loading === 'boolean' ? {loading} : loading)
     }
+    console.log(loadingProps)
     return h(
       'div',
       {
         class : classNames(prefixCls + '-wrap')
       },
       [
-        h(
-          Loading,
-          loadingProps,
-          [
-            this.renderContent(prefixCls)
-          ]
-        )
+        this.renderTable(prefixCls)
       ]
     )
   }
