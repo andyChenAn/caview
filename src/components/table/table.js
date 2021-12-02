@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import _extends from '@babel/runtime/helpers/extends';
-import Loading from '../loading';
 import THead from './tHead';
 import TBody from './tBody';
 export default {
