@@ -1,4 +1,4 @@
-class ColumnManager {
+export default class ColumnManager {
   constructor (columns) {
     this.cache = {};
     this.columns = columns;
@@ -17,6 +17,15 @@ class ColumnManager {
     this.columns.some(col => {
       return col.fixed === 'right';
     })
-  },
-  getLeftColumns
+  }
+  getLeftColumns () {
+    return this.columns.fitler(col => {
+      return col.fixed === true || col.fixed === 'left';
+    })
+  }
+  getRightColumns () {
+    return this.columns.fitler(col => {
+      return col.fixed === 'right';
+    })
+  }
 }

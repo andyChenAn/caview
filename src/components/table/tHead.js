@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import HeaderCol from './headerCol';
+import HeaderCol from './headColumn';
 export default {
   props : {
     columns : {
@@ -8,7 +8,16 @@ export default {
         return []
       }
     },
-    prefixCls : String
+    fixed : {
+      type : [String , Boolean],
+      default : ''
+    }
+  },
+  inject : {
+    table : {
+      default : {},
+      from : 'table'
+    }
   },
   methods : {
     renderHeaderCol (prefixCls) {
@@ -42,7 +51,7 @@ export default {
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls } = this.$props;
+    const prefixCls = this.table.prefixCls;
     return h(
       'thead',
       {

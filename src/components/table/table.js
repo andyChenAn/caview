@@ -2,6 +2,7 @@ import classNames from "classnames";
 import _extends from '@babel/runtime/helpers/extends';
 import THead from './tHead';
 import TBody from './tBody';
+import ColumnManager from './columnManager';
 export default {
   props : {
     columns : {
@@ -35,10 +36,78 @@ export default {
       default : false
     },
   },
+  data () {
+    return {
+      columnManager : new ColumnManager(this.columns)
+    }
+  },
+  provide () {
+    return {
+      table : this
+    }
+  },
   methods : {
-    renderTable (prefixCls) {
+    renderLeftFixedTable (prefixCls) {
+      const h = this.$createElement;
+      return h(
+        'div',
+        {
+          class : classNames(prefixCls + '-fixed-left')
+        },
+        [
+          this.renderTable({
+            columns : this.columnManager.getLeftColumns(),
+            fixed : 'left'
+          })
+        ]
+      )
+    },
+    renderRightFixedTable (prefixCls) {
+      const h = this.$createElement;
+      return h(
+        'div',
+        {
+          class : classNames(prefixCls + '-fixed-right')
+        },
+        [
+          this.renderTable({
+            columns : this.columnManager.getRightColumns(),
+            fixed : 'right'
+          })
+        ]
+      )
+    },
+    renderTable (options) {
+      const h = this.$createElement;
+      const { columns , fixed } = options;
+      const tableHeadProps = {
+        props : _extends({} , {
+          fixed : fixed,
+          columns : columns,
+          key : 'head'
+        })
+      };
+      const tableBodyProps = {
+        props : _extends({} , {
+          columns : columns,
+          fixed : fixed
+        })
+      }
+      const tableHead = h(
+        THead,
+        tableHeadProps,
+      );
+      const tableBody = h(
+        TBody,
+        tableBodyProps
+      );
+      return [tableHead , tableBody];
+    },
+    renderTableWrap (prefixCls) {
       const h = this.$createElement;
       const { size } = this.$props;
+      const hasFixedLeft = this.columnManager.isColumnsLeftFixed();
+      const hasFixedRight = this.columnManager.isColumnsRightFixed();
       return h(
         'div',
         {
@@ -46,7 +115,17 @@ export default {
         },
         [
           this.renderTableTitle(prefixCls),
-          this.renderTableContent(prefixCls)
+          h(
+            'div',
+            {
+              class : classNames(prefixCls + '-content')
+            },
+            [
+              this.renderTableContent(prefixCls),
+              hasFixedLeft && this.renderLeftFixedTable(prefixCls),
+              hasFixedRight && this.renderRightFixedTable(prefixCls)
+            ]
+          )
         ]
       )
     },
@@ -57,16 +136,23 @@ export default {
     },
     renderTableContent (prefixCls) {
       const h = this.$createElement;
-      return h(
+      const { columns } = this.$props;
+      const isColumnsFixed = this.columnManager.isColumnsFixed();
+      const scrollable = isColumnsFixed;
+      const table = [
+        this.renderTable({
+          columns : columns,
+          isColumnsFixed : isColumnsFixed
+        }),
+        this.renderTableFooter(prefixCls)
+      ]
+      return scrollable ? h(
         'div',
         {
-          class : classNames(prefixCls + '-content')
+          class : classNames(prefixCls + '-scroll')
         },
-        [
-          this.renderTableBody(prefixCls),
-          this.renderTableFooter(prefixCls)
-        ]
-      )
+        [table]
+      ) : table;
     },
     renderTableBody (prefixCls) {
       const h = this.$createElement;
@@ -118,14 +204,13 @@ export default {
     const loadingProps = {
       props : _extends({} , typeof loading === 'boolean' ? {loading} : loading)
     }
-    console.log(loadingProps)
     return h(
       'div',
       {
         class : classNames(prefixCls + '-wrap')
       },
       [
-        this.renderTable(prefixCls)
+        this.renderTableWrap(prefixCls)
       ]
     )
   }
