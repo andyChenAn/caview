@@ -19,7 +19,11 @@ export default {
         {
           title: "Name",
           key: "name",
-          sortOrder : 'ascend'
+          sortOrder : 'ascend',
+          filteredValue : ['Jim'],
+          sorter : function (a , b) {
+            return a - b > 0
+          }
         },
         {
           title: "Age",
