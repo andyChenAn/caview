@@ -19,7 +19,7 @@ export default {
         {
           title: "Name",
           key: "name",
-          sorter : true
+          sortOrder : 'ascend'
         },
         {
           title: "Age",
@@ -27,7 +27,7 @@ export default {
         },
         {
           title: "Address",
-          key: "address",
+          key: "address"
         },
       ],
       dataSource: [

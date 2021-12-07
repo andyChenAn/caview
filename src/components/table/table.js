@@ -1,8 +1,28 @@
 import classNames from "classnames";
 import _extends from '@babel/runtime/helpers/extends';
-import THead from './tHead';
-import TBody from './tBody';
 import ColumnManager from './columnManager';
+import Loading from '../loading';
+import Vue from 'vue';
+import { flatFilter } from './utils';
+function getRowSelection (props) {
+  return props.rowSelection || {};
+};
+function getFilteredValueColumns (columns) {
+  return flatFilter(columns , col => {
+    return col.filteredValue !== 'undefined';
+  })
+};
+function getColumnKey (column , index) {
+  return column.key || column.dataIndex || index;
+};
+function getFiltersFromColumns (columns) {
+  let filters = {};
+  getFilteredValueColumns(columns).forEach(col => {
+    let colKey = getColumnKey(col);
+    filters[colKey] = col.filteredValue;
+  });
+  return filters;
+}
 export default {
   props : {
     columns : {
@@ -37,9 +57,13 @@ export default {
     },
   },
   data () {
-    return {
-      columnManager : new ColumnManager(this.columns)
-    }
+    this.store = Vue.observable({
+      selectedRowKeys : getRowSelection(this.$props).selectedRowKeys || [],
+      selectionDirty : false
+    });
+    return _extends({} , this.getDefaultSortOrder(this.$props.columns || []) , {
+      sFilters : this.getDefaultFilters(this.$props.columns)
+    })
   },
   provide () {
     return {
@@ -47,170 +71,100 @@ export default {
     }
   },
   methods : {
-    renderLeftFixedTable (prefixCls) {
-      const h = this.$createElement;
-      return h(
-        'div',
-        {
-          class : classNames(prefixCls + '-fixed-left')
-        },
-        [
-          this.renderTable({
-            columns : this.columnManager.getLeftColumns(),
-            fixed : 'left'
-          })
-        ]
-      )
+    // 获取过滤条件，可以有默认的过滤条件和用于自定义的过滤条件，如果同时存在那么优先使用自定义的
+    getDefaultFilters (columns) {
+      let filters = getFiltersFromColumns(columns);
+      let defaultFilteredValueColumns = flatFilter(columns , col => {
+        return typeof col.defaultFilteredValue !== 'undefined';
+      });
+      const defaultFilters = defaultFilteredValueColumns.reduce((obj , col) => {
+        const colKey = getColumnKey(col);
+        obj[colKey] = col.defaultFilteredValue;
+        return obj;
+      } , {});
+      return _extends({} , defaultFilters , filters);
     },
-    renderRightFixedTable (prefixCls) {
-      const h = this.$createElement;
-      return h(
-        'div',
-        {
-          class : classNames(prefixCls + '-fixed-right')
-        },
-        [
-          this.renderTable({
-            columns : this.columnManager.getRightColumns(),
-            fixed : 'right'
-          })
-        ]
-      )
-    },
-    renderTable (options) {
-      const h = this.$createElement;
-      const { columns , fixed } = options;
-      const tableHeadProps = {
-        props : _extends({} , {
-          fixed : fixed,
-          columns : columns,
-          key : 'head'
-        })
+    getDefaultSortOrder (columns) {
+      // 获取排序状态
+      let sortState = this.getSortStateFromColumns(columns);
+      // 默认排序的列
+      const defaultSortedColumn = flatFilter(columns || [] , col => {
+        return col.defaultSortOrder != null;
+      })[0];
+      // 如果存在默认排序的列，并且不存在其他排序的列，那么就重新更新
+      if (defaultSortedColumn && !sortState.sortedColumn) {
+        sortState = {
+          sSortColumn : defaultSortedColumn,
+          sSortOrder : defaultSortedColumn.defaultSortOrder
+        }
       };
-      const tableBodyProps = {
-        props : _extends({} , {
-          columns : columns,
-          fixed : fixed
-        })
-      }
-      const tableHead = h(
-        THead,
-        tableHeadProps,
-      );
-      const tableBody = h(
-        TBody,
-        tableBodyProps
-      );
-      return [tableHead , tableBody];
+      return sortState;
     },
-    renderTableWrap (prefixCls) {
-      const h = this.$createElement;
-      const { size } = this.$props;
-      const hasFixedLeft = this.columnManager.isColumnsLeftFixed();
-      const hasFixedRight = this.columnManager.isColumnsRightFixed();
-      return h(
-        'div',
-        {
-          class : classNames(prefixCls , prefixCls + '-' + size)
-        },
-        [
-          this.renderTableTitle(prefixCls),
-          h(
-            'div',
-            {
-              class : classNames(prefixCls + '-content')
-            },
-            [
-              this.renderTableContent(prefixCls),
-              hasFixedLeft && this.renderLeftFixedTable(prefixCls),
-              hasFixedRight && this.renderRightFixedTable(prefixCls)
-            ]
-          )
-        ]
-      )
-    },
-    renderTableTitle (prefixCls) {
-      const title = this.$scopedSlots.title;
-      const h = this.$createElement;
-      return title && typeof title === 'function' ? title(this.$props.dataSource) : null;
-    },
-    renderTableContent (prefixCls) {
-      const h = this.$createElement;
-      const { columns } = this.$props;
-      const isColumnsFixed = this.columnManager.isColumnsFixed();
-      const scrollable = isColumnsFixed;
-      const table = [
-        this.renderTable({
-          columns : columns,
-          isColumnsFixed : isColumnsFixed
-        }),
-        this.renderTableFooter(prefixCls)
-      ]
-      return scrollable ? h(
-        'div',
-        {
-          class : classNames(prefixCls + '-scroll')
-        },
-        [table]
-      ) : table;
-    },
-    renderTableBody (prefixCls) {
-      const h = this.$createElement;
-      return h(
-        'table',
-        [
-          this.renderTableTHead(prefixCls),
-          this.renderTableTbody(prefixCls)
-        ]
-      )
-    },
-    renderTableTHead (prefixCls) {
-      const h = this.$createElement;
-      const { columns } = this.$props;
-      const tHeadProps = {
-        props : {
-          columns : columns,
-          prefixCls : prefixCls
+    getSortStateFromColumns (columns) {
+      // 遍历存在sortOrder字段的columns数据，并返回第一列sortOrder不为假的数据
+      // 如果存在排序的话，那么就只能拿其中一列来排序，不能同时有几列来排序，不然都不知道以哪个为准了
+      const sortedColumn = this.getSortOrderColumns(columns).filter(col => {
+        return col.sortOrder;
+      })[0];
+      if (sortedColumn) {
+        return {
+          // 排序的列
+          sSortColumn : sortedColumn,
+          // 排序方式，升序or降序?
+          sSortOrder : sortedColumn.sortOrder
         }
+      };
+      // 如果没有那么返回null
+      return {
+        sSortColumn : null,
+        sSortOrder : null
       }
-      return h(
-        THead,
-        tHeadProps
-      )
     },
-    renderTableTbody (prefixCls) {
-      const h = this.$createElement;
-      const { dataSource } = this.$props;
-      const tBodyProps = {
-        props : {
-          dataSource : dataSource,
-          prefixCls : prefixCls
-        }
-      }
-      return h(
-        TBody,
-        tBodyProps
-      )
+    getSortOrderColumns (columns) {
+      // 返回每一列中存在sortOrder字段的column数据
+      return flatFilter(columns || [] , col => {
+        return 'sortOrder' in col;
+      })
     },
-    renderTableFooter (prefixCls) {
+    getLocalData (state) {
+      let filter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      const currentState = state || this.$data;
+      const filters = currentState.sFilters;
+      let dataSource = this.$props.dataSource;
+      let data = dataSource || [];
+      data = data.slice();
+      const sortedFn = this.getSorterFn(currentState);
+    },
+    getSorterFn (state) {
+      
+    },
+    renderTable (prefixCls) {
       const h = this.$createElement;
-      const footer = this.$scopedSlots.footer;
-      return footer && typeof footer === 'function' ? footer(this.$props.dataSource) : null;
+      const data = this.getCurrentPageData();
+
+    },
+    getCurrentPageData () {
+      const data = this.getLocalData();
     }
   },
   render () {
-    const h =this.$createElement;
-    const { loading , prefixCls } = this.$props;
+    const h = this.$createElement;
+    const { prefixCls , loading } = this.$props;
     const loadingProps = {
       props : _extends({} , typeof loading === 'boolean' ? {loading} : loading)
-    }
+    };
+    const table = this.renderTable(prefixCls)
     return h(
       'div',
       {
-        class : classNames(prefixCls + '-wrap')
+        class : classNames(prefixCls + '-wrapper')
       },
       [
-        this.renderTableWrap(prefixCls)
+        h(
+          Loading,
+          loadingProps,
+          [table]
+        )
       ]
     )
   }
