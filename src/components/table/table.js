@@ -133,10 +133,29 @@ export default {
       let dataSource = this.$props.dataSource;
       let data = dataSource || [];
       data = data.slice();
+      // 排序函数，是通过column中的sorter函数来实现的
       const sortedFn = this.getSorterFn(currentState);
+      if (sortedFn) {
+        data = this.recursiveSort(data , sortedFn);
+      }
+    },
+    recursiveSort (data , sortedFn) {
+      
     },
     getSorterFn (state) {
-      
+      state = state || this.$data;
+      let sortOrder = state.sSortOrder;
+      let sortColumn = state.sSortColumn;
+      if (!sortOrder || !sortColumn || typeof sortColumn.sorter !== 'function') {
+        return;
+      };
+      return function (a , b) {
+        let result = sortColumn.sorter(a , b , sortOrder);
+        if (result !== 0) {
+          return sortOrder === 'descend' ? -result : result;
+        }
+        return 0;
+      }
     },
     renderTable (prefixCls) {
       const h = this.$createElement;
