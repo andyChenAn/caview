@@ -20,6 +20,7 @@ import CardMeta from './components/card/meta';
 import Statistic from './components/statistic';
 import Countdown from './components/statistic/countdown';
 import Table from './components/table';
+import Tabs from './components/tabs';
 const components = {
   Message,
   Notification,
@@ -42,7 +43,8 @@ const components = {
   CardMeta,
   Statistic,
   Countdown,
-  Table
+  Table,
+  Tabs
 }
 const caview = {
   ...components

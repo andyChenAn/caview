@@ -86,6 +86,10 @@ export default [
       {
         name :'Table 表格',
         path : '/table'
+      },
+      {
+        name : 'Tabs 标签页',
+        path : '/tabs'
       }
     ]
   }
