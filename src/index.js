@@ -21,6 +21,7 @@ import Statistic from './components/statistic';
 import Countdown from './components/statistic/countdown';
 import Table from './components/table';
 import Tabs from './components/tabs';
+import TabPane from './components/tabs/tabPane';
 const components = {
   Message,
   Notification,
@@ -44,7 +45,8 @@ const components = {
   Statistic,
   Countdown,
   Table,
-  Tabs
+  Tabs,
+  TabPane
 }
 const caview = {
   ...components
