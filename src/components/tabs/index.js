@@ -43,11 +43,24 @@ export default {
     animate : {
       type : Boolean,
       default : true
+    },
+    prevArrowStyle : {
+      type : Object,
+      default () {
+        return {};
+      }
+    },
+    nextArrowStyle : {
+      type : Object,
+      default () {
+        return {}
+      }
     }
   },
   methods : {
     renderTabBar (prefixCls) {
       const h = this.$createElement;
+      const { activeKey } = this.$props;
       let tabBarExtraContent = null;
       if (this.$slots.tabBarExtraContent) {
         tabBarExtraContent = h(
@@ -58,16 +71,44 @@ export default {
           [this.$slots.tabBarExtraContent]
         )
       };
-      const tabBarProps = {
-        props : {
-          prefixCls : prefixCls,
-          tabBarExtraContent : tabBarExtraContent
-        }
-      }
-      return h(
-        TabBar,
-        tabBarProps
-      )
+      // let children = this.$slots.default.filter(c => c.tag || c.text.trim());
+      // let newChildren = [];
+      // children.forEach(child => {
+      //   const key = child.key;
+      //   const { tab } = child.componentOptions.propsData;
+
+      //   newChildren.push(h(
+      //     'div',
+      //     {
+      //       class : cls
+      //     }
+      //   ))
+      // })
+      // let tabs = [];
+      // this.$slots.default.map(c => {
+      //   const { tab , key } = c.componentOptions.propsData;
+      // });
+      // const tabBarProps = {
+      //   props : {
+      //     prefixCls : prefixCls,
+      //     tabBarExtraContent : tabBarExtraContent,
+      //     tabs : tabs
+      //   },
+      //   on : {
+      //     prevClick : this.prevClick,
+      //     nextClick : this.nextClick
+      //   }
+      // }
+      // return h(
+      //   TabBar,
+      //   tabBarProps
+      // )
+    },
+    prevClick () {
+      this.$emit('prevClick');
+    },
+    nextClick () {
+      this.$emit('nextClick');
     },
     renderTabContent (prefixCls) {
       const h = this.$createElement;
@@ -80,7 +121,8 @@ export default {
       }
       return h(
         TabPane,
-        tabPaneProps
+        tabPaneProps,
+        [this.$slots.default]
       )
     }
   },

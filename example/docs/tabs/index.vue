@@ -7,15 +7,24 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom: 20px">基本使用</div>
-      <Tabs >
-        <TabPane tab="tab1" />
+      <Tabs @prevClick="prevClick">
+        <TabPane :tab="tab" key="2" />
       </Tabs>
     </div>
   </div>  
 </template>
 <script>
 export default {
-  
+  data ()  {
+    return {
+      tab : 'tab1'
+    }
+  },
+  methods : {
+    prevClick () {
+      alert(23)
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
