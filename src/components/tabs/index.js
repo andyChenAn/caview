@@ -71,38 +71,31 @@ export default {
           [this.$slots.tabBarExtraContent]
         )
       };
-      // let children = this.$slots.default.filter(c => c.tag || c.text.trim());
-      // let newChildren = [];
-      // children.forEach(child => {
-      //   const key = child.key;
-      //   const { tab } = child.componentOptions.propsData;
-
-      //   newChildren.push(h(
-      //     'div',
-      //     {
-      //       class : cls
-      //     }
-      //   ))
-      // })
-      // let tabs = [];
-      // this.$slots.default.map(c => {
-      //   const { tab , key } = c.componentOptions.propsData;
-      // });
-      // const tabBarProps = {
-      //   props : {
-      //     prefixCls : prefixCls,
-      //     tabBarExtraContent : tabBarExtraContent,
-      //     tabs : tabs
-      //   },
-      //   on : {
-      //     prevClick : this.prevClick,
-      //     nextClick : this.nextClick
-      //   }
-      // }
-      // return h(
-      //   TabBar,
-      //   tabBarProps
-      // )
+      let tabBarProps = {
+        props : {
+          prefixCls : prefixCls,
+          tabBarExtraContent : tabBarExtraContent,
+          tabs : [],
+          activeKey : activeKey
+        },
+        on : {
+          prevClick : this.prevClick,
+          nextClick : this.nextClick
+        }
+      };
+      let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
+      children.map(c => {
+        const { tab } = c.componentOptions.propsData;
+        const key = c.key;
+        tabBarProps.props.tabs.push({
+          tab : tab,
+          tabKey : key
+        });
+      });
+      return h(
+        TabBar,
+        tabBarProps
+      )
     },
     prevClick () {
       this.$emit('prevClick');

@@ -1,0 +1,96 @@
+.ca-tabs {
+  color: rgba(0,0,0,0.65);
+  font-size: 14px;
+  box-sizing: border-box;
+  &-bar {
+    margin-bottom: 16px;
+    border-bottom: 1px solid #e8e8e8;
+    &-container {
+      box-sizing: border-box;
+      position: relative;
+      white-space: nowrap;
+      line-height: 1.5;
+      margin-bottom: -1px;
+      overflow: hidden;
+      &-scrolling {
+        padding: 0 32px;
+      }
+    }
+  }
+  &-nav-tab {
+    overflow: hidden;
+    width: 100%;
+  }
+  &-nav-scroll {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  &-nav {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+  }
+  &-tab {
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    margin-right: 32px;
+    cursor: pointer;
+    transition: color 0.3s;
+    &:last-child {
+      margin-right: 0;
+    }
+    &-active {
+      color: #1890ff;
+      font-weight: 500;
+    }
+  }
+  &-tab-prev , &-tab-next {
+    position: absolute;
+    text-align: center;
+    width: 0;
+    background-color: transparent;
+    border: 0;
+    opacity: 0;
+    height: 100%;
+    cursor: pointer;
+  }
+  &-tab-prev {
+    left: 0;
+    &.ca-tabs-tab-show {
+      opacity: 1;
+      width: 32px;
+    }
+    .ca-tabs-prev-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50% , -50%);
+    }
+  }
+  &-tab-next {
+    right: 0;
+    &.ca-tabs-tab-show {
+      opacity: 1;
+      width: 32px;
+      pointer-events: auto;
+    }
+    .ca-tabs-next-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50% , -50%);
+    }
+  }
+  &-tab-line {
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    width: 100%;
+    background-color: #1890ff;
+    left: 0;
+    z-index: 1;
+    transition: transform 0.3s;
+  }
+}

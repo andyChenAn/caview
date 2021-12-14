@@ -11,7 +11,7 @@ export default {
     return h(
       'span',
       {
-        class : classNames(prefixCls + '-next-arrow-icon')
+        class : classNames(prefixCls + '-next-icon')
       },
       [
         h(
