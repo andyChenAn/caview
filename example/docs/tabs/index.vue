@@ -7,10 +7,10 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom: 20px">基本使用</div>
-      <div style="width:180px">
+      <div style="width:200px">
         <Tabs activeKey="1" @prevClick="prevClick">
           <TabPane tab="tab1" key="1">tab1 content</TabPane>
-          <TabPane tab="tab2" key="2">tab2 content</TabPane>
+          <TabPane tab="tab2234" key="2">tab2 content</TabPane>
           <TabPane tab="tab3" key="3">tab3 content</TabPane>
         </Tabs>
       </div>

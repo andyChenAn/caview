@@ -3,12 +3,7 @@ import classNames from "classnames";
 export default {
   props : {
     prefixCls : String,
-    prevArrowStyle : Object
-  },
-  methods : {
-    handlePrevClick () {
-      this.$emit('prevClick');
-    }
+    prevArrowStyle : Object,
   },
   render () {
     const h = this.$createElement;
@@ -17,9 +12,6 @@ export default {
       'span',
       {
         class : classNames(prefixCls + '-prev-arrow-icon'),
-        on : {
-          click : this.handlePrevClick
-        }
       },
       [
         h(

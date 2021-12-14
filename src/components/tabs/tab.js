@@ -13,7 +13,9 @@ export default {
     }
   },
   mounted () {
-    this.disableArrow(this.$el);
+    this.$nextTick(() => {
+      this.disableArrow(this.$el);
+    })
   },
   methods : {
     renderTabList () {
