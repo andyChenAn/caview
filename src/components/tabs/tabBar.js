@@ -14,15 +14,17 @@ export default {
       }
     },
     prevArrowStyle: Object,
-    activeKey: String
+    activeKey: String,
+    activeIndex : Number
   },
   data() {
     this.currentKey = this.$props.activeKey;
+    const activeTabIndex = this.$props.activeIndex;
     return {
       // 是否展示左右箭头
       showArrow: false,
       // 当前选中的tab索引
-      activeTabIndex: 0,
+      activeTabIndex: activeTabIndex,
       // 下划线的宽度
       lineWidth: 0,
       // tab容器的位移距离
@@ -126,10 +128,11 @@ export default {
       const { tabs } = this.$props;
       let children = [];
       tabs.map((tab, index) => {
+        console.log(tab)
         children.push(h(
           'div',
           {
-            class: classNames(prefixCls + '-tab', tab.tabKey === this.currentKey ? prefixCls + '-tab-active' : ''),
+            class: classNames(prefixCls + '-tab', tab.tabKey === this.currentKey ? prefixCls + '-tab-active' : '' , tab.disabled ? prefixCls + '-tab-disabled' : ''),
             attrs: {
               'data-index': index
             },
@@ -161,7 +164,7 @@ export default {
       this.currentKey = this.tabs[index].tabKey;
       let tabs = document.querySelectorAll('.' + prefixCls + '-tab');
       let currentTab = tabs[this.activeTabIndex];
-      this.$emit('tabClick');
+      this.$emit('tabClick' , this.currentKey , this.activeTabIndex);
       if (this.activeTabIndex !== 0) {
         let currentTabOffset = currentTab.offsetWidth + currentTab.offsetLeft;
         let tabBoxWidth = this.$refs.tabBox.offsetWidth;
@@ -197,7 +200,6 @@ export default {
         let width = activeNode.offsetLeft + activeNode.offsetWidth;
         if (this.$refs.tabBox) {
           let tabBoxWidth = this.$refs.tabBox.offsetWidth;
-          let offset = 0;
           if (width > tabBoxWidth) {
             offset = width - tabBoxWidth;
           }

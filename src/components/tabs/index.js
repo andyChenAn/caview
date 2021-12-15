@@ -1,6 +1,6 @@
 import _extends from '@babel/runtime/helpers/extends';
 import TabBar from './tabBar';
-import TabPane from './tabPane';
+import TabContent from './tabContent';
 import classNames from 'classnames';
 export default {
   props : {
@@ -57,10 +57,16 @@ export default {
       }
     }
   },
+  data () {
+    const currentKey = this.$props.activeKey || this.$props.defaultActiveKey;
+    return {
+      currentKey : currentKey
+    }
+  },
   methods : {
     renderTabBar (prefixCls) {
       const h = this.$createElement;
-      const { activeKey } = this.$props;
+      const { currentKey } = this.$data;
       let tabBarExtraContent = null;
       if (this.$slots.tabBarExtraContent) {
         tabBarExtraContent = h(
@@ -76,26 +82,36 @@ export default {
           prefixCls : prefixCls,
           tabBarExtraContent : tabBarExtraContent,
           tabs : [],
-          activeKey : activeKey
+          activeKey : currentKey,
+          activeIndex : 0
         },
         on : {
           prevClick : this.prevClick,
-          nextClick : this.nextClick
+          nextClick : this.nextClick,
+          tabClick : this.tabClick
         }
       };
       let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
-      children.map(c => {
-        const { tab } = c.componentOptions.propsData;
+      children.map((c , index) => {
+        const { tab , disabled } = c.componentOptions.propsData;
         const key = c.key;
         tabBarProps.props.tabs.push({
           tab : tab,
-          tabKey : key
+          tabKey : key,
+          disabled : !!disabled || disabled === ''
         });
+        if (this.currentKey === key) {
+          tabBarProps.props.activeIndex = index;
+        }
       });
       return h(
         TabBar,
         tabBarProps
       )
+    },
+    tabClick (currentKey , currentIndex) {
+      this.currentKey = currentKey;
+      this.activeIndex = currentIndex;
     },
     prevClick () {
       this.$emit('prevClick');
@@ -105,16 +121,22 @@ export default {
     },
     renderTabContent (prefixCls) {
       const h = this.$createElement;
-      const { animate } = this.$props;
-      const tabPaneProps = {
+      this.$slots.default.filter(c => c.tag || c.text.trim() !== '').map((child , index) => {
+        if (this.currentKey == child.key) {
+          this.activeIndex = index;
+        }
+      })
+      const tabContentProps = {
         props : {
           prefixCls : prefixCls,
-          animate : animate
+          activeKey : this.currentKey,
+          activeIndex : this.activeIndex,
+          animate : this.animate
         }
-      }
+      };
       return h(
-        TabPane,
-        tabPaneProps,
+        TabContent,
+        tabContentProps,
         [this.$slots.default]
       )
     }
