@@ -128,7 +128,10 @@ export default {
       const { tabs } = this.$props;
       let children = [];
       tabs.map((tab, index) => {
-        console.log(tab)
+        let events = {};
+        if (!tab.disabled) {
+          events.click = this.clickTab;
+        }
         children.push(h(
           'div',
           {
@@ -136,9 +139,7 @@ export default {
             attrs: {
               'data-index': index
             },
-            on: {
-              click: this.clickTab
-            },
+            on: events,
             key: index
           },
           [tab.tab]
