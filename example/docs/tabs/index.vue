@@ -54,6 +54,17 @@
         </Tabs>
       </div>
     </div>
+    <div class="inner">
+      <div style="margin-bottom:20px;">附件内容</div>
+      <div>
+        <Tabs default-active-key="1">
+          <TabPane key="1" tab="tab1">tab1 content</TabPane>
+          <TabPane key="2" tab="tab2">tab2 content</TabPane>
+          <TabPane key="3" tab="tab3">tab3 content</TabPane>
+          <button slot="tabBarExtraContent">click</button>
+        </Tabs>
+      </div>
+    </div>
   </div>
 </template>
 <script>

@@ -272,6 +272,13 @@ export default {
         h(
           'div',
           {
+            class : classNames(prefixCls + '-extra-content')
+          },
+          [this.tabBarExtraContent]
+        ),
+        h(
+          'div',
+          {
             class: classNames(prefixCls + '-bar-container', showArrow ? prefixCls + '-bar-container-scrolling' : '')
           },
           [
