@@ -10,8 +10,8 @@ export default {
       default : false
     },
     prefixCls : String,
-    paneKey : String,
-    currentKey : String
+    paneKey : [String , Number],
+    currentKey : [String , Number]
   },
   render () {
     const { prefixCls , currentKey , paneKey } = this.$props; 
@@ -19,7 +19,7 @@ export default {
     return h(
       'div',
       {
-        class : classNames(prefixCls+ '-tabpane' , currentKey === paneKey ? prefixCls + '-active-tabpane' : prefixCls + '-inactive-tabpane')
+        class : classNames(prefixCls+ '-tabpane' , currentKey == paneKey ? prefixCls + '-active-tabpane' : prefixCls + '-inactive-tabpane')
       },
       [this.$slots.default]
     )

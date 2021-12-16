@@ -31,7 +31,7 @@ export default {
   },
   render () {
     const { prefixCls , activeKey } = this.$props;
-    const { animate } = this.$data;
+    const { animate } = this.$props;
     const h = this.$createElement;
     const children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
     let newChildren = [];

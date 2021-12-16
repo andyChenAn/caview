@@ -5,6 +5,7 @@
   &-bar {
     margin-bottom: 16px;
     border-bottom: 1px solid #e8e8e8;
+    user-select: none;
     &-container {
       box-sizing: border-box;
       position: relative;
@@ -44,7 +45,6 @@
     }
     &-active {
       color: #1890ff;
-      font-weight: 500;
     }
     &-disabled {
       color: rgba(0,0,0,0.45);
@@ -97,7 +97,9 @@
     background-color: #1890ff;
     left: 0;
     z-index: 1;
-    transition: transform 0.3s , width 0.3s;
+    &-animate {
+      transition: transform 0.3s , width 0.3s;
+    }
   }
   &-content {
     width: 100%;

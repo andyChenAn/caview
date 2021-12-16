@@ -57,16 +57,30 @@ export default {
       }
     }
   },
+  model : {
+    prop : 'activeKey',
+    event : 'change'
+  },
   data () {
     const currentKey = this.$props.activeKey || this.$props.defaultActiveKey;
     return {
       currentKey : currentKey
     }
   },
+  watch : {
+    activeKey (key) {
+      this.currentKey = key;
+      const children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
+      children.map((child , index) => {
+        if (key === child.key) {
+          this.activeIndex = index;
+        }
+      })
+    }
+  },
   methods : {
     renderTabBar (prefixCls) {
       const h = this.$createElement;
-      const { currentKey } = this.$data;
       let tabBarExtraContent = null;
       if (this.$slots.tabBarExtraContent) {
         tabBarExtraContent = h(
@@ -82,25 +96,44 @@ export default {
           prefixCls : prefixCls,
           tabBarExtraContent : tabBarExtraContent,
           tabs : [],
-          activeKey : currentKey,
-          activeIndex : 0
+          activeKey : this.currentKey,
+          activeIndex : 0,
+          animate : this.animate
         },
         on : {
           prevClick : this.prevClick,
           nextClick : this.nextClick,
-          tabClick : this.tabClick
+          tabClick : this.tabClick,
         }
       };
       let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
       children.map((c , index) => {
-        const { tab , disabled } = c.componentOptions.propsData;
+        let { tab , disabled } = c.componentOptions.propsData;
+        const cChildren = c.componentOptions.children;
+        if (cChildren[0].children && cChildren[0].children.length > 0) {
+          let arr = [];
+          cChildren.forEach(child => {
+            if (child.data && child.data.slot === 'tab') {
+              // 删除掉slot属性，不然会展示在html上
+              if (child.data.attrs && child.data.attrs.slot) {
+                delete child.data.attrs.slot;
+              }
+              if (child.tag === 'template') {
+                arr.push(child.children);
+              } else {
+                arr.push(child);
+              }
+            }
+          });
+          tab = arr;
+        }
         const key = c.key;
         tabBarProps.props.tabs.push({
           tab : tab,
           tabKey : key,
           disabled : !!disabled || disabled === ''
         });
-        if (this.currentKey === key) {
+        if (this.currentKey == key) {
           tabBarProps.props.activeIndex = index;
         }
       });

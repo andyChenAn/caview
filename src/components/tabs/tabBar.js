@@ -15,7 +15,8 @@ export default {
     },
     prevArrowStyle: Object,
     activeKey: String,
-    activeIndex : Number
+    activeIndex: Number,
+    animate: Boolean
   },
   data() {
     this.currentKey = this.$props.activeKey;
@@ -29,6 +30,11 @@ export default {
       lineWidth: 0,
       // tab容器的位移距离
       tabOffset: 0
+    }
+  },
+  watch: {
+    activeIndex(value) {
+      this.activeTabIndex = value;
     }
   },
   methods: {
@@ -46,8 +52,8 @@ export default {
         'span',
         {
           class: classNames(prefixCls + '-tab-prev', showArrow ? prefixCls + '-tab-show' : ''),
-          on : {
-            click : this.prevClick
+          on: {
+            click: this.prevClick
           }
         },
         [
@@ -82,7 +88,7 @@ export default {
         'span',
         {
           class: classNames(prefixCls + '-tab-next', showArrow ? prefixCls + '-tab-show' : ''),
-          on : {
+          on: {
             click: this.nextClick
           }
         },
@@ -135,10 +141,11 @@ export default {
         children.push(h(
           'div',
           {
-            class: classNames(prefixCls + '-tab', tab.tabKey === this.currentKey ? prefixCls + '-tab-active' : '' , tab.disabled ? prefixCls + '-tab-disabled' : ''),
+            class: classNames(prefixCls + '-tab', tab.tabKey == this.currentKey ? prefixCls + '-tab-active' : '', tab.disabled ? prefixCls + '-tab-disabled' : ''),
             attrs: {
               'data-index': index
             },
+            ref: 'tab',
             on: events,
             key: index
           },
@@ -159,25 +166,31 @@ export default {
       )
     },
     clickTab(evt) {
-      const { prefixCls } = this.$props;
-      const index = evt.target.getAttribute('data-index');
-      this.activeTabIndex = Number(index);
-      this.currentKey = this.tabs[index].tabKey;
-      let tabs = document.querySelectorAll('.' + prefixCls + '-tab');
-      let currentTab = tabs[this.activeTabIndex];
-      this.$emit('tabClick' , this.currentKey , this.activeTabIndex);
-      if (this.activeTabIndex !== 0) {
-        let currentTabOffset = currentTab.offsetWidth + currentTab.offsetLeft;
-        let tabBoxWidth = this.$refs.tabBox.offsetWidth;
-        if (currentTabOffset > tabBoxWidth) {
-          this.tabOffset = -(currentTabOffset - tabBoxWidth);
+      if (this.$refs.nav) {
+        const { prefixCls } = this.$props;
+        const index = evt.currentTarget.getAttribute('data-index');
+        this.activeTabIndex = Number(index);
+        this.currentKey = this.tabs[index].tabKey;
+        let tabs = this.$refs.nav.querySelectorAll('.' + prefixCls + '-tab');
+        let currentTab = tabs[this.activeTabIndex];
+        this.$emit('tabClick', this.currentKey, this.activeTabIndex);
+        if (this.activeTabIndex !== 0) {
+          let currentTabOffset = currentTab.offsetWidth + currentTab.offsetLeft;
+          let tabBoxWidth = this.$refs.tabBox.offsetWidth;
+          if (currentTabOffset > tabBoxWidth + Math.abs(this.tabOffset)) {
+            this.tabOffset = -(currentTabOffset - tabBoxWidth);
+          } else if (currentTab.offsetLeft < Math.abs(this.tabOffset)) {
+            let offset = -(Math.abs(this.tabOffset) - currentTab.offsetLeft);
+            this.tabOffset = -(Math.abs(this.tabOffset) + offset);
+          }
+        } else {
+          this.tabOffset = 0;
         }
-      } else {
-        this.tabOffset = 0;
+        // 设置下划线的宽度
+        const lineWidth = currentTab.getBoundingClientRect().width;
+        this.lineWidth = lineWidth;
       }
-      // 设置下划线的宽度
-      const lineWidth = currentTab.getBoundingClientRect().width;
-      this.lineWidth = lineWidth;
+
     },
     // 选中的tab的下划线
     renderActiveLine(prefixCls) {
@@ -185,29 +198,31 @@ export default {
       return h(
         'div',
         {
-          class: classNames(prefixCls + '-tab-line'),
+          class: classNames(prefixCls + '-tab-line', this.animate ? prefixCls + '-tab-line-animate' : prefixCls + '-tab-line-no-animate'),
           style: _extends({}, { width: this.lineWidth ? this.lineWidth + 'px' : '' }, this.setLineTransform(this.activeTabIndex))
         }
       )
     },
     setLineTransform(index) {
-      let res = {
-        transform: 'translate3d(0px,0px,0px)'
-      };
-      const { prefixCls } = this.$props;
-      let tabs = document.querySelectorAll('.' + prefixCls + '-tab');
-      if (tabs.length > 0) {
-        const activeNode = tabs[index];
-        let width = activeNode.offsetLeft + activeNode.offsetWidth;
-        if (this.$refs.tabBox) {
-          let tabBoxWidth = this.$refs.tabBox.offsetWidth;
-          if (width > tabBoxWidth) {
-            offset = width - tabBoxWidth;
+      if (this.$refs.nav) {
+        let res = {
+          transform: 'translate3d(0px,0px,0px)'
+        };
+        const { prefixCls } = this.$props;
+        let tabs = this.$refs.nav.querySelectorAll('.' + prefixCls + '-tab');
+        if (tabs.length > 0) {
+          const activeNode = tabs[index];
+          let width = activeNode.offsetLeft + activeNode.offsetWidth;
+          if (this.$refs.tabBox) {
+            let tabBoxWidth = this.$refs.tabBox.offsetWidth;
+            if (width > tabBoxWidth) {
+              offset = width - tabBoxWidth;
+            }
+            res.transform = `translate3d(${activeNode.offsetLeft}px , 0px , 0px)`
           }
-          res.transform = `translate3d(${activeNode.offsetLeft}px , 0px , 0px)`
-        }
-      };
-      return res;
+        };
+        return res;
+      }
     },
     renderContent(prefixCls) {
       const h = this.$createElement;
@@ -229,7 +244,7 @@ export default {
                 {
                   class: classNames(prefixCls + '-nav'),
                   style: {
-                    transform : `translate3d(${this.tabOffset}px , 0px , 0px)`
+                    transform: `translate3d(${this.tabOffset}px , 0px , 0px)`
                   },
                   ref: 'nav'
                 },
