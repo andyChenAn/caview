@@ -16,7 +16,8 @@ export default {
     prevArrowStyle: Object,
     activeKey: String,
     activeIndex: Number,
-    animate: Boolean
+    animate: Boolean,
+    tabPosition: String
   },
   data() {
     this.currentKey = this.$props.activeKey;
@@ -35,6 +36,18 @@ export default {
   watch: {
     activeIndex(value) {
       this.activeTabIndex = value;
+    },
+    tabPosition(value) {
+      const { prefixCls } = this.$props;
+      let tabs = this.$refs.nav.querySelectorAll('.' + prefixCls + '-tab');
+      let currentTab = tabs[this.activeTabIndex];
+      // 设置下划线的宽度
+      const rect = currentTab.getBoundingClientRect();
+      if (value === 'left' || value === 'right') {
+        this.lineWidth = rect.height;
+      } else {
+        this.lineWidth = rect.width;
+      }
     }
   },
   methods: {
@@ -116,7 +129,7 @@ export default {
     },
     // 是否展示左右箭头按钮
     disableArrow(node) {
-      const { prefixCls } = this.$props;
+      const { prefixCls, tabPosition } = this.$props;
       const tabListNode = this.tabListNode || (this.tabListNode = node);
       const tabWidth = tabListNode.getBoundingClientRect().width;
       const wrapWidth = this.$el.getBoundingClientRect().width;
@@ -126,8 +139,12 @@ export default {
       };
       // 设置下划线的宽度
       const activeTabNode = tabListNode.querySelector('.' + prefixCls + '-tab-active');
-      const width = activeTabNode.getBoundingClientRect().width;
-      this.lineWidth = width;
+      const rect = activeTabNode.getBoundingClientRect();
+      if (tabPosition === 'left' || tabPosition === 'right') {
+        this.lineWidth = rect.height;
+      } else {
+        this.lineWidth = rect.width;
+      }
     },
     renderTab(prefixCls) {
       const h = this.$createElement;
@@ -167,7 +184,7 @@ export default {
     },
     clickTab(evt) {
       if (this.$refs.nav) {
-        const { prefixCls } = this.$props;
+        const { prefixCls, tabPosition } = this.$props;
         const index = evt.currentTarget.getAttribute('data-index');
         this.activeTabIndex = Number(index);
         this.currentKey = this.tabs[index].tabKey;
@@ -187,19 +204,30 @@ export default {
           this.tabOffset = 0;
         }
         // 设置下划线的宽度
-        const lineWidth = currentTab.getBoundingClientRect().width;
-        this.lineWidth = lineWidth;
+        const rect = currentTab.getBoundingClientRect();
+        if (tabPosition === 'left' || tabPosition === 'right') {
+          this.lineWidth = rect.height;
+        } else {
+          this.lineWidth = rect.width;
+        }
       }
 
     },
     // 选中的tab的下划线
     renderActiveLine(prefixCls) {
       const h = this.$createElement;
+      const { tabPosition } = this.$props;
+      const style = {};
+      if (tabPosition === 'top' || tabPosition === 'bottom') {
+        style.width = this.lineWidth + 'px';
+      } else if (tabPosition === 'left' || tabPosition === 'right') {
+        style.height = this.lineWidth + 'px';
+      }
       return h(
         'div',
         {
           class: classNames(prefixCls + '-tab-line', this.animate ? prefixCls + '-tab-line-animate' : prefixCls + '-tab-line-no-animate'),
-          style: _extends({}, { width: this.lineWidth ? this.lineWidth + 'px' : '' }, this.setLineTransform(this.activeTabIndex))
+          style: _extends({}, style, this.setLineTransform(this.activeTabIndex))
         }
       )
     },
@@ -208,17 +236,21 @@ export default {
         let res = {
           transform: 'translate3d(0px,0px,0px)'
         };
-        const { prefixCls } = this.$props;
+        const { prefixCls, tabPosition } = this.$props;
         let tabs = this.$refs.nav.querySelectorAll('.' + prefixCls + '-tab');
         if (tabs.length > 0) {
           const activeNode = tabs[index];
           let width = activeNode.offsetLeft + activeNode.offsetWidth;
           if (this.$refs.tabBox) {
-            let tabBoxWidth = this.$refs.tabBox.offsetWidth;
-            if (width > tabBoxWidth) {
-              offset = width - tabBoxWidth;
+            if (tabPosition === 'top' || tabPosition === 'bottom') {
+              let tabBoxWidth = this.$refs.tabBox.offsetWidth;
+              if (width > tabBoxWidth) {
+                offset = width - tabBoxWidth;
+              }
+              res.transform = `translate3d(${activeNode.offsetLeft}px , 0px , 0px)`
+            } else {
+              
             }
-            res.transform = `translate3d(${activeNode.offsetLeft}px , 0px , 0px)`
           }
         };
         return res;
@@ -261,18 +293,18 @@ export default {
   },
   render() {
     const h = this.$createElement;
-    const { prefixCls } = this.$props;
+    const { prefixCls, tabPosition } = this.$props;
     const { showArrow } = this.$data;
     return h(
       'div',
       {
-        class: classNames(prefixCls + '-bar')
+        class: classNames(prefixCls + '-bar', prefixCls + '-bar-' + tabPosition)
       },
       [
         h(
           'div',
           {
-            class : classNames(prefixCls + '-extra-content')
+            class: classNames(prefixCls + '-extra-content')
           },
           [this.tabBarExtraContent]
         ),

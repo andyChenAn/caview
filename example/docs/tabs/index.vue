@@ -5,7 +5,7 @@
     <br />
     <br />
     <div class="title2 mb15">代码演示</div>
-    <div class="inner">
+    <!-- <div class="inner">
       <div style="margin-bottom: 20px">基本使用，默认选中第一项</div>
       <div>
         <Tabs default-active-key="1">
@@ -64,6 +64,20 @@
           <button slot="tabBarExtraContent">click</button>
         </Tabs>
       </div>
+    </div> -->
+    <div class="inner">
+      <div style="margin-bottom:20px">tabs位置，可以是top，left，bottom，right</div>
+      <div style="margin-bottom:20px">
+        <button @click="onClick('top')">top</button>
+        <button @click="onClick('bottom')">bottom</button>
+        <button @click="onClick('left')">left</button>
+        <button @click="onClick('right')">right</button>
+      </div>
+      <Tabs :tabPosition="tabPosition" default-active-key="1">
+        <TabPane key="1" tab="tab1">tab1 content</TabPane>
+        <TabPane key="2" tab="tab2">tab2 content</TabPane>
+        <TabPane key="3" tab="tab3">tab3 content</TabPane>
+      </Tabs>
     </div>
   </div>
 </template>
@@ -72,11 +86,15 @@ export default {
   data() {
     return {
       tab1: "tab1",
-      activeKey : '2'
+      activeKey : '2',
+      tabPosition : 'top'
     };
   },
   methods: {
     prevClick() {},
+    onClick (position) {
+      this.tabPosition = position;
+    }
   },
   mounted () {
     setTimeout(() => {

@@ -3,112 +3,113 @@ import TabBar from './tabBar';
 import TabContent from './tabContent';
 import classNames from 'classnames';
 export default {
-  props : {
+  props: {
     // 激活的tab面板
-    activeKey : String,
+    activeKey: String,
     // 默认激活的tab面板
-    defaultActiveKey : String,
+    defaultActiveKey: String,
     // tab尺寸
-    size : {
-      type : String,
-      default : 'default'
+    size: {
+      type: String,
+      default: 'default'
     },
     // tab bar位置，可以是top,left,bottom,right
-    tabPosition : {
-      type : String,
-      default : 'top'
+    tabPosition: {
+      type: String,
+      default: 'top'
     },
     // tab bar之间的间距
-    tabBarGutter : {
-      type : Number,
-      default : 0
+    tabBarGutter: {
+      type: Number,
+      default: 0
     },
     // tab bar的样式
-    tabBarStyle : {
-      type : Object,
-      default () {
+    tabBarStyle: {
+      type: Object,
+      default() {
         return {}
       }
     },
     // tab类型,支持line,card,editable-card
-    type : {
-      type : String,
-      default : 'line'
+    type: {
+      type: String,
+      default: 'line'
     },
-    prefixCls : {
-      type : String,
-      default : 'ca-tabs'
+    prefixCls: {
+      type: String,
+      default: 'ca-tabs'
     },
     // tab内容是否需要动画效果
-    animate : {
-      type : Boolean,
-      default : true
+    animate: {
+      type: Boolean,
+      default: true
     },
-    prevArrowStyle : {
-      type : Object,
-      default () {
+    prevArrowStyle: {
+      type: Object,
+      default() {
         return {};
       }
     },
-    nextArrowStyle : {
-      type : Object,
-      default () {
+    nextArrowStyle: {
+      type: Object,
+      default() {
         return {}
       }
     }
   },
-  model : {
-    prop : 'activeKey',
-    event : 'change'
+  model: {
+    prop: 'activeKey',
+    event: 'change'
   },
-  data () {
+  data() {
     const currentKey = this.$props.activeKey || this.$props.defaultActiveKey;
     return {
-      currentKey : currentKey
+      currentKey: currentKey
     }
   },
-  watch : {
-    activeKey (key) {
+  watch: {
+    activeKey(key) {
       this.currentKey = key;
       const children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
-      children.map((child , index) => {
+      children.map((child, index) => {
         if (key === child.key) {
           this.activeIndex = index;
         }
       })
     }
   },
-  methods : {
-    renderTabBar (prefixCls) {
+  methods: {
+    renderTabBar(prefixCls) {
       const h = this.$createElement;
       let tabBarExtraContent = null;
       if (this.$slots.tabBarExtraContent) {
         tabBarExtraContent = h(
           'div',
           {
-            class : classNames(prefixCls + '-extra-content')
+            class: classNames(prefixCls + '-extra-content')
           },
           [this.$slots.tabBarExtraContent]
         )
       };
       let tabBarProps = {
-        props : {
-          prefixCls : prefixCls,
-          tabBarExtraContent : tabBarExtraContent,
-          tabs : [],
-          activeKey : this.currentKey,
-          activeIndex : 0,
-          animate : this.animate
+        props: {
+          prefixCls: prefixCls,
+          tabBarExtraContent: tabBarExtraContent,
+          tabs: [],
+          activeKey: this.currentKey,
+          activeIndex: 0,
+          animate: this.animate,
+          tabPosition : this.$props.tabPosition
         },
-        on : {
-          prevClick : this.prevClick,
-          nextClick : this.nextClick,
-          tabClick : this.tabClick,
+        on: {
+          prevClick: this.prevClick,
+          nextClick: this.nextClick,
+          tabClick: this.tabClick,
         }
       };
       let children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
-      children.map((c , index) => {
-        let { tab , disabled } = c.componentOptions.propsData;
+      children.map((c, index) => {
+        let { tab, disabled } = c.componentOptions.propsData;
         const cChildren = c.componentOptions.children;
         if (cChildren[0].children && cChildren[0].children.length > 0) {
           let arr = [];
@@ -129,9 +130,9 @@ export default {
         }
         const key = c.key;
         tabBarProps.props.tabs.push({
-          tab : tab,
-          tabKey : key,
-          disabled : !!disabled || disabled === ''
+          tab: tab,
+          tabKey: key,
+          disabled: !!disabled || disabled === ''
         });
         if (this.currentKey == key) {
           tabBarProps.props.activeIndex = index;
@@ -142,29 +143,30 @@ export default {
         tabBarProps
       )
     },
-    tabClick (currentKey , currentIndex) {
+    tabClick(currentKey, currentIndex) {
       this.currentKey = currentKey;
       this.activeIndex = currentIndex;
     },
-    prevClick () {
+    prevClick() {
       this.$emit('prevClick');
     },
-    nextClick () {
+    nextClick() {
       this.$emit('nextClick');
     },
-    renderTabContent (prefixCls) {
+    renderTabContent(prefixCls) {
       const h = this.$createElement;
-      this.$slots.default.filter(c => c.tag || c.text.trim() !== '').map((child , index) => {
+      this.$slots.default.filter(c => c.tag || c.text.trim() !== '').map((child, index) => {
         if (this.currentKey == child.key) {
           this.activeIndex = index;
         }
       })
       const tabContentProps = {
-        props : {
-          prefixCls : prefixCls,
-          activeKey : this.currentKey,
-          activeIndex : this.activeIndex,
-          animate : this.animate
+        props: {
+          prefixCls: prefixCls,
+          activeKey: this.currentKey,
+          activeIndex: this.activeIndex,
+          animate: this.animate,
+          tabPosition : this.$props.tabPosition
         }
       };
       return h(
@@ -174,18 +176,20 @@ export default {
       )
     }
   },
-  render () {
+  render() {
     const h = this.$createElement;
-    const { prefixCls } = this.$props;
+    const { prefixCls, tabPosition } = this.$props;
+    let children = [
+      this.renderTabBar(prefixCls),
+      this.renderTabContent(prefixCls)
+    ];
+    children = tabPosition === 'bottom' ? children.reverse() : children;
     return h(
       'div',
       {
-        class : classNames(prefixCls)
+        class: classNames(prefixCls, prefixCls + '-' + tabPosition)
       },
-      [
-        this.renderTabBar(prefixCls),
-        this.renderTabContent(prefixCls)
-      ]
+      children
     )
   }
 }

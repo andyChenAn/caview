@@ -27,10 +27,11 @@ export default {
     prefixCls : String,
     activeKey : String,
     activeIndex : Number,
-    animate : Boolean
+    animate : Boolean,
+    tabPosition : String
   },
   render () {
-    const { prefixCls , activeKey } = this.$props;
+    const { prefixCls , activeKey , tabPosition } = this.$props;
     const { animate } = this.$props;
     const h = this.$createElement;
     const children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
@@ -45,7 +46,7 @@ export default {
       newChildren.push(child);
     });
     let style = {};
-    if (animate) {
+    if (animate && (tabPosition === 'top' || tabPosition === 'bottom')) {
       style = {
         transform : `translate3d(-${this.activeIndex * 100}% , 0px , 0px)`
       }
@@ -53,7 +54,7 @@ export default {
     return h(
       'div',
       {
-        class : classNames(prefixCls + '-content' , animate ? prefixCls + '-content-animate' : prefixCls + '-content-no-animate'),
+        class : classNames(prefixCls + '-content' , animate ? prefixCls + '-content-animate' : prefixCls + '-content-no-animate' , prefixCls + '-content-' + tabPosition),
         style : style
       },
       [newChildren]
