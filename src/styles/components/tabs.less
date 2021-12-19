@@ -46,6 +46,9 @@
       .ca-tabs-bar-container-scrolling {
         padding: 32px 0;
       }
+      .ca-tabs-bar-container {
+        height: 100%;
+      }
       .ca-tabs-tab-prev {
         left: auto;
         top: 0;
@@ -62,12 +65,16 @@
         display: block;
         margin-right: 0;
         margin-bottom: 16px;
+        padding: 8px 24px;
         &:last-child {
           margin-bottom: 0;
         }
       }
       .ca-tabs-tab-line-animate {
         transition: transform 0.3s
+      }
+      .ca-tabs-nav-tab {
+        height: 100%;
       }
     }
   }
@@ -111,6 +118,7 @@
     box-sizing: border-box;
     padding: 12px 16px;
     margin-right: 32px;
+    text-align: center;
     cursor: pointer;
     transition: color 0.3s;
     &:last-child {

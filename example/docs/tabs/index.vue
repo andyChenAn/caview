@@ -5,7 +5,7 @@
     <br />
     <br />
     <div class="title2 mb15">代码演示</div>
-    <!-- <div class="inner">
+    <div class="inner">
       <div style="margin-bottom: 20px">基本使用，默认选中第一项</div>
       <div>
         <Tabs default-active-key="1">
@@ -47,15 +47,19 @@
       </div>
     </div>
     <div class="inner">
-      <div style="margin-bottom:20px">左右滑动</div>
+      <div style="margin-bottom:20px">滑动效果</div>
+      <div style="margin-bottom:20px;">
+        <button @click="onClick1('top')">水平方向</button>
+        <button @click="onClick1('left')">垂直方向</button>
+      </div>
       <div style="width:300px;">
-        <Tabs default-active-key="8">
+        <Tabs :tabPosition="tabPosition1" default-active-key="8" :style="{height : '200px'}">
           <TabPane v-for="i in 30" :key="String(i)" :tab="'tab' + i">{{i}}</TabPane>
         </Tabs>
       </div>
     </div>
     <div class="inner">
-      <div style="margin-bottom:20px;">附件内容</div>
+      <div style="margin-bottom:20px;">附加内容</div>
       <div>
         <Tabs default-active-key="1">
           <TabPane key="1" tab="tab1">tab1 content</TabPane>
@@ -64,7 +68,7 @@
           <button slot="tabBarExtraContent">click</button>
         </Tabs>
       </div>
-    </div> -->
+    </div>
     <div class="inner">
       <div style="margin-bottom:20px">tabs位置，可以是top，left，bottom，right</div>
       <div style="margin-bottom:20px">
@@ -73,7 +77,7 @@
         <button @click="onClick('left')">left</button>
         <button @click="onClick('right')">right</button>
       </div>
-      <div style="width:200px">
+      <div style="width:500px">
         <Tabs :tabPosition="tabPosition" :active-key="activeKey">
         <TabPane key="1" tab="tab1">
           tab1 content
@@ -91,13 +95,17 @@ export default {
     return {
       tab1: "tab1",
       activeKey : '2',
-      tabPosition : 'top'
+      tabPosition : 'top',
+      tabPosition1 : 'top'
     };
   },
   methods: {
     prevClick() {},
     onClick (position) {
       this.tabPosition = position;
+    },
+    onClick1 (pos) {
+      this.tabPosition1 = pos;
     }
   },
   mounted () {
