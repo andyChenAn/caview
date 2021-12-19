@@ -102,6 +102,16 @@
     overflow: hidden;
     width: 100%;
   }
+  &-nav-tab-small {
+    .ca-tabs-tab {
+      padding: 8px 16px;
+    }
+  }
+  &-nav-tab-large {
+    .ca-tabs-tab {
+      padding: 16px;
+    }
+  }
   &-nav-scroll {
     overflow: hidden;
     white-space: nowrap;
@@ -111,6 +121,24 @@
     display: inline-block;
     box-sizing: border-box;
     transition: transform 0.3s;
+  }
+  &.ca-tabs-card {
+    .ca-tabs-tab {
+      height: 40px;
+      margin: 0;
+      margin-right: 2px;
+      padding: 0 16px;
+      line-height: 38px;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px 4px 0 0;
+      background-color: #fafafa;
+      transition: all 0.3s;
+      &-active {
+        color: #1890ff;
+        background-color: #fff;
+        border-bottom: 1px solid #fff;
+      }
+    }
   }
   &-tab {
     display: inline-block;
@@ -180,6 +208,11 @@
     z-index: 1;
     &-animate {
       transition: transform 0.3s , width 0.3s;
+    }
+  }
+  &.ca-tabs-card {
+    .ca-tabs-tab-line {
+      visibility: hidden;
     }
   }
   &-tabpane {

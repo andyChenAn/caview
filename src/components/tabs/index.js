@@ -36,7 +36,7 @@ export default {
         return {}
       }
     },
-    // tab类型,支持line,card,editable-card
+    // tab类型,支持line,card
     type: {
       type: String,
       default: 'line'
@@ -106,9 +106,11 @@ export default {
       this.currentKey = key;
       this.currentIndex = this.getCurrentTabIndex(key);
     },
-    handleChange () {},
+    handleChange (key) {
+      this.$emit('change' , key);
+    },
     renderTabBar () {
-      const { prefixCls , animate , tabPosition , prevArrowStyle , nextArrowStyle } = this.$props;
+      const { prefixCls , animate , tabPosition , prevArrowStyle , nextArrowStyle , size } = this.$props;
       const { currentKey , currentIndex } = this.$data;
       let { tabBarExtraContent } = this.$slots;
       const h = this.$createElement;
@@ -131,7 +133,8 @@ export default {
           animate : animate,
           tabPosition : tabPosition,
           prevArrowStyle : prevArrowStyle || {},
-          nextArrowStyle : nextArrowStyle || {}
+          nextArrowStyle : nextArrowStyle || {},
+          size : size
         },
         on : {
           prevClick : this.prevClick,
@@ -195,7 +198,7 @@ export default {
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls , tabPosition } = this.$props;
+    const { prefixCls , tabPosition , size , type } = this.$props;
     let children = [
       this.renderTabBar(),
       this.renderTabContent()
@@ -209,7 +212,7 @@ export default {
     return h(
       'div',
       {
-        class : classNames(prefixCls , prefixCls + '-' + tabPosition)
+        class : classNames(prefixCls , prefixCls + '-' + tabPosition , prefixCls + '-' + size , prefixCls + '-' + type)
       },
       [children]
     )

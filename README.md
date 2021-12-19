@@ -17,3 +17,4 @@
 - [x] Popover 气泡卡片组件
 - [x] Statistic 统计数值组件
 - [x] Countdown 计数器组件
+- [x] Tabs 标签页组件

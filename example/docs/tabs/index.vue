@@ -87,6 +87,31 @@
       </Tabs>
       </div>
     </div>
+    <div class="inner">
+      <div style="margin-bottom:20px">尺寸大小</div>
+      <div style="margin-bottom:20px">
+        <button @click="changeSize('small')">small</button>
+        <button @click="changeSize('default')">default</button>
+        <button @click="changeSize('large')">large</button>
+      </div>
+      <div>
+        <Tabs :size="size" default-active-key="1">
+          <TabPane key="1" tab="tab1">tab1</TabPane>
+          <TabPane key="2" tab="tab2">tab2</TabPane>
+          <TabPane key="3" tab="tab3">tab3</TabPane>
+        </Tabs>
+      </div>
+    </div>
+    <div class="inner">
+      <div style="margin-bottom:20px">卡片形式</div>
+      <div>
+        <Tabs type="card" default-active-key="1">
+          <TabPane key="1" tab="tab1">tab1</TabPane>
+          <TabPane key="2" tab="tab2">tab2</TabPane>
+          <TabPane key="3" tab="tab3">tab3</TabPane>
+        </Tabs>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -96,7 +121,8 @@ export default {
       tab1: "tab1",
       activeKey : '2',
       tabPosition : 'top',
-      tabPosition1 : 'top'
+      tabPosition1 : 'top',
+      size : 'default'
     };
   },
   methods: {
@@ -106,6 +132,9 @@ export default {
     },
     onClick1 (pos) {
       this.tabPosition1 = pos;
+    },
+    changeSize (size) {
+      this.size = size;
     }
   },
   mounted () {

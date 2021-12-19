@@ -16,7 +16,8 @@ export default {
     animate : Boolean,
     tabPosition : String,
     prevArrowStyle : Object,
-    nextArrowStyle : Object
+    nextArrowStyle : Object,
+    size : String
   },
   data () {
     const activeIndex = this.$props.currentIndex || 0;
@@ -163,6 +164,7 @@ export default {
       this.setTabActiveLineTransform(this.activeIndex , tabPosition);
       this.setTabBoxTransform(this.activeIndex , tabPosition);
       this.$emit('tabClick' , currentKey);
+      this.$emit('change' , currentKey);
     },
     setTabBoxTransform (index , tabPosition) {
       this.$refs.nav.style.transform = '';
@@ -268,11 +270,11 @@ export default {
     },
     renderTabBarList () {
       const h = this.$createElement;
-      const { prefixCls } = this.$props; 
+      const { prefixCls , size } = this.$props; 
       return h(
         'div',
         {
-          class : classNames(prefixCls + '-nav-tab'),
+          class : classNames(prefixCls + '-nav-tab' , prefixCls + '-nav-tab-' + size),
           ref : 'tabBox'
         },
         [
