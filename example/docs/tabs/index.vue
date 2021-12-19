@@ -49,7 +49,7 @@
     <div class="inner">
       <div style="margin-bottom:20px">左右滑动</div>
       <div style="width:300px;">
-        <Tabs default-active-key="1">
+        <Tabs default-active-key="8">
           <TabPane v-for="i in 30" :key="String(i)" :tab="'tab' + i">{{i}}</TabPane>
         </Tabs>
       </div>
@@ -73,11 +73,15 @@
         <button @click="onClick('left')">left</button>
         <button @click="onClick('right')">right</button>
       </div>
-      <Tabs :tabPosition="tabPosition" default-active-key="1">
-        <TabPane key="1" tab="tab1">tab1 content</TabPane>
+      <div style="width:200px">
+        <Tabs :tabPosition="tabPosition" :active-key="activeKey">
+        <TabPane key="1" tab="tab1">
+          tab1 content
+        </TabPane>
         <TabPane key="2" tab="tab2">tab2 content</TabPane>
         <TabPane key="3" tab="tab3">tab3 content</TabPane>
       </Tabs>
+      </div>
     </div>
   </div>
 </template>
@@ -97,9 +101,9 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
-      this.activeKey = '3';
-    } , 2000)
+    // setTimeout(() => {
+    //   this.activeKey = '3';
+    // } , 2000)
   }
 };
 </script>

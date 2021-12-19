@@ -7,14 +7,14 @@ export default {
         return [];
       }
     },
-    disableArrow : {
+    tabBarMounted : {
       type : Function,
       default : function () {}
     }
   },
   mounted () {
     this.$nextTick(() => {
-      this.disableArrow(this.$el);
+      this.tabBarMounted(this.$el);
     })
   },
   methods : {

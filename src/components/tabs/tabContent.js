@@ -25,13 +25,13 @@ function cloneVNode(vnode) {
 export default {
   props : {
     prefixCls : String,
-    activeKey : String,
-    activeIndex : Number,
+    currentKey : String,
+    currentIndex : Number,
     animate : Boolean,
     tabPosition : String
   },
   render () {
-    const { prefixCls , activeKey , tabPosition } = this.$props;
+    const { prefixCls , currentKey , tabPosition } = this.$props;
     const { animate } = this.$props;
     const h = this.$createElement;
     const children = this.$slots.default.filter(c => c.tag || c.text.trim() !== '');
@@ -40,7 +40,7 @@ export default {
       child.componentOptions.propsData = _extends({} , (child.componentOptions.propsData || {}) , {
         prefixCls : prefixCls,
         paneKey : child.key,
-        currentKey : activeKey
+        currentKey : currentKey
       });
       child = cloneVNode(child);
       newChildren.push(child);
@@ -48,7 +48,7 @@ export default {
     let style = {};
     if (animate && (tabPosition === 'top' || tabPosition === 'bottom')) {
       style = {
-        transform : `translate3d(-${this.activeIndex * 100}% , 0px , 0px)`
+        transform : `translate3d(-${this.currentIndex * 100}% , 0px , 0px)`
       }
     }
     return h(

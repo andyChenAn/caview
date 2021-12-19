@@ -4,10 +4,12 @@ export default {
   props : {
     prefixCls : String,
     prevArrowStyle : Object,
+    tabPosition : String
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls , prevArrowStyle } = this.$props;
+    const { prefixCls , prevArrowStyle , tabPosition } = this.$props;
+    const iconClass = tabPosition === 'top' || tabPosition === 'bottom' ? 'icon-arrow-left' : 'icon-arrow-up'
     return h(
       'span',
       {
@@ -17,7 +19,7 @@ export default {
         h(
           'i',
           {
-            class : classNames('iconfont icon-arrow-left' , prefixCls +'-prev-icon'),
+            class : classNames('iconfont' , prefixCls +'-prev-icon' , iconClass),
             style : prevArrowStyle
           }
         )
