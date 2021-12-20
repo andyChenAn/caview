@@ -90,6 +90,10 @@ export default [
       {
         name : 'Tabs 标签页',
         path : '/tabs'
+      },
+      {
+        name : 'Tag 标签',
+        path : '/tag'
       }
     ]
   }

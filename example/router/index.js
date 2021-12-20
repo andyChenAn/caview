@@ -73,6 +73,10 @@ const routes = [
   {
     path : '/tabs',
     component : () => import('@example/docs/tabs')
+  },
+  {
+    path : '/tag',
+    component : () => import('@example/docs/tag')
   }
 ];
 const router = new VueRouter({

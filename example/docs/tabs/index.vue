@@ -136,11 +136,6 @@ export default {
     changeSize (size) {
       this.size = size;
     }
-  },
-  mounted () {
-    // setTimeout(() => {
-    //   this.activeKey = '3';
-    // } , 2000)
   }
 };
 </script>
