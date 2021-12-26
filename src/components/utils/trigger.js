@@ -1,27 +1,14 @@
 import _extends from '@babel/runtime/helpers/extends';
-import classNames from 'classnames';
 import omit from 'omit.js';
 import ContainerRender from './containerRender';
 import Popup from './popup';
 import throttle from 'lodash/throttle';
 export default {
   props: {
-    action: {
-      type : String,
-      default : ''
-    },
-    visible : {
-      type : Boolean,
-      default : false
-    },
-    prefixCls : {
-      type : String,
-      default : 'ca-popover'
-    },
-    placement : {
-      type : String,
-      default : 'top'
-    }
+    action: String,
+    visible : Boolean,
+    prefixCls : String,
+    placement : String
   },
   data () {
     return {

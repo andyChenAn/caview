@@ -1,12 +1,23 @@
 import _extends from "@babel/runtime/helpers/extends";
-import omit from "omit.js";
 import Trigger from "../utils/trigger";
 export default {
   props : {
-    placement : String,
-    visible : Boolean,
-    prefixCls : String,
-    trigger : String
+    placement : {
+      type : String,
+      default : 'top'
+    },
+    visible : {
+      type : Boolean,
+      default : false
+    },
+    prefixCls : {
+      type : String,
+      default : 'ca-tooltip'
+    },
+    trigger : {
+      type : String,
+      default : 'hover'
+    }
   },
   methods : {
     popupVisibleChange (visible) {

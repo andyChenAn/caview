@@ -81,6 +81,10 @@ const routes = [
   {
     path : '/timeline',
     component : () => import('@example/docs/timeline')
+  },
+  {
+    path : '/tooltip',
+    component : () => import('@example/docs/tooltip')
   }
 ];
 const router = new VueRouter({

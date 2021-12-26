@@ -25,6 +25,7 @@ import TabPane from './components/tabs/tabPane';
 import Tag from './components/tag';
 import Timeline from './components/timeline';
 import TimelineItem from './components/timeline/timelineItem';
+import Tooltip from './components/tooltip';
 const components = {
   Message,
   Notification,
@@ -52,7 +53,8 @@ const components = {
   TabPane,
   Tag,
   Timeline,
-  TimelineItem
+  TimelineItem,
+  Tooltip
 }
 const caview = {
   ...components

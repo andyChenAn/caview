@@ -98,6 +98,10 @@ export default [
       {
         name : 'Timeline 时间轴',
         path : '/timeline'
+      },
+      {
+        name : 'Tooltip 文字提示',
+        path : '/tooltip'
       }
     ]
   }
