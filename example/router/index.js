@@ -85,6 +85,10 @@ const routes = [
   {
     path : '/tooltip',
     component : () => import('@example/docs/tooltip')
+  },
+  {
+    path : '/cascader',
+    component : () => import('@example/docs/cascader')
   }
 ];
 const router = new VueRouter({

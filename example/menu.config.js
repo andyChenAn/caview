@@ -104,5 +104,14 @@ export default [
         path : '/tooltip'
       }
     ]
+  },
+  {
+    title : '数据输入',
+    children : [
+      {
+        name : 'Cascader 级联选择',
+        path : '/cascader'
+      }
+    ]
   }
 ]
