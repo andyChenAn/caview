@@ -20,3 +20,4 @@
 - [x] Statistic 统计数值组件
 - [x] Countdown 计数器组件
 - [x] Tabs 标签页组件
+- [x] Timeline 时间轴组件
