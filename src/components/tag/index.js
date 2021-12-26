@@ -30,6 +30,25 @@ export default {
       default : false
     }
   },
+  model : {
+    prop : 'visible',
+  },
+  data () {
+    const visible = this.$props.visible || false;
+    const checked = this.$props.checked || false;
+    return {
+      sVisible : visible,
+      sChecked : checked
+    }
+  },
+  watch : {
+    visible (newVal) {
+      this.sVisible = newVal;
+    },
+    checked (newVal) {
+      this.sChecked = newVal;
+    }
+  },
   methods : {
     getTagStyle () {
       let style = {}
@@ -56,32 +75,37 @@ export default {
       )
     },
     handleClose (evt) {
+      this.sVisible = false;
       this.$emit('close' , evt);
     },
-    handleChange () {
-      this.$emit('change');
-    },
-    handleClick () {
-
+    handleClick (evt) {
+      const { checkable } = this.$props;
+      const isCheckable = checkable || checkable === '';
+      if (isCheckable) {
+        this.sChecked = !this.sChecked;
+        this.$emit('change' , this.sChecked);
+      }
+      this.$emit('click' , evt);
     }
   },
   render () {
     const h = this.$createElement;
-    const { visible , prefixCls } = this.$props;
+    const { prefixCls , checkable , color } = this.$props;
+    const { sVisible , sChecked } = this.$data;
+    const isCheckable = checkable || checkable === '';
     const tag = h(
       'span',
       {
         directives : [
           {
             name : 'show',
-            value : visible
+            value : sVisible
           }
         ],
         on : {
-          change : this.handleChange,
           click : this.handleClick
         },
-        class : classNames(prefixCls),
+        class : classNames(prefixCls , isCheckable ? prefixCls + '-checkable' : '' , sChecked ? prefixCls + '-checked' : '' , color ? prefixCls + '-has-color' : ''),
         style : this.getTagStyle()
       },
       [this.$slots.default , this.renderCloseIcon()]

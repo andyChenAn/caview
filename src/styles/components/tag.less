@@ -14,11 +14,29 @@
   position: relative;
   margin-right: 8px;
   &:hover {
-    opacity: 0.9;
+    opacity: 0.85;
   }
   &-close-icon {
     font-size: 12px;
     margin-left: 5px;
     cursor: pointer;
   }
+  &-checkable {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  &-checked {
+    background-color: #1890ff;
+    color: #fff;
+  }
+  &-has-color {
+    border-color: transparent;
+  }
+}
+.ca-tag-zoom-enter-active , .ca-tag-zoom-leave-active {
+  transition: all 0.3s ease;
+}
+.ca-tag-zoom-enter , .ca-tag-zoom-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
 }
