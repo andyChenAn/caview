@@ -1,0 +1,119 @@
+.ca-timeline {
+  box-sizing: border-box;
+  font-size: 14px;
+  color: rgba(0,0,0,0.65);
+  line-height: 1.5;
+  &.ca-timeline-reverse {
+    .ca-timeline-item-pending {
+      .ca-timeline-item-tail {
+        top: 15px;
+        display: block;
+        height: calc(100% - 15px);
+        border-left: 2px dotted #d8d8d8;
+      }
+    }
+    .ca-timeline-item-last {
+      .ca-timeline-item-tail {
+        display: none;
+      }
+    }
+  }
+  &.ca-timeline-right {
+    .ca-timeline-item-right {
+      .ca-timeline-item-content {
+        width: calc(50% - 12px);
+        margin: 0;
+        text-align: right;
+      }
+    }
+    .ca-timeline-item-tail {
+      left: 50%;
+    }
+    .ca-timeline-item-dot {
+      left: 50%;
+      margin-left: -4px;
+    }
+  }
+  &.ca-timeline-alternate {
+    .ca-timeline-item-left {
+      .ca-timeline-item-content {
+        left: calc(50% - 4px);
+        width: calc(50% - 14px);
+        text-align: left;
+      }
+    }
+    .ca-timeline-item-right {
+      .ca-timeline-item-content {
+        width: calc(50% - 12px);
+        margin: 0;
+        text-align: right;
+      }
+    }
+    .ca-timeline-item {
+      .ca-timeline-item-tail {
+        left: 50%;
+      }
+      .ca-timeline-item-dot {
+        left: 50%;
+        margin-left: -4px;
+      }
+    }
+  }
+  &-item {
+    padding-bottom: 20px;
+    position: relative;
+    &.ca-timeline-item-pending {
+      .ca-timeline-item-tail {
+        display: none;
+      }
+      .ca-timeline-item-dot {
+        border-left-color: transparent !important;
+        border-top-color: transparent !important;
+        border-width: 1px;
+        animation: rotate 1s linear infinite;
+      }
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    }
+    &.ca-timeline-item-last {
+      .ca-timeline-item-tail {
+        border-left: 2px dotted #d8d8d8;
+      }
+    }
+    &-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #fff;
+      border: 2px solid transparent;
+    }
+    &-tail {
+      position: absolute;
+      top: 10px;
+      left: 4px;
+      height: calc(100% - 10px);
+      border-left: 2px solid #d8d8d8;
+    }
+    &-content {
+      margin-left: 18px;
+      position: relative;
+      top: -5px;
+    }
+    &-custom {
+      background-color: #fff;
+      position: absolute;
+      line-height: 1;
+      padding: 3px 1px;
+      top: 5px;
+      left: 5px;
+      transform: translate(-50% , -50%);
+    }
+  }
+}

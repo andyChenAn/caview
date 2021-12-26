@@ -23,6 +23,8 @@ import Table from './components/table';
 import Tabs from './components/tabs';
 import TabPane from './components/tabs/tabPane';
 import Tag from './components/tag';
+import Timeline from './components/timeline';
+import TimelineItem from './components/timeline/timelineItem';
 const components = {
   Message,
   Notification,
@@ -48,7 +50,9 @@ const components = {
   Table,
   Tabs,
   TabPane,
-  Tag
+  Tag,
+  Timeline,
+  TimelineItem
 }
 const caview = {
   ...components

@@ -77,6 +77,10 @@ const routes = [
   {
     path : '/tag',
     component : () => import('@example/docs/tag')
+  },
+  {
+    path : '/timeline',
+    component : () => import('@example/docs/timeline')
   }
 ];
 const router = new VueRouter({

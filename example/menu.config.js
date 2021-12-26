@@ -94,6 +94,10 @@ export default [
       {
         name : 'Tag 标签',
         path : '/tag'
+      },
+      {
+        name : 'Timeline 时间轴',
+        path : '/timeline'
       }
     ]
   }
