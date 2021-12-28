@@ -1,5 +1,6 @@
 import classNames from "classnames";
-
+import Cascader from './cascader';
+import _extends from '@babel/runtime/helpers/extends';
 export default {
   props : {
     placeholder : {
@@ -30,6 +31,10 @@ export default {
     prefixCls : {
       type : String,
       default : 'ca-cascader'
+    },
+    popupVisible : {
+      type : Boolean,
+      default : false
     }
   },
   data () {
@@ -86,6 +91,21 @@ export default {
         }
       )
     },
+    getContent () {
+      const h = this.$createElement;
+      const { prefixCls } = this.$props;
+      return h(
+        'div',
+        {
+          class : classNames(prefixCls)
+        },
+        [
+          this.renderInput(),
+          this.renderValue(),
+          this.renderArrow()
+        ]
+      )
+    },
     getValue () {
       let { sValue } = this.$data;
       return sValue.join(' / ');
@@ -95,26 +115,32 @@ export default {
       const { sValue } = this.$data;
       return sValue.length > 0 ? '' : placeholder
     },
-    handleClick () {
+    getPopupContent () {
       const h = this.$createElement;
-      
+      return h(
+        
+      )
     }
   },
   render () {
-    const h = this.$createElement;
-    const { prefixCls } = this.$props;
+    const h =this.$createElement;
+    const children = this.getContent();
+    const cascaderProps = {
+      props : _extends({} , this.$props , {
+        children : children
+      })
+    }
     return h(
-      'div',
-      {
-        class : classNames(prefixCls),
-        on : {
-          click : this.handleClick
-        }
-      },
+      Cascader,
+      cascaderProps,
       [
-        this.renderInput(),
-        this.renderValue(),
-        this.renderArrow()
+        h(
+          'template',
+          {
+            slot : 'popup'
+          },
+          [this.getPopupContent()]
+        )
       ]
     )
   }
