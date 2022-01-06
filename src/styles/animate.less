@@ -68,3 +68,12 @@
   opacity: 0;
   transform: scale(0.8);
 }
+
+// Cascader组件
+.scaleTop-enter-active , .scaleTop-leave-active {
+  transition: opacity 0.3s cubic-bezier(0.08, 0.82, 0.17, 1) , transform 0.3s cubic-bezier(0.08, 0.82, 0.17, 1);
+}
+.scaleTop-enter , .scaleTop-leave-to {
+  opacity: 0;
+  transform: scale(1 , 0.8);
+}

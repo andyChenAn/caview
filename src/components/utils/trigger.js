@@ -8,7 +8,11 @@ export default {
     action: String,
     visible : Boolean,
     prefixCls : String,
-    placement : String
+    placement : String,
+    transitionName : {
+      type : String,
+      default : 'zoomIn'
+    }
   },
   data () {
     return {
@@ -65,11 +69,12 @@ export default {
     },
     align (popupElement) {
       popupElement = this.popupElement || (this.popupElement = popupElement);
-      const { placement } = this.$props;
+      const { placement , transitionName } = this.$props;
       this.positionInfo = this.getClickTargetPosition();
       const rect = popupElement.getBoundingClientRect();
-      const popupWidth = this.rectWidth || (this.rectWidth = rect.width * 1 / 0.8);
-      const popupHeight = this.rectHeight || (this.rectHeight = rect.height * 1 / 0.8);
+      // 这里的0.8主要是为了获取宽度和高度
+      const popupWidth = this.rectWidth || (this.rectWidth = transitionName === 'zoomIn' ? rect.width * 1 / 0.8 : rect.width);
+      const popupHeight = this.rectHeight || (this.rectHeight = transitionName === 'zoomIn' ? rect.height * 1 / 0.8 : rect.height);
       let { top , left , width , height } = this.positionInfo;
       const scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -109,6 +114,7 @@ export default {
         popupTop = top + height + 'px';
         transformOrigin = `50% 0px`;
       } else if (placement === 'bottomRight') {
+        console.log(left , width , popupWidth)
         popupLeft = left + width - popupWidth + 'px';
         popupTop = top + height + 'px';
         transformOrigin = `${popupWidth}px 0px`;
@@ -141,6 +147,7 @@ export default {
     },
     getComponent () {
       const h = this.$createElement;
+      const { transitionName } = this.$props;
       const popupProps = {
         props : _extends({} , this.$props , omit(this.$props , ['action'])),
         on : {
@@ -158,7 +165,7 @@ export default {
         'transition',
         {
           props : {
-            name : 'zoomIn',
+            name : transitionName,
             appear : true
           }
         },

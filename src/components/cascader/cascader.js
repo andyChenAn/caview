@@ -1,42 +1,43 @@
+import _extends from "@babel/runtime/helpers/extends";
+import Trigger from "../utils/trigger";
 export default {
   props : {
-    placeholder : {
-      type : String,
-      default : '请选择'
-    },
-    // 数据
-    dataSource : {
-      type : Array,
-      default () {
-        return [];
-      }
-    },
-    // 默认选中项
-    defaultValue : {
-      type : Array,
-      default () {
-        return [];
-      }
-    },
-    // 选中项
-    value : {
-      type : Array,
-      default () {
-        return [];
-      }
-    },
-    prefixCls : {
-      type : String,
-      default : 'ca-cascader'
-    },
-    children : Object,
-    popupVisible : {
-      type : Boolean,
-      default : false
+    placement : String,
+    visible : Boolean,
+    prefixCls : String,
+    trigger : String
+  },
+  methods : {
+    popupVisibleChange (visible) {
+      this.$emit('visibleChange' , visible);
+      this.$emit('visibleChange1' , visible);
     }
   },
   render () {
     const h = this.$createElement;
-    
+    const { trigger } = this.$props;
+    const triggerProps = {
+      props : _extends({} , this.$props , {
+        action : trigger,
+        transitionName : 'scaleTop'
+      }),
+      on : {
+        popupVisibleChange : this.popupVisibleChange
+      }
+    };
+    return h(
+      Trigger,
+      triggerProps,
+      [
+        h(
+          'template',
+          {
+            slot : 'popup'
+          },
+          [this.$slots.popup]
+        ),
+        this.$slots.default
+      ]
+    )
   }
 }

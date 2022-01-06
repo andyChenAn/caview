@@ -1,4 +1,4 @@
-.ca-cascader {
+.ca-cascader-picker {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -10,30 +10,36 @@
   background-color: #fff;
   outline: none;
   position: relative;
-  &-input {
-    border: 1px solid #d8d8d8;
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-    line-height: 1.5;
-    font-size: 14px;
-    height: 32px;
-    padding: 4px 10px;
-    -webkit-appearance: none;
-  }
-  &-value {
-    position: absolute;
-    padding: 0 20px 0 10px;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    transform: translateY(-50%);
-  }
-  &-arrow {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    z-index: 1;
-    transform: translateY(-50%);
-  }
+}
+.ca-cascader-input {
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  line-height: 1.5;
+  font-size: 14px;
+  height: 32px;
+  padding: 4px 10px;
+  -webkit-appearance: none;
+}
+.ca-cascader-value {
+  position: absolute;
+  padding: 0 20px 0 10px;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+}
+.ca-cascader-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+.ca-cascader {
+  position: absolute;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  background-color: #fff;
+  border-radius: 4px;
 }
