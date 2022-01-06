@@ -1,6 +1,6 @@
 import _extends from "@babel/runtime/helpers/extends";
 import ContainerRender from '../utils/containerRender';
-import Popup from './popup';
+import Popup from '../utils/popup';
 import throttle from 'lodash/throttle';
 export default {
   props : {

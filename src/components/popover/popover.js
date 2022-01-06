@@ -1,5 +1,4 @@
 import _extends from "@babel/runtime/helpers/extends";
-import omit from "omit.js";
 import Trigger from "../utils/trigger";
 export default {
   props : {
