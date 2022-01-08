@@ -15,7 +15,7 @@ export default {
   methods : {
     renderComponent () {
       const self = this;
-      if (this.visible) {
+      if (this.visible || this._component) {
         let el;
         if (!this.container) {
           this.container = this.getContainer();
@@ -23,13 +23,25 @@ export default {
           this.componentEl = el;
           this.container.appendChild(el);
         };
+        // 保存起来，防止放在render函数中，会触发多次渲染
+        let com = { component: self.getComponent() };
         if (!this._component) {
           this._component = new this.$root.constructor({
             el : el,
+            data : {
+              _com : com
+            },
+            methods : {
+              setComponent (_com) {
+                this.$data._com = _com;
+              }
+            },
             render () {
-              return self.getComponent();
+              return this.$data._com.component;
             }
           })
+        } else {
+          this._component.setComponent(com);
         }
       }
     },

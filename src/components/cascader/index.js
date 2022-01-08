@@ -2,6 +2,16 @@ import classNames from "classnames";
 import Cascader from './cascader';
 import _extends from '@babel/runtime/helpers/extends';
 import omit from 'omit.js';
+// function recursion (array) {
+//   let res = [];
+//   array.map(item => {
+//     res.push({
+//       label : item.label,
+//       value : item.value
+//     })
+//   });
+//   return res;
+// }
 export default {
   props : {
     placeholder : {
@@ -60,7 +70,8 @@ export default {
     return {
       sValue : sValue,
       placeHolderText : placeHolderText,
-      sPopupVisible : popupVisible
+      sPopupVisible : popupVisible,
+      menus : []
     }
   },
   watch : {
@@ -68,7 +79,18 @@ export default {
       this.sValue = newVal;
     }
   },
+  mounted () {
+    const { dataSource } = this.$props;
+    this.menus = this.getMenusData(dataSource);
+  },
   methods : {
+    getMenusData (array) {
+      let res = [];
+      array.forEach(item => {
+        res.push(item);
+      });
+      return [res];
+    },
     renderInput () {
       const h = this.$createElement;
       const { prefixCls } = this.$props;
@@ -133,19 +155,59 @@ export default {
     },
     getPopupContent () {
       const h = this.$createElement;
-      let children = this.getMenus();
+      const { menus } = this.$data;
+      let content = [];
+      menus.forEach(item => {
+        content.push(this.renderMenu(item));
+      });
+      return content;
+    },
+    renderMenu (data) {
+      const h = this.$createElement;
+      const { prefixCls } = this.$props;
+      let items = [];
+      if (data && data.length > 0) {
+        data.forEach(item => {
+          items.push(h(
+            'li',
+            {
+              class : classNames(prefixCls + '-menu-item'),
+              attrs : {
+                title : item.label
+              },
+              on : {
+                click : () => this.clickMenuItem(item)
+              },
+              key : item.label
+            },
+            [
+              item.label,
+              h(
+                'i',
+                {
+                  class : classNames('iconfont icon-arrow-right' , prefixCls + '-arrow-icon')
+                }
+              )
+            ]
+          ))
+        });
+      };
       return h(
-        'div',
-        ['helo']
+        'ul',
+        {
+          class : classNames(prefixCls + '-menu')
+        },
+        [items]
       )
     },
-    getMenus () {
-      const { dataSource } = this.$props;
+    clickMenuItem (item) {
+      const children = this.getMenusData(item.children);
+      this.menus = this.menus.concat(children);
     },
     visibleChange1 (visible) {
       this.sPopupVisible = visible;
       this.$emit('visileChange' , visible);
-    }
+    },
   },
   render () {
     const h =this.$createElement;
@@ -159,7 +221,8 @@ export default {
       on : _extends({} , this.$listeners , {
         visibleChange1 : this.visibleChange1
       })
-    }
+    };
+    const popup = this.getPopupContent();
     return h(
       Cascader,
       cascaderProps,
@@ -169,7 +232,7 @@ export default {
           {
             slot : 'popup'
           },
-          [this.getPopupContent()]
+          [popup]
         ),
         children
       ]

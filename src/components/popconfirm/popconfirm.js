@@ -202,6 +202,7 @@ export default {
       {
         props : {
           visible : this.visible,
+          parent : this,
           getContainer : this.getContainer,
           getComponent : this.getComponent,
           children (ref) {

@@ -114,7 +114,6 @@ export default {
         popupTop = top + height + 'px';
         transformOrigin = `50% 0px`;
       } else if (placement === 'bottomRight') {
-        console.log(left , width , popupWidth)
         popupLeft = left + width - popupWidth + 'px';
         popupTop = top + height + 'px';
         transformOrigin = `${popupWidth}px 0px`;

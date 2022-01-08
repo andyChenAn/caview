@@ -42,4 +42,28 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
   background-color: #fff;
   border-radius: 4px;
+  color: rgba(0,0,0,0.65);
+  &-menu {
+    min-width: 111px;
+    display: inline-block;
+    height: 180px;
+    overflow: auto;
+    padding: 4px 0;
+    &-item {
+      padding: 5px 12px;
+      padding-right: 24px;
+      line-height: 22px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s;
+      position: relative;
+      &:hover {
+        background-color: rgba(37,141,235,0.15);
+      }
+      .ca-cascader-arrow-icon {
+        position: absolute;
+        right: 12px;
+      }
+    }
+  }
 }
