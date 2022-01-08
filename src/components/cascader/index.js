@@ -71,25 +71,58 @@ export default {
       sValue : sValue,
       placeHolderText : placeHolderText,
       sPopupVisible : popupVisible,
-      menus : []
+      menus : [],
+      source : []
     }
   },
   watch : {
     value (newVal) {
       this.sValue = newVal;
+    },
+    dataSource (newVal) {
+      this.source = this.initDataSource(newVal);
     }
   },
   mounted () {
     const { dataSource } = this.$props;
-    this.menus = this.getMenusData(dataSource);
+    // 初始化数据源
+    this.source = this.initDataSource(dataSource);
+    const result = this.getMenusData(this.source);
+    this.menus.push(result.list);
   },
   methods : {
+    initDataSource (dataSource) {
+      let level = 0;
+      let res = [];
+      const recursion = array => {
+        level++;
+        return array.map((item , index , arr) => {
+          item.level = level;
+          if (item.children && item.children.length > 0) {
+            item.children = recursion(item.children);
+          };
+          if (arr.length - 1 === index) {
+            level--;
+          }
+          return item;
+        })
+      }
+      res = recursion(dataSource);
+      return res;
+    },
     getMenusData (array) {
       let res = [];
-      array.forEach(item => {
-        res.push(item);
-      });
-      return [res];
+      let level;
+      if (array) {
+        array.forEach(item => {
+          level = item.level;
+          res.push(item);
+        });
+        return {
+          list : res,
+          level : level
+        };
+      }
     },
     renderInput () {
       const h = this.$createElement;
@@ -191,18 +224,42 @@ export default {
             ]
           ))
         });
+        return h(
+          'ul',
+          {
+            class : classNames(prefixCls + '-menu')
+          },
+          [items]
+        )
       };
-      return h(
-        'ul',
-        {
-          class : classNames(prefixCls + '-menu')
-        },
-        [items]
-      )
     },
     clickMenuItem (item) {
-      const children = this.getMenusData(item.children);
-      this.menus = this.menus.concat(children);
+      let result = this.getMenusData(item.children);
+      if (result) {
+        const { list , level } = result;
+        let index = this.getIndex(this.menus , level)
+        if (index > -1) {
+          // 如果有同一级的数据
+          let menus = this.menus.slice(0 , index);
+          menus.push(list);
+          this.menus = menus;
+        } else {
+          // 没有同一级的数据
+          this.menus.push(list);
+        }
+      }
+    },
+    getIndex (target , level) {
+      let index = -1;
+      for (let i = 0 ; i < target.length ; i++) {
+        for (let j = 0 ; j < target[i].length ; j++) {
+          if (target[i][j].level === level) {
+            index = i;
+            break;
+          }
+        }
+      };
+      return index;
     },
     visibleChange1 (visible) {
       this.sPopupVisible = visible;

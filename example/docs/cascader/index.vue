@@ -48,6 +48,30 @@ export default {
             },
           ],
         },
+        {
+          value: 'hunan',
+          label: 'Hunan',
+          children: [
+            {
+              value: 'changsha',
+              label: 'Changsha',
+              children: [
+                {
+                  value: 'wangcheng',
+                  label: 'Wang cheng',
+                },
+                {
+                  value : 'yuhua',
+                  label : 'Yuhua'
+                }
+              ],
+            },
+            {
+              value : '怀化',
+              label : 'huaihua'
+            }
+          ],
+        },
       ],
     }
   }
