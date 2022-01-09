@@ -2,16 +2,6 @@ import classNames from "classnames";
 import Cascader from './cascader';
 import _extends from '@babel/runtime/helpers/extends';
 import omit from 'omit.js';
-// function recursion (array) {
-//   let res = [];
-//   array.map(item => {
-//     res.push({
-//       label : item.label,
-//       value : item.value
-//     })
-//   });
-//   return res;
-// }
 export default {
   props : {
     placeholder : {
@@ -56,6 +46,11 @@ export default {
     showSearch : {
       type : Boolean,
       default : false
+    },
+    // 选中即改变视图
+    changeOnSelect : {
+      type : Boolean,
+      default : false
     }
   },
   model : {
@@ -72,7 +67,10 @@ export default {
       placeHolderText : placeHolderText,
       sPopupVisible : popupVisible,
       menus : [],
-      source : []
+      // 数据源
+      source : [],
+      // 箭头向下还是向上
+      arrowRotate : false,
     }
   },
   watch : {
@@ -81,33 +79,71 @@ export default {
     },
     dataSource (newVal) {
       this.source = this.initDataSource(newVal);
+    },
+    sPopupVisible (newVal) {
+      if (!newVal) {
+        this.arrowRotate = false;
+        // 就先这样吧
+        setTimeout(() => {
+          // 如果没有值，那么就重置到默认状态
+          if (this.changeOnSelect) {
+
+          } else {
+            if (this.sValue.length == 0) {
+              this.source = this.resetSelected(this.source);
+              this.menus = this.getMenusList();
+            } else if (this.sValue.length > 0) {
+              this.source = this.getSelectedForValue();
+              this.menus = this.getMenusList();
+            }
+          }
+        } , 300);
+      } else {
+        this.arrowRotate = true;
+      }
     }
   },
   mounted () {
     const { dataSource } = this.$props;
-    // 初始化数据源
+    // 初始化数据源,主要是添加level和selected字段，用于后续逻辑处理
     this.source = this.initDataSource(dataSource);
-    const result = this.getMenusData(this.source);
-    this.menus.push(result.list);
+    // 用于展示的级联数据(this.menus)
+    this.menus = this.getMenusList();
   },
   methods : {
-    initDataSource (dataSource) {
-      let level = 0;
-      let res = [];
-      const recursion = array => {
-        level++;
-        return array.map((item , index , arr) => {
-          item.level = level;
+    getSelectedForValue () {
+      const { sValue , source } = this.$data;
+      const step = array => {
+        return array.map(item => {
+          item.selected = false;
+          if (sValue.indexOf(item.value) > -1) {
+            item.selected = true;
+          }
           if (item.children && item.children.length > 0) {
-            item.children = recursion(item.children);
-          };
-          if (arr.length - 1 === index) {
-            level--;
+            item.children = step(item.children);
           }
           return item;
         })
       }
-      res = recursion(dataSource);
+      return step(source)
+    },
+    getMenusList () {
+      const { source } = this.$data;
+      let res = [];
+      res.push(source);
+      const step = array => {
+        array.map(item => {
+          if (item.selected) {
+            if (item.children && item.children.length > 0) {
+              res.push(item.children);
+            }
+          }
+          if (item.children && item.children.length > 0) {
+            step(item.children);
+          }
+        })
+      };
+      step(source);
       return res;
     },
     getMenusData (array) {
@@ -124,20 +160,62 @@ export default {
         };
       }
     },
+    resetSelected (arr) {
+      const step = arr => {
+        return arr.map(item => {
+          item.selected = false;
+          if (item.children && item.children.length > 0) {
+            item.children = step(item.children);
+          }
+          return item;
+        })
+      }
+      return step(arr);
+    },
+    initDataSource (dataSource) {
+      let level = 0;
+      let res = [];
+      const { sValue } = this.$data;
+      const recursion = array => {
+        level++;
+        return array.map((item , index , arr) => {
+          this.$set(item , 'level' , level);
+          this.$set(item , 'selected' , false);
+          if (sValue.indexOf(item.value) > -1) {
+            item.selected = true;
+          }
+          if (item.children && item.children.length > 0) {
+            this.$set(item , 'isLeaf' , false);
+            item.children = recursion(item.children);
+          } else {
+            this.$set(item , 'isLeaf' , true);
+          }
+          if (arr.length - 1 === index) {
+            level--;
+          }
+          return item;
+        })
+      }
+      res = recursion(dataSource);
+      return res;
+    },
     renderInput () {
       const h = this.$createElement;
-      const { prefixCls } = this.$props;
+      const { prefixCls , showSearch } = this.$props;
       const placeholder = this.getPlaceholder();
+      const inputProps = {
+        class : classNames(prefixCls + '-input'),
+        attrs : {
+          placeholder : placeholder,
+          type : 'text'
+        }
+      };
+      if (showSearch) {
+        inputProps.attrs.readonly = true;
+      };
       return h(
         'input',
-        {
-          class : classNames(prefixCls + '-input'),
-          attrs : {
-            placeholder : placeholder,
-            readonly : true,
-            type : 'text'
-          }
-        }
+        inputProps
       )
     },
     renderValue () {
@@ -155,12 +233,34 @@ export default {
     renderArrow () {
       const h =this.$createElement;
       const { prefixCls } = this.$props;
+      const { arrowRotate } = this.$data;
       return h(
         'i',
         {
-          class : classNames('iconfont icon-arrow-down' , prefixCls + '-arrow')
+          class : classNames('iconfont icon-arrow-down' , prefixCls + '-arrow' , arrowRotate ? prefixCls + '-arrow-rotate' : '')
         }
       )
+    },
+    renderClearIcon () {
+      const h =this.$createElement;
+      const { prefixCls } = this.$props;
+      const { sValue } = this.$data;
+      return sValue.length > 0 && h(
+        'i',
+        {
+          class : classNames('iconfont icon-error' , prefixCls + '-clear-icon'),
+          on : {
+            click : this.clearValue
+          }
+        }
+      )
+    },
+    clearValue (evt) {
+      evt.stopPropagation();
+      this.sValue = [];
+      this.source = this.resetSelected(this.source);
+      this.menus = this.getMenusList();
+      this.sPopupVisible = false;
     },
     getContent () {
       const h = this.$createElement;
@@ -173,13 +273,26 @@ export default {
         [
           this.renderInput(),
           this.renderValue(),
+          this.renderClearIcon(),
           this.renderArrow()
         ]
       )
     },
     getValue () {
-      let { sValue } = this.$data;
-      return sValue.join(' / ');
+      const { source , sValue } = this.$data;
+      let res = [];
+      const step = array => {
+        array.map(item => {
+          if (sValue.indexOf(item.value) > -1) {
+            res.push(item.label);
+          };
+          if (item.children && item.children.length > 0) {
+            step(item.children);
+          }
+        })
+      }
+      step(source);
+      return res.join(' / ');
     },
     getPlaceholder () {
       const { placeholder } = this.$props;
@@ -204,7 +317,7 @@ export default {
           items.push(h(
             'li',
             {
-              class : classNames(prefixCls + '-menu-item'),
+              class : classNames(prefixCls + '-menu-item' , item.selected ? 'selected' : '' , item.disabled ? prefixCls + '-menu-item-disabled' : ''),
               attrs : {
                 title : item.label
               },
@@ -215,7 +328,7 @@ export default {
             },
             [
               item.label,
-              h(
+              item.children && h(
                 'i',
                 {
                   class : classNames('iconfont icon-arrow-right' , prefixCls + '-arrow-icon')
@@ -234,10 +347,34 @@ export default {
       };
     },
     clickMenuItem (item) {
+      if (item.disabled) {
+        return;
+      }
+      // 先将同一级和同一级下的所有子元素的选中状态设置为false
+      for (let i = 0 ; i < this.menus.length ; i++) {
+        for (let j = 0 ; j < this.menus[i].length ; j++) {
+          if (this.menus[i][j].level === item.level) {
+            this.menus[i][j].selected = false;
+            if (item.children && item.children.length > 0) {
+              const step = array => {
+                array.map(item => {
+                  item.selected = false;
+                  if (item.children && item.children.length > 0) {
+                    step(item.children);
+                  }
+                })
+              }
+              step(item.children);
+            }
+          }
+        }
+      }
+      // 设置选中状态
+      item.selected = true;
       let result = this.getMenusData(item.children);
       if (result) {
         const { list , level } = result;
-        let index = this.getIndex(this.menus , level)
+        let index = this.getIndex(this.menus , level);
         if (index > -1) {
           // 如果有同一级的数据
           let menus = this.menus.slice(0 , index);
@@ -247,7 +384,40 @@ export default {
           // 没有同一级的数据
           this.menus.push(list);
         }
+        if (this.changeOnSelect) {
+          this.sValue = this.getArrayValue(this.menus);
+          const selectedData = this.getSelectedData(this.menus);
+          this.$emit('change' , this.sValue , selectedData);
+        }
+      } else {
+        // 点击的是最后一级了
+        this.sValue = this.getArrayValue(this.menus);
+        const selectedData = this.getSelectedData(this.menus);
+        this.sPopupVisible = false;
+        this.$emit('change' , this.sValue , selectedData);
       }
+    },
+    getSelectedData (arr) {
+      let res = [];
+      for (let i = 0 ; i < arr.length ; i++) {
+        for (let j = 0 ; j < arr[i].length ; j++) {
+          if (arr[i][j].selected) {
+            res.push(arr[i][j]);
+          }
+        }
+      };
+      return res;
+    },
+    getArrayValue (arr) {
+      let res = [];
+      for (let i = 0 ; i < arr.length ; i++) {
+        for (let j = 0 ; j < arr[i].length ; j++) {
+          if (arr[i][j].selected) {
+            res.push(arr[i][j].value);
+          }
+        }
+      };
+      return res;
     },
     getIndex (target , level) {
       let index = -1;
@@ -268,7 +438,7 @@ export default {
   },
   render () {
     const h =this.$createElement;
-    const children = this.getContent();
+    const children = this.$slots.default || this.getContent();
     const cascaderProps = {
       props : _extends({} , omit(this.$props , ['placeholder' , 'dataSource' , 'defaultValue' , 'value' , 'showSearch' , 'popupVisible' , 'popupPlacement']) , {
         visible : this.sPopupVisible,
