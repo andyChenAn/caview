@@ -11,10 +11,20 @@
   outline: none;
   position: relative;
   width: 100%;
+  transition: all 0.3s;
   &:hover {
     .ca-cascader-clear-icon {
       opacity: 1;
     }
+  }
+  &.ca-cascader-picker-show-search {
+    .ca-cascader-input {
+      position: relative;
+      z-index: 2;
+    }
+  }
+  &.ca-cascader-picker-focused {
+    color: rgba(0,0,0,.25);
   }
 }
 .ca-cascader-input {
@@ -25,13 +35,15 @@
   line-height: 1.5;
   font-size: 14px;
   height: 32px;
-  padding: 4px 10px;
+  padding: 4px 35px 4px 10px;
   -webkit-appearance: none;
   width: 100%;
+  position: static;
+  background-color: transparent;
 }
 .ca-cascader-value {
   position: absolute;
-  padding: 0 20px 0 10px;
+  padding: 0 35px 0 10px;
   top: 50%;
   left: 0;
   width: 100%;
@@ -45,11 +57,13 @@
   top: 50%;
   right: 10px;
   z-index: 1;
-  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
   transition: all 0.3s;
-  transform-origin: center 50%;
+  color: #ccc;
   &-rotate {
-    transform: rotate(-180deg) translate(0 , 50%);
+    transform: rotate(180deg);
   }
 }
 .ca-cascader-clear-icon {

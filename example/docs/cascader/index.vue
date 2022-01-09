@@ -5,7 +5,7 @@
     <br />
     <br />
     <div class="title2 mb15">代码演示</div>
-    <!-- <div class="inner">
+    <div class="inner">
       <div style="margin-bottom:20px">基础使用</div>
       <div class="cascader-wrap">
         <Cascader 
@@ -54,12 +54,13 @@
           :dataSource="dataSource1" 
         />
       </div>
-    </div> -->
+    </div>
     <div class="inner">
-      <div style="margin-bottom:20px">搜索</div>
+      <div style="margin-bottom:20px">搜索(暂时还没有实现该功能)</div>
       <div class="cascader-wrap">
         <Cascader 
           placeholder="请输入"
+          :showSearch="true"
           :dataSource="JSON.parse(JSON.stringify(dataSource))"
         />
       </div>

@@ -63,14 +63,19 @@ export default {
     const placeHolderText = this.$props.placeholder;
     const popupVisible = this.$props.popupVisible || false;
     return {
+      // value值
       sValue : sValue,
+      // placehoder
       placeHolderText : placeHolderText,
+      // 是否显示弹框
       sPopupVisible : popupVisible,
       menus : [],
       // 数据源
       source : [],
       // 箭头向下还是向上
       arrowRotate : false,
+      // 输入框是否获得焦点
+      isFocus : false,
     }
   },
   watch : {
@@ -86,9 +91,7 @@ export default {
         // 就先这样吧
         setTimeout(() => {
           // 如果没有值，那么就重置到默认状态
-          if (this.changeOnSelect) {
-
-          } else {
+          if (!this.changeOnSelect) {
             if (this.sValue.length == 0) {
               this.source = this.resetSelected(this.source);
               this.menus = this.getMenusList();
@@ -208,15 +211,40 @@ export default {
         attrs : {
           placeholder : placeholder,
           type : 'text'
+        },
+        on : {
+          focus : this.onFocus,
+          blur : this.onBlur,
+          input : this.onChange
         }
       };
-      if (showSearch) {
+      if (!showSearch) {
         inputProps.attrs.readonly = true;
       };
       return h(
         'input',
         inputProps
       )
+    },
+    onFocus () {
+      this.isFocus = true;
+    },
+    onBlur () {
+      this.isFocus = false;
+    },
+    onChange (evt) {
+      this.prevSValue = this.prevSValue || JSON.parse(JSON.stringify(this.sValue));
+      const value = evt.target.value.trim();
+      if (value) {
+        this.sValue = [];
+      } else {
+        this.sValue = this.prevSValue;
+      }
+      this.searchKeyword(value);
+    },
+    searchKeyword (value) {
+      let res = [];
+      const data = JSON.parse(JSON.stringify(this.source));
     },
     renderValue () {
       const h = this.$createElement;
@@ -264,11 +292,12 @@ export default {
     },
     getContent () {
       const h = this.$createElement;
-      const { prefixCls } = this.$props;
+      const { prefixCls , showSearch } = this.$props;
+      const { isFocus } = this.$data;
       return h(
         'div',
         {
-          class : classNames(prefixCls + '-picker')
+          class : classNames(prefixCls + '-picker' , showSearch ? prefixCls +'-picker-show-search' : '' , isFocus ? prefixCls + '-picker-focused' : '')
         },
         [
           this.renderInput(),
