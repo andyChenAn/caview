@@ -89,6 +89,10 @@ const routes = [
   {
     path : '/cascader',
     component : () => import('@example/docs/cascader')
+  },
+  {
+    path : '/checkbox',
+    component : () => import('@example/docs/checkbox')
   }
 ];
 const router = new VueRouter({

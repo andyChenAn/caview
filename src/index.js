@@ -27,6 +27,7 @@ import Timeline from './components/timeline';
 import TimelineItem from './components/timeline/timelineItem';
 import Tooltip from './components/tooltip';
 import Cascader from './components/cascader';
+import Checkbox from './components/checkbox';
 const components = {
   Message,
   Notification,
@@ -56,7 +57,8 @@ const components = {
   Timeline,
   TimelineItem,
   Tooltip,
-  Cascader
+  Cascader,
+  Checkbox
 }
 const caview = {
   ...components

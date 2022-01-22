@@ -111,6 +111,10 @@ export default [
       {
         name : 'Cascader 级联选择',
         path : '/cascader'
+      },
+      {
+        name : 'Checkbox 多选框',
+        path : '/checkbox'
       }
     ]
   }
