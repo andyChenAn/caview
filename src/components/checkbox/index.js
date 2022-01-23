@@ -12,12 +12,21 @@ export default {
       default : 'ca-checkbox'
     }
   },
+  inject : ['checkboxGroupContext'],
+  methods : {
+    handleClick () {
+
+    }
+  },
   render () {
     const h = this.$createElement;
     const children = this.$slots.default;
     const { prefixCls } = this.$props;
     const checkboxProps = {
-      props : _extends({} , this.$props)
+      props : _extends({} , this.$props , {
+        text : children[0].text
+      }),
+      on : _extends({} , this.$listeners)
     };
     return h(
       'label',
