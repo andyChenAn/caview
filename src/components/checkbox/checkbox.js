@@ -11,6 +11,14 @@ export default {
     type : {
       type : String,
       default : 'checkbox'
+    },
+    indeterminate : Boolean
+  },
+  inject : {
+    checkboxGroupContext : {
+      default () {
+        return undefined;
+      }
     }
   },
   data () {
@@ -26,19 +34,28 @@ export default {
     },
   },
   methods : {
-    handleClick () {
+    handleClick (evt) {
       this.sChecked = !this.sChecked;
       this.$emit('change' , this.sChecked);
+      if (this.checkboxGroupContext) {
+        if (this.sChecked) {
+          // 添加
+          this.checkboxGroupContext.addValue(evt.target.value);
+        } else {
+          // 删除
+          this.checkboxGroupContext.removeValue(evt.target.value);
+        }
+      }
     }
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls , type , disabled , name } = this.$props;
+    const { prefixCls , type , disabled , name , text , indeterminate } = this.$props;
     const { sChecked } = this.$data;
     return h(
       'span',
       {
-        class : classNames(prefixCls , sChecked ? prefixCls + '-checked' : '' , disabled ? prefixCls + '-disabled' : '')
+        class : classNames(prefixCls , sChecked ? prefixCls + '-checked' : '' , disabled ? prefixCls + '-disabled' : '' , indeterminate && !sChecked ? prefixCls + '-indeterminate' : '')
       },
       [
         h(
@@ -47,7 +64,8 @@ export default {
             attrs : {
               type : type,
               disabled : disabled,
-              name : name
+              name : name,
+              value : text
             },
             class : classNames(prefixCls + '-input'),
             on : {

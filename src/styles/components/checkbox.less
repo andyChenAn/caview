@@ -5,6 +5,17 @@
   display: inline-block;
   cursor: pointer;
 }
+.ca-checkbox-indeterminate {
+  .ca-checkbox-content:after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background-color: #1890ff;
+  }
+}
 .ca-checkbox {
   position: relative;
   display: inline-block;
@@ -12,6 +23,22 @@
   line-height: 1;
   white-space: nowrap;
   top: -0.09em;
+  &-indeterminate {
+    .ca-checkbox-content {
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        transform: translate(-50% , -50%);
+        background-color: #1890ff;
+        border: 0;
+        opacity: 1;
+      }
+    }
+  }
   &-checked {
     .ca-checkbox-content {
       background-color: #1890ff;

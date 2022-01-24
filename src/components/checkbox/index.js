@@ -10,13 +10,8 @@ export default {
     prefixCls : {
       type : String,
       default : 'ca-checkbox'
-    }
-  },
-  inject : ['checkboxGroupContext'],
-  methods : {
-    handleClick () {
-
-    }
+    },
+    indeterminate : Boolean
   },
   render () {
     const h = this.$createElement;

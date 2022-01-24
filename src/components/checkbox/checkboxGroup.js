@@ -54,9 +54,11 @@ export default {
   methods : {
     addValue (value) {
       this.sValue = this.sValue.concat([value]);
+      this.$emit('change' , this.sValue);
     },
     removeValue (value) {
       this.sValue = this.sValue.filter(item => item !== value);
+      this.$emit('change' , this.sValue);
     },
     getCheckboxList () {
       const { options , prefixCls , disabled } = this.$props;
@@ -68,9 +70,6 @@ export default {
           attrs : {
             disabled : disabled,
             checked : this.check(item)
-          },
-          on : {
-            change : this.handleChange
           }
         };
         checkboxList.push(
@@ -82,9 +81,6 @@ export default {
         )
       });
       return checkboxList;
-    },
-    handleChange (value) {
-      
     },
     check (item) {
       if (typeof item === 'string') {
