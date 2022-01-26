@@ -29,6 +29,7 @@ import Tooltip from './components/tooltip';
 import Cascader from './components/cascader';
 import Checkbox from './components/checkbox';
 import CheckboxGroup from './components/checkbox/checkboxGroup';
+import DatePicker from './components/datepicker';
 const components = {
   Message,
   Notification,
@@ -60,7 +61,8 @@ const components = {
   Tooltip,
   Cascader,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  DatePicker
 }
 const caview = {
   ...components

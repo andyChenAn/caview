@@ -93,6 +93,10 @@ const routes = [
   {
     path : '/checkbox',
     component : () => import('@example/docs/checkbox')
+  },
+  {
+    path : '/datepicker',
+    component : () => import('@example/docs/datepicker')
   }
 ];
 const router = new VueRouter({

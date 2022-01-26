@@ -421,7 +421,7 @@ export default {
     getDisplayDays (days , weekOfFirstDay) {
       let displayDays = [];
       const date = new Date(this.currentDate);
-      date.setDate(0)
+      date.setDate(0);
       let prevMonthDays = date.getDate();
       // 当月展示的天数
       for (let i = 1 ; i <= days ; i++) {

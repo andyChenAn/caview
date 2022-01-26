@@ -115,6 +115,10 @@ export default [
       {
         name : 'Checkbox 多选框',
         path : '/checkbox'
+      },
+      {
+        name : 'DatePicker 日期选择器',
+        path : '/datepicker'
       }
     ]
   }
