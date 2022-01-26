@@ -21,7 +21,10 @@ export default {
           {
             attrs : {
               placeholder : placeholder,
-              readonly : true, 
+              readonly : true,
+            },
+            domProps : {
+              value : this.value
             },
             class : classNames(prefixCls + '-input')
           }

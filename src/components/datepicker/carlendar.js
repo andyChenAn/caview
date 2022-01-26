@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import CarlendarHeader from './carlendarHeader';
+import CarlendarBody from './carlendarBody';
 export default {
   props : {
     date : Date,
@@ -27,6 +28,9 @@ export default {
       date.setMonth(month - 1);
       this.currentDate = date;
     },
+    onSelect (date) {
+      this.$emit('select' , date);
+    },
     getCarlendarHeader () {
       const { prefixCls } = this.$props;
       const h = this.$createElement;
@@ -45,6 +49,23 @@ export default {
         CarlendarHeader,
         headerProps
       )
+    },
+    getCarlendarBody () {
+      const h = this.$createElement;
+      const { prefixCls } = this.$props;
+      const carlendarBodyProps = {
+        props : {
+          prefixCls : prefixCls + '-body',
+          value : this.currentDate
+        },
+        on : {
+          select : this.onSelect
+        }
+      }
+      return h(
+        CarlendarBody,
+        carlendarBodyProps
+      )
     }
   },
   render () {
@@ -52,7 +73,8 @@ export default {
     return h(
       'div',
       [
-        this.getCarlendarHeader()
+        this.getCarlendarHeader(),
+        this.getCarlendarBody()
       ]
     )
   }

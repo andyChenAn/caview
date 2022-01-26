@@ -47,8 +47,8 @@ export default {
         this.$emit('click-month' , month);
       } else {
         // 下一月
-        if (month > 12) {
-          month = 12;
+        if (month > 11) {
+          month = 1;
         } else {
           month++;
         }
@@ -92,17 +92,17 @@ export default {
             h(
               'span',
               {
-                class : classNames(prefixCls + '-month')
+                class : classNames(prefixCls + '-year')
               },
-              [monthMap[month]]
+              [year + '年']
             ),
             h(
               'span',
               {
-                class : classNames(prefixCls + '-year')
+                class : classNames(prefixCls + '-month')
               },
-              [year]
-            ),
+              [monthMap[month]]
+            )
           ]
         ),
         h(

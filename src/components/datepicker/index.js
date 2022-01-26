@@ -26,18 +26,29 @@ export default {
     const sOpen = !!open || false;
     return {
       date : currentDate,
-      sVisible : sOpen
+      sVisible : sOpen,
+      dateContent : null
     }
   },
   watch : {
     open (newVal) {
       this.sVisible = newVal;
+    },
+    value (newVal) {
+      this.date = newVal;
+      this.dateContent = newVal;
     }
   },
   methods : {
     visibleChange1 (visible) {
       this.sVisible = visible;
       this.$emit('openChange' , visible);
+    },
+    onSelect (date) {
+      this.sVisible = false;
+      this.date = date;
+      this.dateContent = date;
+      this.$emit('change' , date);
     }
   },
   render () {
@@ -56,12 +67,15 @@ export default {
       props : {
         date : this.date,
         prefixCls : prefixCls + '-carlendar'
+      },
+      on : {
+        select : this.onSelect
       }
     };
     const dateContentProps = {
       props : {
         clearable : this.clearable,
-        value : this.date,
+        value : this.dateContent,
         prefixCls : this.prefixCls,
         placeholder : this.placeholder
       }
