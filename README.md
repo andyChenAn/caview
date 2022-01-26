@@ -22,3 +22,4 @@
 - [x] Tabs 标签页组件
 - [x] Timeline 时间轴组件
 - [x] Cascader 级联组件
+- [x] Checkbox 多选框组件
