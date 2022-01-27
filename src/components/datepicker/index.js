@@ -9,25 +9,48 @@ export default {
       type : String,
       default : 'ca-date-picker'
     },
-    defaultValue : [Date , String],
-    value : [Date , String],
-    format : 'YYYY-MM-DD',
-    clearable : Boolean,
-    autoFocus : Boolean,
+    defaultValue : {
+      type : [Date , String],
+      default : ''
+    },
+    value : {
+      type : [Date , String],
+      default : ''
+    },
+    clearable : {
+      type : Boolean,
+      default : true
+    },
+    autoFocus : {
+      type : Boolean,
+      default : false
+    },
     placeholder : {
       type : String,
       default : '请选择'
     },
-    open : Boolean
+    open : {
+      type : Boolean,
+      default : false
+    },
+    formatter : {
+      type : String,
+      default : 'YYYY-MM-DD'
+    }
   },
   data () {
     const { defaultValue , value , open } = this.$props;
     const currentDate = value || defaultValue || new Date();
     const sOpen = !!open || false;
     return {
+      // 日期
       date : currentDate,
+      // 是否显示日期弹框
       sVisible : sOpen,
-      dateContent : null
+      // 展示的日期数据
+      dateContent : this.value || this.defaultValue || null,
+      // 初始日期，主要用于恢复为最开始的默认值
+      initDate : currentDate
     }
   },
   watch : {
@@ -49,6 +72,10 @@ export default {
       this.date = date;
       this.dateContent = date;
       this.$emit('change' , date);
+    },
+    onClear () {
+      this.dateContent = null;
+      this.date = this.initDate;
     }
   },
   render () {
@@ -77,7 +104,11 @@ export default {
         clearable : this.clearable,
         value : this.dateContent,
         prefixCls : this.prefixCls,
-        placeholder : this.placeholder
+        placeholder : this.placeholder,
+        format : this.formatter
+      },
+      on : {
+        clear : this.onClear
       }
     };
     return h(

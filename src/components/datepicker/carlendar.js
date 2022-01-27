@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import CarlendarHeader from './carlendarHeader';
 import CarlendarBody from './carlendarBody';
+import CarlendarFooter from './carlendarFooter';
 export default {
   props : {
     date : Date,
@@ -66,6 +67,38 @@ export default {
         CarlendarBody,
         carlendarBodyProps
       )
+    },
+    getCarlendarFooter () {
+      const h = this.$createElement;
+      const { prefixCls } = this.$props;
+      const footerProps = {
+        props : {
+          prefixCls : classNames(prefixCls + '-footer'),
+        }
+      };
+      return h(
+        CarlendarFooter,
+        footerProps,
+        [this.getFooter()]
+      )
+    },
+    getFooter () {
+      const { prefixCls } = this.$props;
+      const h = this.$createElement;
+      return h(
+        'span',
+        {
+          class : classNames(prefixCls + '-footer-text'),
+          on : {
+            click : this.clickToday
+          }
+        },
+        ['今天']
+      )
+    },
+    clickToday () {
+      this.currentDate = new Date();
+      this.$emit('select' , this.currentDate);
     }
   },
   render () {
@@ -74,7 +107,8 @@ export default {
       'div',
       [
         this.getCarlendarHeader(),
-        this.getCarlendarBody()
+        this.getCarlendarBody(),
+        this.getCarlendarFooter()
       ]
     )
   }

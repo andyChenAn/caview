@@ -7,7 +7,7 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px;">基础使用</div>
-      <DatePicker />
+      <DatePicker formatter="YYYY-MM-DD hh:mm:ss" />
     </div>
   </div>
 </template>

@@ -5,6 +5,11 @@
   font-size: 14px;
   line-height: 1.5;
   position: relative;
+  &:hover {
+    .ca-date-picker-clearable {
+      opacity: 1;
+    }
+  }
   &-input {
     outline: none;
     border: none;
@@ -203,5 +208,31 @@
     &-text-gray {
       color: rgba(0,0,0,0.25);
     }
+  }
+  &-carlendar-footer {
+    padding: 0 12px;
+    line-height: 38px;
+    height: 38px;
+    border-top: 1px soild #d9d9d9;
+    &-btn {
+      display: block;
+      text-align: center;
+    }
+    &-text {
+      color: #1890ff;
+      cursor: pointer;
+    }
+  }
+  &-clearable {
+    color: #999;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    background-color: #fff;
+    transition: all 0.3s;
+    opacity: 0;
+    cursor: pointer;
   }
 }

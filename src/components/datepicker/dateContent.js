@@ -1,14 +1,36 @@
 import classNames from "classnames";
-
+import { formatDate } from '../utils/date';
 export default {
   props : {
-    clearable : Boolean,
-    value : [Date , String],
-    prefixCls : String,
-    placeholder : String
+    clearable : {
+      type : Boolean,
+      default : false
+    },
+    value : {
+      type : [Date , String],
+      default : ''
+    },
+    prefixCls : {
+      type : String,
+      default : ''
+    },
+    placeholder : {
+      type : String,
+      default : ''
+    },
+    format : {
+      type : String,
+      default : ''
+    }
+  },
+  methods : {
+    onClear (evt) {
+      evt.stopPropagation();
+      this.$emit('clear');
+    }
   },
   render () {
-    const { prefixCls , placeholder } = this.$props;
+    const { prefixCls , placeholder , value , format , clearable } = this.$props;
     const h = this.$createElement;
     return h(
       'span',
@@ -24,7 +46,7 @@ export default {
               readonly : true,
             },
             domProps : {
-              value : this.value
+              value : value ? formatDate(value , format) : ''
             },
             class : classNames(prefixCls + '-input')
           }
@@ -33,6 +55,15 @@ export default {
           'i',
           {
             class : classNames('iconfont icon-rili' , prefixCls + '-rili')
+          }
+        ),
+        (clearable && value) && h(
+          'i',
+          {
+            class : classNames('iconfont icon-error' , prefixCls + '-clearable'),
+            on : {
+              click : this.onClear
+            }
           }
         )
       ]
