@@ -30,6 +30,7 @@ import Cascader from './components/cascader';
 import Checkbox from './components/checkbox';
 import CheckboxGroup from './components/checkbox/checkboxGroup';
 import DatePicker from './components/datepicker';
+import RangeDatePicker from './components/datepicker/rangeDatePicker';
 const components = {
   Message,
   Notification,
@@ -62,7 +63,8 @@ const components = {
   Cascader,
   Checkbox,
   CheckboxGroup,
-  DatePicker
+  DatePicker,
+  RangeDatePicker
 }
 const caview = {
   ...components

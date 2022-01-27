@@ -9,6 +9,10 @@
       <div style="margin-bottom:20px;">基础使用</div>
       <DatePicker formatter="YYYY-MM-DD hh:mm:ss" />
     </div>
+    <div class="inner">
+      <div style="margin-bottom:20px;">日期范围</div>
+      <RangeDatePicker />
+    </div>
   </div>
 </template>
 <script>
