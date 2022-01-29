@@ -3,6 +3,7 @@ import omit from 'omit.js';
 import ContainerRender from './containerRender';
 import Popup from './popup';
 import throttle from 'lodash/throttle';
+import classNames from 'classnames';
 export default {
   props: {
     action: String,
@@ -12,7 +13,8 @@ export default {
     transitionName : {
       type : String,
       default : 'zoomIn'
-    }
+    },
+    popupContainerClass : String
   },
   data () {
     return {
@@ -146,13 +148,14 @@ export default {
     },
     getComponent () {
       const h = this.$createElement;
-      const { transitionName } = this.$props;
+      const { transitionName , popupContainerClass , prefixCls } = this.$props;
       const popupProps = {
         props : _extends({} , this.$props , omit(this.$props , ['action'])),
         on : {
           align : this.align,
           popupMousedown : this.popupMousedown
         },
+        class : classNames(popupContainerClass ? popupContainerClass : ''),
         directives : [
           {
             name : 'show',

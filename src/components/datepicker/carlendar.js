@@ -8,7 +8,9 @@ export default {
     prefixCls : String,
     isRangeDatePicker : Boolean,
     // 是否显示选择时间选择器
-    showTime : [Object , Boolean]
+    showTime : [Object , Boolean],
+    index : Number,
+    showArrow : Boolean
   },
   data () {
     const { date }  = this.$props;
@@ -56,6 +58,9 @@ export default {
       }
       this.currentDate = date;
     },
+    setShowArrow (showArrow) {
+      this.$emit('show-arrow' , showArrow);
+    },
     onSelect (date) {
       this.$emit('select' , date);
     },
@@ -66,11 +71,15 @@ export default {
         props : {
           prefixCls : classNames(prefixCls),
           year : this.currentDate.getFullYear(),
-          month : this.currentDate.getMonth() + 1
+          month : this.currentDate.getMonth() + 1,
+          isRangeDatePicker : this.isRangeDatePicker,
+          index : this.index,
+          showArrow : this.showArrow
         },
         on : {
           'click-year' : this.clickYear,
-          'click-month' : this.clickMonth
+          'click-month' : this.clickMonth,
+          'show-arrow' : this.setShowArrow
         }
       }
       return h(

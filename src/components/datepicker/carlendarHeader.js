@@ -17,7 +17,17 @@ export default {
   props : {
     year : [String , Number],
     month : [Number , String],
-    prefixCls : String
+    prefixCls : String,
+    isRangeDatePicker : Boolean,
+    index : Number,
+    showArrow : Boolean
+  },
+  data () {
+    const { month } = this.$props;
+    const currentMonth = month;
+    return {
+      currentMonth : currentMonth
+    }
   },
   methods : {
     clickYear (evt , dir) {
@@ -54,10 +64,15 @@ export default {
         }
         this.$emit('click-month' , evt , month);
       }
+      if (this.currentMonth === month) {
+        this.$emit('show-arrow' , false);
+      } else {
+        this.$emit('show-arrow' , true);
+      }
     }
   },
   render () {
-    const { prefixCls , year , month } = this.$props;
+    const { prefixCls , year , month , index , isRangeDatePicker , showArrow } = this.$props;
     const h = this.$createElement;
     return h(
       'div',
@@ -65,7 +80,7 @@ export default {
         class : classNames(prefixCls + '-header')
       },
       [
-        h(
+        (!isRangeDatePicker || index === 0 || showArrow) && h(
           'span',
           {
             class : classNames(prefixCls + '-prev-year-btn'),
@@ -74,7 +89,7 @@ export default {
             }
           }
         ),
-        h(
+        (!isRangeDatePicker || index === 0 || showArrow) && h(
           'span',
           {
             class : classNames(prefixCls + '-prev-month-btn'),
@@ -105,7 +120,7 @@ export default {
             )
           ]
         ),
-        h(
+        (!isRangeDatePicker || index !== 0 || showArrow) && h(
           'span',
           {
             class : classNames(prefixCls + '-next-month-btn'),
@@ -114,7 +129,7 @@ export default {
             }
           }
         ),
-        h(
+        (!isRangeDatePicker || index !== 0 || showArrow) && h(
           'span',
           {
             class : classNames(prefixCls + '-next-year-btn'),

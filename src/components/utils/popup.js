@@ -12,7 +12,8 @@ export default {
     visible : {
       type : Boolean,
       default : false
-    }
+    },
+    popupContainerClass : String
   },
   mounted () {
     this.$nextTick(() => {
@@ -27,7 +28,7 @@ export default {
   },
   render () {
     const h = this.$createElement;
-    const { placement , prefixCls } = this.$props;
+    const { placement , prefixCls , popupContainerClass } = this.$props;
     return h(
       'div',
       {
@@ -40,7 +41,7 @@ export default {
         h(
           'div',
           {
-            class : prefixCls + '-content'
+            class : classNames(prefixCls + '-content' , popupContainerClass ? popupContainerClass : '')
           },
           [
             h(

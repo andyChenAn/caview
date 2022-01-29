@@ -29,7 +29,8 @@ export default {
         prefixCls : prefixCls,
         visible : visible,
         placement : 'bottomLeft',
-        transitionName : 'scaleTop'
+        transitionName : 'scaleTop',
+        popupContainerClass : prefixCls + '-range-content'
       },
       on : {
         popupVisibleChange : this.popupVisibleChange

@@ -43,7 +43,8 @@ export default {
     return {
       dateList : dateList,
       sVisible : sOpen,
-      dateContent : this.value || this.defaultValue || null
+      dateContent : this.value || this.defaultValue || null,
+      showArrow : false
     }
   },
   watch : {
@@ -60,6 +61,9 @@ export default {
       this.$emit('openChange' , visible);
     },
     onSelect () {},
+    setShowArrow (showArrow) {
+      this.showArrow = showArrow;
+    },
     // 获取当前日期的下一年日期数据
     getNextYearDate (date) {
       const year = date.getFullYear();
@@ -104,15 +108,18 @@ export default {
       const children = [];
       const { prefixCls } = this.$props;
       const h = this.$createElement;
-      dateList.map(date => {
+      dateList.map((date , index) => {
         const carlendarProps = {
           props : {
             date : date,
             prefixCls : prefixCls + '-carlendar',
-            isRangeDatePicker : true
+            isRangeDatePicker : true,
+            index : index,
+            showArrow : this.showArrow
           },
           on : {
-            select : this.onSelect
+            select : this.onSelect,
+            'show-arrow' : this.setShowArrow
           }
         };
         children.push(h(
