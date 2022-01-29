@@ -31,7 +31,6 @@
     cursor: pointer;
   }
   &-content {
-    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
     background-color: #fff;
     font-size: 14px;
     width: 280px;
@@ -39,6 +38,7 @@
   }
   &-inner {
     position: relative;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
   }
   &-carlendar-header {
     height: 40px;
@@ -213,7 +213,7 @@
     padding: 0 12px;
     line-height: 38px;
     height: 38px;
-    border-top: 1px soild #d9d9d9;
+    border-top: 1px solid #d9d9d9;
     &-btn {
       display: block;
       text-align: center;
@@ -234,5 +234,13 @@
     transition: all 0.3s;
     opacity: 0;
     cursor: pointer;
+  }
+  &-panel {
+    width: 560px;
+    overflow: hidden;
+  }
+  &-carlendar-box {
+    float: left;
+    width: 50%;
   }
 }

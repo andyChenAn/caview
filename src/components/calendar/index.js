@@ -353,7 +353,19 @@ export default {
     clickMonthList (evt , month) {
       evt.stopPropagation();
       let date = new Date(this.currentDate);
-      date.setMonth(month);
+      const currentDay = date.getDate();
+      date.setDate(1);
+      date.setMonth(month + 1);
+      date.setDate(0)
+      const days = date.getDate();
+      if (currentDay <= days) {
+        date.setDate(currentDay);
+      } else {
+        date.setMonth(month + 1);
+        date.setDate(0);
+        const lastDay = date.getDate();
+        date.setDate(lastDay)
+      }
       this.currentDate = date;
       this.showMonthList = false;
     },
@@ -403,6 +415,7 @@ export default {
     getCurrentDays () {
       let date = new Date(this.currentDate);
       let currentMonth = date.getMonth();
+      date.setDate(1);
       date.setMonth(currentMonth + 1);
       date.setDate(0);
       return date.getDate();

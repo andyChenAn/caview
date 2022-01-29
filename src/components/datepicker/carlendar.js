@@ -5,12 +5,16 @@ import CarlendarFooter from './carlendarFooter';
 export default {
   props : {
     date : Date,
-    prefixCls : String
+    prefixCls : String,
+    isRangeDatePicker : Boolean,
+    // 是否显示选择时间选择器
+    showTime : [Object , Boolean]
   },
   data () {
     const { date }  = this.$props;
     return {
-      currentDate : date
+      currentDate : date,
+      prevMonth : 1
     }
   },
   watch : {
@@ -19,14 +23,37 @@ export default {
     }
   },
   methods : {
-    clickYear (year) {
+    clickYear (evt , year) {
+      evt.stopPropagation();
       const date = new Date(this.currentDate);
       date.setFullYear(year);
       this.currentDate = date;
     },
-    clickMonth (month) {
+    clickMonth (evt , month) {
+      evt.stopPropagation();
       const date = new Date(this.currentDate);
-      date.setMonth(month - 1);
+      if (this.prevMonth > month && month === 1 && this.prevMonth === 12) {
+        // 下一年
+        date.setFullYear(date.getFullYear() + 1);
+      };
+      if (this.prevMonth < month && month === 12 && this.prevMonth === 1) {
+        // 上一年
+        date.setFullYear(date.getFullYear() - 1);
+      }
+      this.prevMonth = month;
+      const currentDay = date.getDate();
+      date.setDate(1);
+      date.setMonth(month);
+      date.setDate(0);
+      const days = date.getDate();
+      if (currentDay <= days) {
+        date.setDate(currentDay);
+      } else {
+        date.setMonth(month);
+        date.setDate(0);
+        const lastDay = date.getDate();
+        date.setDate(lastDay);
+      }
       this.currentDate = date;
     },
     onSelect (date) {
@@ -57,7 +84,8 @@ export default {
       const carlendarBodyProps = {
         props : {
           prefixCls : prefixCls + '-body',
-          value : this.currentDate
+          value : this.currentDate,
+          isRangeDatePicker : this.isRangeDatePicker
         },
         on : {
           select : this.onSelect
@@ -102,13 +130,17 @@ export default {
     }
   },
   render () {
+    const { prefixCls , isRangeDatePicker , showTime } = this.$props;
     const h = this.$createElement;
     return h(
       'div',
+      {
+        class : classNames(isRangeDatePicker ? prefixCls + '-box' : '')
+      },
       [
         this.getCarlendarHeader(),
         this.getCarlendarBody(),
-        this.getCarlendarFooter()
+        (!isRangeDatePicker || !!showTime) && this.getCarlendarFooter()
       ]
     )
   }

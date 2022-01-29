@@ -20,7 +20,7 @@ export default {
     prefixCls : String
   },
   methods : {
-    clickYear (dir) {
+    clickYear (evt , dir) {
       let { year } = this.$props;
       if (dir === 'prev') {
         // 上一年
@@ -29,13 +29,13 @@ export default {
         } else {
           year--;
         }
-        this.$emit('click-year' , year);
+        this.$emit('click-year' , evt , year);
       } else {
         // 下一年
-        this.$emit('click-year' , ++year);
+        this.$emit('click-year' , evt , ++year);
       }
     },
-    clickMonth (dir) {
+    clickMonth (evt , dir) {
       let { month } = this.$props;
       if (dir === 'prev') {
         // 上一月
@@ -44,7 +44,7 @@ export default {
         } else {
           month--;
         }
-        this.$emit('click-month' , month);
+        this.$emit('click-month' , evt , month);
       } else {
         // 下一月
         if (month > 11) {
@@ -52,7 +52,7 @@ export default {
         } else {
           month++;
         }
-        this.$emit('click-month' , month);
+        this.$emit('click-month' , evt , month);
       }
     }
   },
@@ -70,7 +70,7 @@ export default {
           {
             class : classNames(prefixCls + '-prev-year-btn'),
             on : {
-              click : () => this.clickYear('prev')
+              click : (evt) => this.clickYear(evt , 'prev')
             }
           }
         ),
@@ -79,7 +79,7 @@ export default {
           {
             class : classNames(prefixCls + '-prev-month-btn'),
             on : {
-              click : () => this.clickMonth('prev')
+              click : (evt) => this.clickMonth(evt , 'prev')
             }
           }
         ),
@@ -110,7 +110,7 @@ export default {
           {
             class : classNames(prefixCls + '-next-month-btn'),
             on : {
-              click : () => this.clickMonth('next')
+              click : (evt) => this.clickMonth(evt , 'next')
             }
           }
         ),
@@ -119,7 +119,7 @@ export default {
           {
             class : classNames(prefixCls + '-next-year-btn'),
             on : {
-              click : () => this.clickYear('next')
+              click : (evt) => this.clickYear(evt , 'next')
             }
           }
         ),

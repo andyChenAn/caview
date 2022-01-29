@@ -3,7 +3,8 @@ const noop = function () {};
 export default {
   props : {
     prefixCls : String,
-    value : Date
+    value : Date,
+    isRangeDatePicker : Boolean
   },
   data () {
     return {
@@ -72,7 +73,7 @@ export default {
     renderCalendar (prefixCls , days , weekOfFirstDay) {
       const h = this.$createElement;
       let displayDays = this.getDisplayDays(days , weekOfFirstDay);
-      const dateCellRender = this.$scopedSlots.dateCellRender || noop;
+      const { isRangeDatePicker } = this.$props;
       let rows = [];
       for (let i = 0 ; i < 6 ; i++) {
         rows.push(h(
@@ -81,6 +82,12 @@ export default {
             class : classNames(prefixCls + '-rows')
           },
           displayDays.slice(i * 7 , (i + 1) * 7).map(day => {
+            const dayProps = {};
+            if (isRangeDatePicker) {
+              dayProps.class = classNames(prefixCls + '-day-text' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : null , this.isCurrentDate(day) ? 'selected' : null);
+            } else {
+              dayProps.class = classNames(prefixCls + '-day-text' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : null , this.isCurrentDate(day) ? 'selected' : null , this.isActiveDay(day) ? 'actived' : null);
+            }
             return h(
               'td',
               {
@@ -99,9 +106,7 @@ export default {
                   [
                     h(
                       'div',
-                      {
-                        class : classNames(prefixCls + '-day-text' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : null , this.isCurrentDate(day) ? 'selected' : null , this.isActiveDay(day) ? 'actived' : null)
-                      },
+                      dayProps,
                       [day.date]
                     )
                   ]
@@ -134,6 +139,7 @@ export default {
     getCurrentDays () {
       let date = new Date(this.currentDate);
       let currentMonth = date.getMonth();
+      date.setDate(1);
       date.setMonth(currentMonth + 1);
       date.setDate(0);
       return date.getDate();
