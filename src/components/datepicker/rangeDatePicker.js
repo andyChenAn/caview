@@ -34,17 +34,34 @@ export default {
       type : Boolean,
       default : false
     },
+    separator : {
+      type : String,
+      default : '至'
+    },
+    placeholder : {
+      type : Array,
+      default () {
+        return ['开始日期' , '结束日期']
+      }
+    }
   },
   data () {
     const { defaultValue , value , open } = this.$props;
     const now = new Date();
     let dateList = defaultValue.length > 0 ? value.length > 0 ? value : defaultValue : [now , this.getNextMonthDate(now)];
     const sOpen = !!open || false;
+    let dateContent = [];
+    if (this.defaultValue.length >= 2) {
+      dateContent = this.defaultValue.slice(0 , 2);
+    }
+    if (this.value.length >= 2) {
+      dateContent = this.value.slice(0 , 2);
+    };
     return {
       dateList : dateList,
       sVisible : sOpen,
-      dateContent : this.value || this.defaultValue || null,
-      showArrow : false
+      dateContent : dateContent,
+      showArrow : false,
     }
   },
   watch : {
@@ -60,7 +77,9 @@ export default {
       this.sVisible = visible;
       this.$emit('openChange' , visible);
     },
-    onSelect () {},
+    onSelect (date) {
+      this.dateContent.push(date);
+    },
     setShowArrow (showArrow) {
       this.showArrow = showArrow;
     },
@@ -151,10 +170,12 @@ export default {
     const dateContentProps = {
       props : {
         clearable : this.clearable,
-        value : '',
+        value : this.dateContent,
         prefixCls : this.prefixCls,
-        placehoder : this.placehoder,
-        format : this.formatter
+        placeholder : this.placeholder,
+        format : this.formatter,
+        isRangeDatePicker : true,
+        separator : this.separator
       }
     }
     return h(

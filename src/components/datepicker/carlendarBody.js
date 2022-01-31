@@ -4,7 +4,8 @@ export default {
   props : {
     prefixCls : String,
     value : Date,
-    isRangeDatePicker : Boolean
+    isRangeDatePicker : Boolean,
+    index : Number
   },
   data () {
     return {
@@ -197,7 +198,7 @@ export default {
       let month = date.getMonth();
       let day = date.getDate();
       let year = date.getFullYear();
-      if (month == item.month && day == item.date && year == item.year) {
+      if (month === item.month && day === item.date && year === item.year && this.index === 0) {
         return true;
       };
       return false;

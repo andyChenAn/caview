@@ -94,7 +94,8 @@ export default {
         props : {
           prefixCls : prefixCls + '-body',
           value : this.currentDate,
-          isRangeDatePicker : this.isRangeDatePicker
+          isRangeDatePicker : this.isRangeDatePicker,
+          index : this.index
         },
         on : {
           select : this.onSelect

@@ -9,8 +9,10 @@ export default {
     clearable : Boolean,
     autoFocus : Boolean,
     placeholder : {
-      type : String,
-      default : '请选择'
+      type : Array,
+      default () {
+        return []
+      }
     },
     visible : Boolean,
   },
