@@ -36,7 +36,7 @@ export default {
     },
     separator : {
       type : String,
-      default : '至'
+      default : '~'
     },
     placeholder : {
       type : Array,
@@ -62,6 +62,10 @@ export default {
       sVisible : sOpen,
       dateContent : dateContent,
       showArrow : false,
+      dayList : [],
+      isClickPanel : false,
+      startIndex : -1,
+      endIndex : -1
     }
   },
   watch : {
@@ -70,6 +74,23 @@ export default {
     },
     value (newVal) {
       this.dateList = newVal;
+    },
+    sVisible (newVal) {
+      if (newVal) {
+        if (this.startIndex > -1 && this.endIndex > -1) {
+          this.dayList.map(item => {
+            item.hover = false;
+            item.clicked = false;
+          });
+          this.dayList[this.startIndex].clicked = true;
+          this.dayList[this.endIndex].clicked = true;
+          for (let i = this.startIndex ; i <= this.endIndex ; i++) {
+            this.dayList[i].hover = true;
+          }
+        }
+      } else {
+        this.isClickPanel = false;
+      }
     }
   },
   methods : {
@@ -77,11 +98,43 @@ export default {
       this.sVisible = visible;
       this.$emit('openChange' , visible);
     },
-    onSelect (date) {
+    onSelect (date , index) {
+      if (this.startIndex > -1 && this.endIndex > -1) {
+        this.dateContent = [];
+        this.dayList[this.startIndex].clicked = false;
+        this.dayList[this.endIndex].clicked = false;
+        this.startIndex = -1;
+        this.endIndex = -1;
+      };
+      this.isClickPanel = !this.isClickPanel;
+      if (this.startIndex === -1) {
+        this.startIndex = index;
+      } else {
+        this.endIndex = index;
+      };
+      if (this.startIndex > -1 && this.endIndex > -1 && this.startIndex > this.endIndex) {
+        let temp = this.startIndex;
+        this.startIndex = this.endIndex;
+        this.endIndex = temp;
+      };
       this.dateContent.push(date);
+      // 如果第一个日期大于第二个日期，那么就更新一下展示顺序
+      if (this.dateContent.length >= 2) {
+        if (this.dateContent[0] > this.dateContent[1]) {
+          this.dateContent = this.dateContent.reverse();
+        }
+        this.sVisible = false;
+      };
     },
     setShowArrow (showArrow) {
       this.showArrow = showArrow;
+    },
+    createCalendar (list) {
+      this.dayList = this.dayList.concat(list);
+      this.dayList = this.dayList.filter(item => item.type === 'current');
+      this.dayList.map((item, index) => {
+        item.index = index;
+      });
     },
     // 获取当前日期的下一年日期数据
     getNextYearDate (date) {
@@ -134,11 +187,16 @@ export default {
             prefixCls : prefixCls + '-carlendar',
             isRangeDatePicker : true,
             index : index,
-            showArrow : this.showArrow
+            showArrow : this.showArrow,
+            dayList : this.dayList,
+            isClickPanel : this.isClickPanel,
+            startIndex : this.startIndex,
+            endIndex : this.endIndex
           },
           on : {
             select : this.onSelect,
-            'show-arrow' : this.setShowArrow
+            'show-arrow' : this.setShowArrow,
+            createCalendar : this.createCalendar
           }
         };
         children.push(h(

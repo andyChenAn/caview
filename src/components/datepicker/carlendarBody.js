@@ -5,12 +5,31 @@ export default {
     prefixCls : String,
     value : Date,
     isRangeDatePicker : Boolean,
-    index : Number
+    // 日期面板索引数，总共两个，
+    index : {
+      type : Number,
+      default : 0
+    },
+    dayList : Array,
+    // 是否用户有点击面板上的日期
+    isClickPanel : Boolean,
+    startIndex : Number,
+    endIndex : Number
   },
   data () {
     return {
-      currentDate : this.value
+      currentDate : this.value,
+      // 展示的天数
+      displayDays : []
     }
+  },
+  created () {
+    // 获取当月天数
+    let days = this.getCurrentDays();
+    // 获取当月第一天是星期几
+    let weekOfFirstDay = this.getWeekOfFirstDay();
+    this.displayDays = this.getDisplayDays(days , weekOfFirstDay);
+    this.$emit('createCalendar' , this.displayDays);
   },
   watch : {
     value (newVal) {
@@ -56,24 +75,19 @@ export default {
     getTableBody () {
       const { prefixCls } = this.$props;
       const h = this.$createElement;
-      // 获取当月天数
-      let days = this.getCurrentDays();
-      // 获取当月第一天是星期几
-      let weekOfFirstDay = this.getWeekOfFirstDay();
       return h(
         'tbody',
         {
           class : classNames(prefixCls + '-tbody')
         },
         [
-          this.renderCalendar(prefixCls , days , weekOfFirstDay)
+          this.renderCalendar(prefixCls)
         ]
       )
     },
     // 渲染日历天数
-    renderCalendar (prefixCls , days , weekOfFirstDay) {
+    renderCalendar (prefixCls) {
       const h = this.$createElement;
-      let displayDays = this.getDisplayDays(days , weekOfFirstDay);
       const { isRangeDatePicker } = this.$props;
       let rows = [];
       for (let i = 0 ; i < 6 ; i++) {
@@ -82,13 +96,18 @@ export default {
           {
             class : classNames(prefixCls + '-rows')
           },
-          displayDays.slice(i * 7 , (i + 1) * 7).map(day => {
+          this.displayDays.slice(i * 7 , (i + 1) * 7).map(day => {
             const dayProps = {};
             if (isRangeDatePicker) {
-              dayProps.class = classNames(prefixCls + '-day-text' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : null , this.isCurrentDate(day) ? 'selected' : null);
+              dayProps.class = classNames(prefixCls + '-day-text' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : null , this.isCurrentDate(day) ? 'selected' : null , day.clicked ? 'clicked' : null , day.hover ? 'hovered' : null);
             } else {
               dayProps.class = classNames(prefixCls + '-day-text' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : null , this.isCurrentDate(day) ? 'selected' : null , this.isActiveDay(day) ? 'actived' : null);
             }
+            dayProps.on = {
+              click : (evt) => this.selectCarlendar(evt , day),
+              mouseenter : (evt) => this.handleMouseEnter(evt , day),
+              mouseleave : evt => this.handleMouseLeave(evt , day) 
+            };
             return h(
               'td',
               {
@@ -99,10 +118,7 @@ export default {
                 h(
                   'div',
                   {
-                    class : classNames(prefixCls + '-day-box'),
-                    on : {
-                      click : () => this.selectCarlendar(day)
-                    }
+                    class : classNames(prefixCls + '-day-box')
                   },
                   [
                     h(
@@ -119,14 +135,49 @@ export default {
       };
       return rows;
     },
-    selectCarlendar (item) {
+    selectCarlendar (evt , item) {
       let date = new Date();
       let hours = date.getHours();
       let minutes = date.getMinutes();
       let seconds = date.getSeconds();
       let now = new Date(item.year , item.month , item.date , hours , minutes , seconds);
       this.currentDate = now;
-      this.$emit('select' , this.currentDate);
+      if (this.isRangeDatePicker) {
+        item.clicked = true;
+        const index = this.dayList.indexOf(item);
+        this.dayList.map(item => {
+          item.hover = false;
+        })
+        for (let i = index ; i < this.dayList.length ; i++) {
+          this.dayList[i].hover = true;
+        }
+        this.$emit('select' , this.currentDate , index);
+      } else {
+        this.$emit('select' , this.currentDate);
+      }
+    },
+    handleMouseEnter (evt , item) {
+      if (this.isClickPanel) {
+        this.dayList.map(item => {
+          item.hover = false;
+          if (this.startIndex !== item.index) {
+            item.clicked = false;
+          }
+        });
+        if (item.index >= this.startIndex) {
+          for (let i = this.startIndex ; i <= item.index ; i++) {
+            this.dayList[i].hover = true;
+          }
+        } else {
+          for (let i = item.index ; i < this.startIndex ; i++) {
+            this.dayList[i].hover = true;
+          }
+        }
+        item.clicked = true;
+      }
+    },
+    handleMouseLeave (evt , item) {
+
     },
     isActiveDay (item) {
       const month = this.currentDate.getMonth();
@@ -168,6 +219,8 @@ export default {
           type : 'current',
           month : this.currentDate.getMonth(),
           year : this.currentDate.getFullYear(),
+          clicked : false,
+          hover : false
         })
       };
       // 上月展示的天数
@@ -177,6 +230,8 @@ export default {
           type : 'prev',
           month : (this.currentDate.getMonth() - 1) < 0 ? 11 : (this.currentDate.getMonth() - 1),
           year : (this.currentDate.getMonth() - 1) < 0 ? this.currentDate.getFullYear() - 1 : this.currentDate.getFullYear(),
+          clicked : false,
+          hover : false,
         });
         prevMonthDays--;
       };
@@ -187,9 +242,15 @@ export default {
           date : i,
           type : 'next',
           month : (this.currentDate.getMonth() + 1) > 11 ? 0 : (this.currentDate.getMonth() + 1),
-          year : (this.currentDate.getMonth() + 1) > 11 ? this.currentDate.getFullYear() + 1 : this.currentDate.getFullYear()
+          year : (this.currentDate.getMonth() + 1) > 11 ? this.currentDate.getFullYear() + 1 : this.currentDate.getFullYear(),
+          clicked : false,
+          hover : false,
         });
       };
+      displayDays.map(item => {
+        item.index = 0;
+        return item;
+      })
       return displayDays;
     },
     // 是否为当前这一天
@@ -201,6 +262,10 @@ export default {
       if (month === item.month && day === item.date && year === item.year && this.index === 0) {
         return true;
       };
+      // 如果用户点击了日期，那么也要选中
+      if (this.isClickPanel && month === item.month && day === item.date && year === item.year) {
+        return true;
+      }
       return false;
     },
   },

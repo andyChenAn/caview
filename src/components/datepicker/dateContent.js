@@ -46,46 +46,54 @@ export default {
         },
         [
           h(
-            'input',
-            {
-              attrs : {
-                placeholder : startPlaceholder,
-                readonly : true
-              },
-              domProps : {
-                value : startValue ? formatDate(startValue , format) : ''
-              },
-              class : classNames(prefixCls + '-range-input')
-            }
-          ),
-          h(
             'span',
             {
-              class : classNames(prefixCls + '-separator')
+              class : classNames(prefixCls + '-input-box')
             },
-            [separator]
-          ),
-          h(
-            'input',
-            {
-              attrs : {
-                placeholder : endPlaceholder,
-                readonly : true
-              },
-              domProps : {
-                value : endValue ? formatDate(endValue , format) : ''
-              },
-              class : classNames(prefixCls + '-range-input')
-            }
-          ),
-          (clearable && startValue && endValue) && h(
-            'i',
-            {
-              class : classNames('iconfont icon-error' , prefixCls + '-clearable'),
-              on : {
-                click : this.onClear
-              }
-            }
+            [
+              h(
+                'input',
+                {
+                  attrs : {
+                    placeholder : startPlaceholder,
+                    readonly : true
+                  },
+                  domProps : {
+                    value : startValue ? formatDate(startValue , format) : ''
+                  },
+                  class : classNames(prefixCls + '-range-input')
+                }
+              ),
+              h(
+                'span',
+                {
+                  class : classNames(prefixCls + '-separator')
+                },
+                [separator]
+              ),
+              h(
+                'input',
+                {
+                  attrs : {
+                    placeholder : endPlaceholder,
+                    readonly : true
+                  },
+                  domProps : {
+                    value : endValue ? formatDate(endValue , format) : ''
+                  },
+                  class : classNames(prefixCls + '-range-input')
+                }
+              ),
+              (clearable && startValue && endValue) && h(
+                'i',
+                {
+                  class : classNames('iconfont icon-error' , prefixCls + '-clearable'),
+                  on : {
+                    click : this.onClear
+                  }
+                }
+              )
+            ]
           )
         ]
       )

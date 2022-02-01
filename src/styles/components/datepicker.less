@@ -28,13 +28,13 @@
   &-range-input {
     outline: none;
     border: none;
-    height: 32px;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    background-color: #fff;
-    line-height: 1.5;
+    background-color: transparent;
+    width: 44%;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     color: rgba(0,0,0,0.65);
-    padding: 4px 11px;
   }
   &-rili {
     position: absolute;
@@ -205,6 +205,13 @@
           border-color: #1890ff;
           font-weight: bold;
         }
+        &.clicked {
+          color: #fff;
+          background-color: #1890ff !important;
+        }
+        &.hovered {
+          background-color: #e6f7ff;
+        }
         &.actived {
           background-color: #bae7ff;
         }
@@ -253,5 +260,16 @@
   }
   &-range-content {
     width: 560px;
+  }
+  &-input-box {
+    border: 1px solid #d9d9d9;
+    display: inline-block;
+    border-radius: 4px;
+    padding: 4px 11px;
+    width: 100%;
+    height: 32px;
+    line-height: 1.5;
+    color: rgba(0,0,0,0.65);
+    background-color: #fff;
   }
 }

@@ -10,7 +10,11 @@ export default {
     // 是否显示选择时间选择器
     showTime : [Object , Boolean],
     index : Number,
-    showArrow : Boolean
+    showArrow : Boolean,
+    dayList : Array,
+    isClickPanel : Boolean,
+    startIndex : Number,
+    endIndex : Number
   },
   data () {
     const { date }  = this.$props;
@@ -25,6 +29,9 @@ export default {
     }
   },
   methods : {
+    createCalendar (dayList) {
+      this.$emit('createCalendar' , dayList);
+    },
     clickYear (evt , year) {
       evt.stopPropagation();
       const date = new Date(this.currentDate);
@@ -61,8 +68,8 @@ export default {
     setShowArrow (showArrow) {
       this.$emit('show-arrow' , showArrow);
     },
-    onSelect (date) {
-      this.$emit('select' , date);
+    onSelect (date , index) {
+      this.$emit('select' , date , index);
     },
     getCarlendarHeader () {
       const { prefixCls } = this.$props;
@@ -95,10 +102,15 @@ export default {
           prefixCls : prefixCls + '-body',
           value : this.currentDate,
           isRangeDatePicker : this.isRangeDatePicker,
-          index : this.index
+          index : this.index,
+          dayList : this.dayList,
+          isClickPanel : this.isClickPanel,
+          startIndex : this.startIndex,
+          endIndex : this.endIndex
         },
         on : {
-          select : this.onSelect
+          select : this.onSelect,
+          createCalendar : this.createCalendar
         }
       }
       return h(
