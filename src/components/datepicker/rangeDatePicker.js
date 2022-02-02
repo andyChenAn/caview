@@ -4,6 +4,7 @@ import omit from 'omit.js';
 import Carlendar from './carlendar';
 import DateContent from './dateContent';
 import RangePicker from './rangePicker';
+const temp = [];
 export default {
   props : {
     defaultValue : {
@@ -91,6 +92,12 @@ export default {
       } else {
         this.isClickPanel = false;
       }
+    },
+    dateContent (newVal) {
+      if (this.dateContent.length === 2) {
+        this.dateList = newVal;
+
+      }
     }
   },
   methods : {
@@ -100,6 +107,7 @@ export default {
     },
     onSelect (date , index) {
       if (this.startIndex > -1 && this.endIndex > -1) {
+        // 如果开始日期和结束日期都有的花，那么就是关闭弹框，表示日期已经选好了
         this.dateContent = [];
         this.dayList[this.startIndex].clicked = false;
         this.dayList[this.endIndex].clicked = false;
@@ -129,12 +137,43 @@ export default {
     setShowArrow (showArrow) {
       this.showArrow = showArrow;
     },
-    createCalendar (list) {
-      this.dayList = this.dayList.concat(list);
+    createCalendar (list , panelIndex) {
+      this.dayList = [];
+      temp[panelIndex] = list;
+      temp.forEach(item => {
+        item.forEach(i => {
+          this.dayList.push(i);
+        });
+      });
       this.dayList = this.dayList.filter(item => item.type === 'current');
       this.dayList.map((item, index) => {
         item.index = index;
       });
+      // this.$nextTick(() => {
+      //   if (this.startIndex > -1 && this.endIndex > -1) {
+      //     const start = this.dateList[0];
+      //     const end = this.dateList[1];
+      //     this.dayList.map(item => {
+      //       if (item.year === start.getFullYear() && item.month === start.getMonth() && item.date === start.getDate()) {
+      //         this.startIndex = item.index;
+      //       };
+      //       if (item.year === end.getFullYear() && item.month === end.getMonth() && item.date === end.getDate()) {
+      //         this.endIndex = item.index;
+      //       };
+      //     });
+      //     if (this.startIndex > -1 && this.endIndex > -1) {
+      //       this.dayList.map(item => {
+      //         item.hover = false;
+      //         item.clicked = false;
+      //       });
+      //       this.dayList[this.startIndex].clicked = true;
+      //       this.dayList[this.endIndex].clicked = true;
+      //       for (let i = this.startIndex ; i <= this.endIndex ; i++) {
+      //         this.dayList[i].hover = true;
+      //       }
+      //     }
+      //   }
+      // })
     },
     // 获取当前日期的下一年日期数据
     getNextYearDate (date) {

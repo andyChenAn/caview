@@ -24,19 +24,23 @@ export default {
     }
   },
   created () {
-    // 获取当月天数
-    let days = this.getCurrentDays();
-    // 获取当月第一天是星期几
-    let weekOfFirstDay = this.getWeekOfFirstDay();
-    this.displayDays = this.getDisplayDays(days , weekOfFirstDay);
-    this.$emit('createCalendar' , this.displayDays);
+    this.updateDays();
   },
   watch : {
     value (newVal) {
       this.currentDate = newVal;
+      this.updateDays();
     }
   },
   methods : {
+    updateDays () {
+      // 获取当月天数
+      let days = this.getCurrentDays();
+      // 获取当月第一天是星期几
+      let weekOfFirstDay = this.getWeekOfFirstDay();
+      this.displayDays = this.getDisplayDays(days , weekOfFirstDay);
+      this.$emit('createCalendar' , this.displayDays , this.index);
+    },
     getTableHeader () {
       const { prefixCls } = this.$props;
       const h = this.$createElement;
@@ -143,37 +147,59 @@ export default {
       let now = new Date(item.year , item.month , item.date , hours , minutes , seconds);
       this.currentDate = now;
       if (this.isRangeDatePicker) {
-        item.clicked = true;
-        const index = this.dayList.indexOf(item);
-        this.dayList.map(item => {
-          item.hover = false;
-        })
-        for (let i = index ; i < this.dayList.length ; i++) {
-          this.dayList[i].hover = true;
+        const obj = this.getRightItem(item);
+        obj.clicked = true;
+        let index = this.dayList.indexOf(obj);
+        if (index === -1) {
+          if (item.type === 'prev') {
+            index = 0;
+          } else if (item.type === 'next') {
+            index = -1;
+          }
         }
-        this.$emit('select' , this.currentDate , index);
+        if (index > -1) {
+          this.dayList.map(item => {
+            item.hover = false;
+          })
+          for (let i = index ; i < this.dayList.length ; i++) {
+            this.dayList[i].hover = true;
+          }
+          this.$emit('select' , this.currentDate , index);
+        }
       } else {
         this.$emit('select' , this.currentDate);
       }
     },
+    // 获取正确的日期，因为我有可能在本月面板中点击上一个或者下一个月的数据
+    getRightItem (item) {
+      let res = item;
+      for (let i = 0 ; i < this.dayList.length ; i++) {
+        const day = this.dayList[i];
+        if (day.year == item.year && day.month === item.month && day.date === item.date) {
+          res = day;
+          break;
+        }
+      };
+      return res;
+    },
     handleMouseEnter (evt , item) {
       if (this.isClickPanel) {
+        const obj = this.getRightItem(item);
         this.dayList.map(item => {
           item.hover = false;
           if (this.startIndex !== item.index) {
             item.clicked = false;
           }
         });
-        if (item.index >= this.startIndex) {
-          for (let i = this.startIndex ; i <= item.index ; i++) {
+        if (obj.index >= this.startIndex) {
+          for (let i = this.startIndex ; i <= obj.index ; i++) {
             this.dayList[i].hover = true;
           }
         } else {
-          for (let i = item.index ; i < this.startIndex ; i++) {
+          for (let i = obj.index ; i < this.startIndex ; i++) {
             this.dayList[i].hover = true;
           }
         }
-        item.clicked = true;
       }
     },
     handleMouseLeave (evt , item) {

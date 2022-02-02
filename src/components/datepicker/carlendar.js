@@ -29,8 +29,8 @@ export default {
     }
   },
   methods : {
-    createCalendar (dayList) {
-      this.$emit('createCalendar' , dayList);
+    createCalendar (dayList , panelIndex) {
+      this.$emit('createCalendar' , dayList , panelIndex);
     },
     clickYear (evt , year) {
       evt.stopPropagation();
