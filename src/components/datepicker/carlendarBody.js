@@ -27,13 +27,9 @@ export default {
     this.updateDays();
   },
   watch : {
-    value (newVal , oldVal) {
+    value (newVal) {
       this.currentDate = newVal;
-      if (newVal.getFullYear() === oldVal.getFullYear() && newVal.getMonth() === oldVal.getMonth() && this.index === 0) {
-        // 如果起始和结束位置都是在同一个月上，并且点击的是左面板
-        return;
-      }
-      //this.updateDays();
+      this.updateDays();
     }
   },
   methods : {
@@ -151,6 +147,10 @@ export default {
       let now = new Date(item.year , item.month , item.date , hours , minutes , seconds);
       this.currentDate = now;
       if (this.isRangeDatePicker) {
+        this.dayList.map(item => {
+          item.hover = false;
+          item.clicked = false;
+        })
         const obj = this.getRightItem(item);
         obj.clicked = true;
         let index = this.dayList.indexOf(obj);
@@ -162,9 +162,7 @@ export default {
           }
         }
         if (index > -1) {
-          this.dayList.map(item => {
-            item.hover = false;
-          })
+          
           for (let i = index ; i < this.dayList.length ; i++) {
             this.dayList[i].hover = true;
           };
@@ -203,7 +201,8 @@ export default {
           for (let i = obj.index ; i < this.startIndex ; i++) {
             this.dayList[i].hover = true;
           }
-        }
+        };
+        item.clicked = true;
       }
     },
     handleMouseLeave (evt , item) {

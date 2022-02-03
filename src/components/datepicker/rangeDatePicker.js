@@ -5,6 +5,7 @@ import Carlendar from './carlendar';
 import DateContent from './dateContent';
 import RangePicker from './rangePicker';
 const temp = [];
+let arr = [];
 export default {
   props : {
     defaultValue : {
@@ -66,7 +67,8 @@ export default {
       dayList : [],
       isClickPanel : false,
       startIndex : -1,
-      endIndex : -1
+      endIndex : -1,
+      prevDateContent : JSON.parse(JSON.stringify(dateContent))
     }
   },
   watch : {
@@ -79,6 +81,35 @@ export default {
     sVisible (newVal) {
       if (newVal) {
         if (this.startIndex > -1 && this.endIndex > -1) {
+          this.$nextTick(() => {
+            this.dayList.map(item => {
+              item.hover = false;
+              item.clicked = false;
+            });
+            const start = this.dateList[0];
+            const end = this.dateList[1];
+            this.dayList.map(item => {
+              if (start.getFullYear() ===item.year && start.getMonth() === item.month && start.getDate() === item.date) {
+                this.startIndex = item.index;
+              };
+              if (end.getFullYear() ===item.year && end.getMonth() === item.month && end.getDate() === item.date) {
+                this.endIndex = item.index;
+              };
+            });
+            this.dayList[this.startIndex].clicked = true;
+            this.dayList[this.endIndex].clicked = true;
+            for (let i = this.startIndex ; i <= this.endIndex ; i++) {
+              this.dayList[i].hover = true;
+            }
+          })
+        }
+      } else {
+        this.isClickPanel = false;
+      }
+    },
+    dateContent (newVal) {
+      if (this.dateContent.length === 2) {
+        if (this.dateContent[0].getFullYear() === this.dateContent[1].getFullYear() && this.dateContent[0].getMonth() === this.dateContent[1].getMonth()) {
           this.dayList.map(item => {
             item.hover = false;
             item.clicked = false;
@@ -88,14 +119,11 @@ export default {
           for (let i = this.startIndex ; i <= this.endIndex ; i++) {
             this.dayList[i].hover = true;
           }
+          this.startIndex = -1;
+          this.endIndex = -1;
+        } else {
+          this.dateList = newVal;
         }
-      } else {
-        this.isClickPanel = false;
-      }
-    },
-    dateContent (newVal) {
-      if (this.dateContent.length === 2) {
-        //this.dateList = newVal;
       }
     }
   },
@@ -107,7 +135,6 @@ export default {
     onSelect (date , index) {
       if (this.startIndex > -1 && this.endIndex > -1) {
         // 如果开始日期和结束日期都有的花，那么就是关闭弹框，表示日期已经选好了
-        this.dateContent = [];
         this.dayList[this.startIndex].clicked = false;
         this.dayList[this.endIndex].clicked = false;
         this.startIndex = -1;
@@ -124,14 +151,29 @@ export default {
         this.startIndex = this.endIndex;
         this.endIndex = temp;
       };
-      this.dateContent.push(date);
+      // 第一次通过添加的方式，之后就等到日期选择完之后再修改
+      arr.push(date);
+      if (this.dateContent.length >= 1) {
+        if (arr.length == 2) {
+          this.dateContent = arr;
+          arr = [];
+        }
+      } else {
+        this.dateContent.push(date);
+      }
+      // 上一次的结果只会添加一次
+      if (this.prevDateContent.length < 2) {
+        this.prevDateContent.push(date);
+      };
       // 如果第一个日期大于第二个日期，那么就更新一下展示顺序
       if (this.dateContent.length >= 2) {
         if (this.dateContent[0] > this.dateContent[1]) {
           this.dateContent = this.dateContent.reverse();
         }
-        this.sVisible = false;
       };
+      if (this.startIndex > -1 && this.endIndex > -1) {
+        this.sVisible = false;
+      }
     },
     setShowArrow (showArrow) {
       this.showArrow = showArrow;
@@ -184,7 +226,6 @@ export default {
       if (nextMonth > 11) {
         nextMonth = 0;
       };
-      nextDate.setDate(1);
       nextDate.setMonth(nextMonth);
       return nextDate;
     },
