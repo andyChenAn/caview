@@ -27,9 +27,13 @@ export default {
     this.updateDays();
   },
   watch : {
-    value (newVal) {
+    value (newVal , oldVal) {
       this.currentDate = newVal;
-      this.updateDays();
+      if (newVal.getFullYear() === oldVal.getFullYear() && newVal.getMonth() === oldVal.getMonth() && this.index === 0) {
+        // 如果起始和结束位置都是在同一个月上，并且点击的是左面板
+        return;
+      }
+      //this.updateDays();
     }
   },
   methods : {
@@ -163,7 +167,7 @@ export default {
           })
           for (let i = index ; i < this.dayList.length ; i++) {
             this.dayList[i].hover = true;
-          }
+          };
           this.$emit('select' , this.currentDate , index);
         }
       } else {

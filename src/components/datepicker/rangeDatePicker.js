@@ -95,8 +95,7 @@ export default {
     },
     dateContent (newVal) {
       if (this.dateContent.length === 2) {
-        this.dateList = newVal;
-
+        //this.dateList = newVal;
       }
     }
   },
@@ -149,31 +148,6 @@ export default {
       this.dayList.map((item, index) => {
         item.index = index;
       });
-      // this.$nextTick(() => {
-      //   if (this.startIndex > -1 && this.endIndex > -1) {
-      //     const start = this.dateList[0];
-      //     const end = this.dateList[1];
-      //     this.dayList.map(item => {
-      //       if (item.year === start.getFullYear() && item.month === start.getMonth() && item.date === start.getDate()) {
-      //         this.startIndex = item.index;
-      //       };
-      //       if (item.year === end.getFullYear() && item.month === end.getMonth() && item.date === end.getDate()) {
-      //         this.endIndex = item.index;
-      //       };
-      //     });
-      //     if (this.startIndex > -1 && this.endIndex > -1) {
-      //       this.dayList.map(item => {
-      //         item.hover = false;
-      //         item.clicked = false;
-      //       });
-      //       this.dayList[this.startIndex].clicked = true;
-      //       this.dayList[this.endIndex].clicked = true;
-      //       for (let i = this.startIndex ; i <= this.endIndex ; i++) {
-      //         this.dayList[i].hover = true;
-      //       }
-      //     }
-      //   }
-      // })
     },
     // 获取当前日期的下一年日期数据
     getNextYearDate (date) {
