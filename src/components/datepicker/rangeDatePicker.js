@@ -141,11 +141,14 @@ export default {
         this.endIndex = -1;
       };
       this.isClickPanel = !this.isClickPanel;
-      if (this.startIndex === -1) {
-        this.startIndex = index;
-      } else {
-        this.endIndex = index;
-      };
+      if (index !== null) {
+        if (this.startIndex === -1) {
+          this.startIndex = index;
+        } else {
+          this.endIndex = index;
+        };
+      }
+      
       if (this.startIndex > -1 && this.endIndex > -1 && this.startIndex > this.endIndex) {
         let temp = this.startIndex;
         this.startIndex = this.endIndex;

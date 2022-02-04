@@ -168,7 +168,6 @@ export default {
           for (let i = index ; i < this.dayList.length ; i++) {
             this.dayList[i].hover = true;
           };
-          //this.$emit('select' , this.currentDate , index);
         }
         this.$emit('select' , this.currentDate , index);
       } else {
@@ -210,7 +209,7 @@ export default {
           if (obj.type === 'current') {
             obj.clicked = true;
           }
-        } else if (obj.index === 0 && obj.type === 'next') {
+        } else if (obj.index === 0 && obj.type === 'next' && this.index === 1 && this.startIndex < this.dayList.length) {
           // 如果第二次hover面板的是第二个面板的next部分数据
           this.dayList.map(item => {
             item.clicked = false;
