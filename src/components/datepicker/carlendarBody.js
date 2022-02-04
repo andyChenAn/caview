@@ -152,22 +152,25 @@ export default {
           item.clicked = false;
         })
         const obj = this.getRightItem(item);
-        obj.clicked = true;
+        // 如果是当前月份面板的上一个月数据或者当前月份面板的下一个月的数据，那么久不让他有点击效果
+        if (!((obj.type === 'prev' && obj.index === 0) || (obj.type === 'next' && obj.index === 0))) {
+          obj.clicked = true;
+        }
         let index = this.dayList.indexOf(obj);
         if (index === -1) {
           if (item.type === 'prev') {
             index = 0;
           } else if (item.type === 'next') {
-            index = -1;
+            index = this.dayList.length;
           }
         }
         if (index > -1) {
-          
           for (let i = index ; i < this.dayList.length ; i++) {
             this.dayList[i].hover = true;
           };
-          this.$emit('select' , this.currentDate , index);
+          //this.$emit('select' , this.currentDate , index);
         }
+        this.$emit('select' , this.currentDate , index);
       } else {
         this.$emit('select' , this.currentDate);
       }
@@ -187,22 +190,36 @@ export default {
     handleMouseEnter (evt , item) {
       if (this.isClickPanel) {
         const obj = this.getRightItem(item);
-        this.dayList.map(item => {
-          item.hover = false;
-          if (this.startIndex !== item.index) {
+        // 如果第一次点击面板的是第二个面板的next部分数据，那么就要过滤掉，不显示效果
+        if (obj.index !== 0 && obj.type !== 'next') {
+          this.dayList.map(item => {
+            item.hover = false;
+            if (this.startIndex !== item.index) {
+              item.clicked = false;
+            }
+          });
+          if (obj.index >= this.startIndex) {
+            for (let i = this.startIndex ; i <= obj.index ; i++) {
+              this.dayList[i].hover = true;
+            }
+          } else {
+            for (let i = obj.index ; i < this.startIndex ; i++) {
+              this.dayList[i].hover = true;
+            }
+          }
+          if (obj.type === 'current') {
+            obj.clicked = true;
+          }
+        } else if (obj.index === 0 && obj.type === 'next') {
+          // 如果第二次hover面板的是第二个面板的next部分数据
+          this.dayList.map(item => {
             item.clicked = false;
-          }
-        });
-        if (obj.index >= this.startIndex) {
-          for (let i = this.startIndex ; i <= obj.index ; i++) {
+          });
+          this.dayList[this.startIndex].clicked = true;
+          for (let i = this.startIndex ; i < this.dayList.length ; i++) {
             this.dayList[i].hover = true;
           }
-        } else {
-          for (let i = obj.index ; i < this.startIndex ; i++) {
-            this.dayList[i].hover = true;
-          }
-        };
-        item.clicked = true;
+        }
       }
     },
     handleMouseLeave (evt , item) {
@@ -288,7 +305,7 @@ export default {
       let month = date.getMonth();
       let day = date.getDate();
       let year = date.getFullYear();
-      if (month === item.month && day === item.date && year === item.year && this.index === 0) {
+      if (month === item.month && day === item.date && year === item.year && item.type === 'current') {
         return true;
       };
       // 如果用户点击了日期，那么也要选中

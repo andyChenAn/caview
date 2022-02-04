@@ -134,7 +134,7 @@ export default {
     },
     onSelect (date , index) {
       if (this.startIndex > -1 && this.endIndex > -1) {
-        // 如果开始日期和结束日期都有的花，那么就是关闭弹框，表示日期已经选好了
+        // 如果开始日期和结束日期都有的话，那么就是关闭弹框，表示日期已经选好了
         this.dayList[this.startIndex].clicked = false;
         this.dayList[this.endIndex].clicked = false;
         this.startIndex = -1;
