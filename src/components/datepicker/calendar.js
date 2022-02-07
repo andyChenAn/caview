@@ -7,7 +7,18 @@ export default {
     // 是否显示时间选择器
     showTime : [Object , Boolean]
   },
+  data () {
+    return {
+      sCurrentDate : this.currentDate
+    }
+  },
+  watch : { 
+    currentDate (newVal) {
+      this.sCurrentDate = newVal;
+    }
+  },
   render () {
     const h = this.$createElement;
+    
   }
 }

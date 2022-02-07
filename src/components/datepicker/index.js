@@ -3,6 +3,7 @@ import _extends from '@babel/runtime/helpers/extends';
 import DatePicker from './datePicker';
 import Calendar from './calendar';
 import DateInput from './dateInput';
+import { getDaysForMonth , getFirstDayForWeek } from './utils';
 export default {
   props : {
     prefixCls : {
@@ -36,7 +37,9 @@ export default {
       // 日期
       currentDate : currentDate,
       // 是否显示日期弹框
-      sVisible : sOpen
+      sVisible : sOpen,
+      // 展示的日期天数列表
+      dayList : []
     }
   },
   watch : {
@@ -45,7 +48,11 @@ export default {
     },
     value (newVal) {
       this.currentDate = newVal;
+      this.dayList = this.getDayList(this.currentDate);
     }
+  },
+  created () {
+    this.dayList = this.getDayList(this.currentDate);
   },
   methods : {
     visibleChange1 (visible) {
@@ -53,7 +60,52 @@ export default {
       this.$emit('openChange' , visible);
     },
     onSelect () {},
-    onClear () {}
+    onClear () {},
+    getDayList (currentDate) {
+      const dayNum = getDaysForMonth(currentDate);
+      let prevDayNum = getDaysForMonth(new Date(currentDate).setMonth(currentDate.getMonth() - 1));
+      const firstDayForWeek = getFirstDayForWeek(currentDate);
+      let displayDays = [];
+      // 当月展示的天数
+      for (let i = 1 ; i <= dayNum ; i++) {
+        displayDays.push({
+          date : i,
+          month : currentDate.getMonth(),
+          year : currentDate.getFullYear(),
+          type : 'current',
+          hover : false,
+          disabled : false,
+          click : false
+        })
+      };
+      // 上月展示的天数
+      for (let i = 1 ; i <= firstDayForWeek ; i++) {
+        displayDays.unshift({
+          date : prevDayNum,
+          month : currentDate.getMonth() === 0 ? 11 : currentDate.getMonth() - 1,
+          year : currentDate.getMonth() === 0 ? currentDate.getFullYear() - 1 : currentDate.getFullYear(),
+          type : 'prev',
+          hover : false,
+          disabled : true,
+          click : false
+        });
+        prevDayNum--;
+      };
+      // 下月展示的天数
+      const nextDayNum = 7 * 6 - displayDays.length;
+      for (let i = 1 ; i <= nextDayNum ; i++) {
+        displayDays.push({
+          date : i,
+          month : currentDate.getMonth() === 11 ? 0 : currentDate.getMonth() + 1,
+          year : currentDate.getMonth() === 11 ? currentDate.getFullYear() + 1 : currentDate.getFullYear(),
+          type : 'next',
+          hover : false,
+          disabled : true,
+          click : false
+        })
+      };
+      console.log(displayDays)
+    }
   },
   render () {
     const h =this.$createElement;
@@ -70,7 +122,7 @@ export default {
     const calendarProps = {
       props : _extends({} , omit(this.$props , ['value' , 'defaultValue' , 'open' , 'clearable']) , {
         currentDate : this.currentDate,
-        prefixCls : prefixCls + '-calendar'
+        prefixCls : prefixCls + '-calendar',
       }),
       on : {
         select : this.onSelect
