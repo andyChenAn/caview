@@ -1,6 +1,8 @@
 import omit from 'omit.js';
 import _extends from '@babel/runtime/helpers/extends';
 import DatePicker from './datePicker';
+import Calendar from './calendar';
+import DateInput from './dateInput';
 export default {
   props : {
     prefixCls : {
@@ -50,9 +52,12 @@ export default {
       this.sVisible = visible;
       this.$emit('openChange' , visible);
     },
+    onSelect () {},
+    onClear () {}
   },
   render () {
     const h =this.$createElement;
+    const { prefixCls } = this.$props;
     const datePickerProps = {
       props : _extends({} , omit(this.$props , ['value' , 'defaultValue' , 'open']) , {
         currentDate : this.currentDate,
@@ -62,9 +67,48 @@ export default {
         visibleChange1 : this.visibleChange1
       }),
     };
+    const calendarProps = {
+      props : _extends({} , omit(this.$props , ['value' , 'defaultValue' , 'open' , 'clearable']) , {
+        currentDate : this.currentDate,
+        prefixCls : prefixCls + '-calendar'
+      }),
+      on : {
+        select : this.onSelect
+      }
+    };
+    const dateInputProps = {
+      props : {
+        clearable : this.clearable,
+        value : this.currentDate,
+        prefixCls : this.prefixCls,
+        placeholder : this.placeholder,
+        formatter : this.formatter,
+      },
+      on : {
+        clear : this.onClear
+      }
+    }
     return h(
       DatePicker,
-      datePickerProps
+      datePickerProps,
+      [
+        h(
+          'template',
+          {
+            slot : ['popup']
+          },
+          [
+            h(
+              Calendar,
+              calendarProps
+            )
+          ]
+        ),
+        h(
+          DateInput,
+          dateInputProps
+        )
+      ]
     )
   }
 }
