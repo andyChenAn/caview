@@ -1,11 +1,18 @@
 import Trigger from '../utils/trigger';
 export default {
   props : {
-    prefixCls : String,
-    format : String,
+    prefixCls : {
+      type : String,
+      default : 'ca-date-picker'
+    },
+    format : 'YYYY-MM-DD',
     clearable : Boolean,
-    placeholder : String,
-    currentDate : Date,
+    autoFocus : Boolean,
+    placeholder : {
+      type : String,
+      default : '请选择'
+    },
+    currentDate : [Date , String],
     visible : Boolean,
   },
   methods : {
