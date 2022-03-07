@@ -104,7 +104,6 @@ export default {
           click : false
         })
       };
-      console.log(displayDays)
     }
   },
   render () {
