@@ -22,24 +22,26 @@
     background-color: #fff;
     color: rgba(0,0,0,0.65);
   }
+  &-separator {
+    margin: 0 10px;
+  }
+  &-range-input {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    width: 44%;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: rgba(0,0,0,0.65);
+  }
   &-rili {
     position: absolute;
     top: 50%;
     right: 12px;
     transform: translateY(-50%);
     font-size: 14px;
-    cursor: pointer;
-  }
-  &-clearable {
-    color: #999;
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    background-color: #fff;
-    transition: all 0.3s;
-    opacity: 0;
     cursor: pointer;
   }
   &-content {
@@ -52,14 +54,14 @@
     position: relative;
     box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
   }
-  &-calendar-header {
+  &-carlendar-header {
     height: 40px;
     line-height: 40px;
     text-align: center;
     position: relative;
     border-bottom: 1px solid #d9d9d9;
     user-select: none;
-    .ca-date-picker-calendar-header-prev-year {
+    .ca-date-picker-carlendar-prev-year-btn {
       position: absolute;
       left: 7px;
       padding: 0 5px;
@@ -92,7 +94,7 @@
         content: '';
       }
     }
-    .ca-date-picker-calendar-header-prev-month {
+    .ca-date-picker-carlendar-prev-month-btn {
       position: absolute;
       left: 29px;
       padding: 0 5px;
@@ -111,7 +113,7 @@
         content: '';
       }
     }
-    .ca-date-picker-calendar-header-next-year {
+    .ca-date-picker-carlendar-next-year-btn {
       position: absolute;
       right: 7px;
       padding: 0 5px;
@@ -144,7 +146,7 @@
         content: '';
       }
     }
-    .ca-date-picker-calendar-header-next-month {
+    .ca-date-picker-carlendar-next-month-btn {
       position: absolute;
       padding: 0 5px;
       right: 29px;
@@ -163,14 +165,111 @@
         content: '';
       }
     }
-    .ca-date-picker-calendar-header-content {
-      .ca-date-picker-calendar-header-month , .ca-date-picker-calendar-header-year {
+    .ca-date-picker-carlendar-select {
+      .ca-date-picker-carlendar-month , .ca-date-picker-carlendar-year {
         display: inline-block;
         padding: 0 2px;
         font-weight: 500;
         color: rgba(0,0,0,0.85);
         line-height: 40px;
       }
+      
     }
+  }
+  &-carlendar-body {
+    padding: 8px 12px;
+    &-table {
+      text-align: center;
+      width: 100%;
+      border: 0;
+    }
+    &-th {
+      height: 30px;
+    }
+    &-day {
+      text-align: center;
+      height: 30px;
+      padding: 3px 0;
+      &-text {
+        color: rgba(0,0,0,0.65);
+        width: 24px;
+        height: 24px;
+        margin: 0 auto;
+        line-height: 24px;
+        cursor: pointer;
+        border-radius: 2px;
+        border: 1px solid transparent;
+        transition: all 0.3s;
+        &.selected {
+          color: #1890ff;
+          border-color: #1890ff;
+          font-weight: bold;
+        }
+        &.clicked {
+          color: #fff;
+          background-color: #1890ff !important;
+        }
+        &.hovered {
+          background-color: #e6f7ff;
+        }
+        &.actived {
+          background-color: #bae7ff;
+        }
+        &:hover {
+          background-color: #e6f7ff;
+        }
+      }
+    }
+    &-text-gray {
+      color: rgba(0,0,0,0.25);
+    }
+  }
+  &-carlendar-footer {
+    padding: 0 12px;
+    line-height: 38px;
+    height: 38px;
+    border-top: 1px solid #d9d9d9;
+    &-btn {
+      display: block;
+      text-align: center;
+    }
+    &-text {
+      color: #1890ff;
+      cursor: pointer;
+    }
+  }
+  &-clearable {
+    color: #999;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    background-color: #fff;
+    transition: all 0.3s;
+    opacity: 0;
+    cursor: pointer;
+  }
+  &-panel {
+    width: 560px;
+    overflow: hidden;
+  }
+  &-carlendar-box {
+    float: left;
+    width: 50%;
+  }
+  &-range-content {
+    width: 560px;
+  }
+  &-input-box {
+    border: 1px solid #d9d9d9;
+    display: inline-block;
+    border-radius: 4px;
+    padding: 4px 11px;
+    width: 100%;
+    height: 32px;
+    line-height: 1.5;
+    color: rgba(0,0,0,0.65);
+    background-color: #fff;
   }
 }
