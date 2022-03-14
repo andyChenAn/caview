@@ -29,20 +29,13 @@ export default {
       let { month } = this.$props;
       if (dir === 'prev') {
         // 上一月
-        if (month <= 1) {
-          month = 12;
-        } else {
-          month--;
-        }
+        month--;
       } else {
         // 下一月
-        if (month > 11) {
-          month = 1;
-        } else {
-          month++;
-        }
+        month++;
       }
-      this.$emit('click-month' , evt , month);
+      console.log(month - 1)
+      this.$emit('click-month' , evt , month - 1);
     },
     clickYear (evt , dir) {
       let { year } = this.$props;

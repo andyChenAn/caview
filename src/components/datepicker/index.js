@@ -52,8 +52,18 @@ export default {
       this.sVisible = visible;
       this.$emit('openChange' , visible);
     },
-    onSelect () {},
+    onSelect (date) {
+      this.sVisible = false;
+      this.currentDate = date;
+      this.$emit('change' , date);
+    },
     onClear () {},
+    clickYear (date) {
+      this.currentDate = date;
+    },
+    clickMonth (date) {
+      this.currentDate = date;
+    }
   },
   render () {
     const h =this.$createElement;
@@ -73,7 +83,9 @@ export default {
         prefixCls : prefixCls + '-calendar',
       }),
       on : {
-        select : this.onSelect
+        select : this.onSelect,
+        'click-year' : this.clickYear,
+        'click-month' : this.clickMonth
       }
     };
     const dateInputProps = {

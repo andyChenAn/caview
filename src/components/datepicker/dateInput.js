@@ -6,11 +6,11 @@ export default {
     value : Date,
     prefixCls : String,
     placeholder : String,
-    formatter : String,
+    format : String,
   },
   render () {
     const h = this.$createElement;
-    const { prefixCls , placeholder , value , formatter , clearable } = this.$props;
+    const { prefixCls , placeholder , value , format , clearable } = this.$props;
     return h(
       'span',
       {
@@ -25,7 +25,7 @@ export default {
               readonly : true,
             },
             domProps : {
-              value : value ? formatDate(value , formatter) : ''
+              value : value ? formatDate(value , format) : ''
             },
             class : classNames(prefixCls + '-input')
           }

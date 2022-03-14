@@ -1,6 +1,7 @@
-import { getDaysForMonth , getFirstDayForWeek } from './utils';
 import classNames from 'classnames';
 import CalendarHeader from './calendarHeader';
+import CalendarBody from './calendarBody';
+import CalendarFooter from './calendarFooter';
 export default {
   props : {
     // 当前日期
@@ -12,66 +13,7 @@ export default {
     prefixCls : String,
     format : String
   },
-  data () {
-    return {
-      // 展示的日期天数列表
-      dayList : []
-    }
-  },
-  watch : { 
-    currentDate (newVal) {
-      this.dayList = this.getDayList(newVal);
-    }
-  },
-  created () {
-    this.dayList = this.getDayList(this.currentDate);
-  },
   methods : {
-    getDayList (currentDate) {
-      const dayNum = getDaysForMonth(currentDate);
-      let prevDayNum = getDaysForMonth(new Date(currentDate).setMonth(currentDate.getMonth() - 1));
-      const firstDayForWeek = getFirstDayForWeek(currentDate);
-      let displayDays = [];
-      // 当月展示的天数
-      for (let i = 1 ; i <= dayNum ; i++) {
-        displayDays.push({
-          date : i,
-          month : currentDate.getMonth(),
-          year : currentDate.getFullYear(),
-          type : 'current',
-          hover : false,
-          disabled : false,
-          click : false
-        })
-      };
-      // 上月展示的天数
-      for (let i = 1 ; i <= firstDayForWeek ; i++) {
-        displayDays.unshift({
-          date : prevDayNum,
-          month : currentDate.getMonth() === 0 ? 11 : currentDate.getMonth() - 1,
-          year : currentDate.getMonth() === 0 ? currentDate.getFullYear() - 1 : currentDate.getFullYear(),
-          type : 'prev',
-          hover : false,
-          disabled : true,
-          click : false
-        });
-        prevDayNum--;
-      };
-      // 下月展示的天数
-      const nextDayNum = 7 * 6 - displayDays.length;
-      for (let i = 1 ; i <= nextDayNum ; i++) {
-        displayDays.push({
-          date : i,
-          month : currentDate.getMonth() === 11 ? 0 : currentDate.getMonth() + 1,
-          year : currentDate.getMonth() === 11 ? currentDate.getFullYear() + 1 : currentDate.getFullYear(),
-          type : 'next',
-          hover : false,
-          disabled : true,
-          click : false
-        })
-      };
-      return displayDays;
-    },
     getCalendarHeader () {
       const { prefixCls , currentDate } = this.$props;
       const h = this.$createElement;
@@ -91,8 +33,70 @@ export default {
         headerProps
       )
     },
-    clickYear () {},
-    clickMonth () {}
+    getCalendarBody () {
+      const { prefixCls , currentDate } = this.$props;
+      const h = this.$createElement;
+      const calendarBodyProps = {
+        props : {
+          prefixCls : prefixCls + '-body',
+          currentDate : currentDate
+        },
+        on : {
+          select : this.onSelect
+        }
+      };
+      return h(
+        CalendarBody,
+        calendarBodyProps
+      );
+    },
+    getCalendarFooter () {
+      const { prefixCls } = this.$props;
+      const h = this.$createElement;
+      const calendarFooterProps = {
+        props : {
+          prefixCls : prefixCls + '-footer'
+        }
+      };
+      return h(
+        CalendarFooter,
+        calendarFooterProps,
+        [this.getFooter()]
+      )
+    },
+    getFooter () {
+      const { prefixCls } = this.$props;
+      const h = this.$createElement;
+      return h(
+        'span',
+        {
+          class : classNames(prefixCls + '-footer-text'),
+          on : {
+            click : this.clickToday
+          }
+        },
+        ['今天']
+      )
+    },
+    clickToday () {
+      const now = new Date();
+      this.$emit('select' , now);
+    },
+    clickYear (evt , year) {
+      evt.stopPropagation();
+      const date = new Date(this.currentDate);
+      date.setFullYear(year);
+      this.$emit('click-year' , date);
+    },
+    clickMonth (evt , month) {
+      evt.stopPropagation();
+      const date = new Date(this.currentDate);
+      date.setMonth(month);
+      this.$emit('click-month' , date);
+    },
+    onSelect (date) {
+      this.$emit('select' , date);
+    }
   },
   render () {
     const h = this.$createElement;
@@ -103,7 +107,9 @@ export default {
         class : classNames(prefixCls + '-box')
       },
       [
-        this.getCalendarHeader()
+        this.getCalendarHeader(),
+        this.getCalendarBody(),
+        this.getCalendarFooter()
       ]
     )
   }
