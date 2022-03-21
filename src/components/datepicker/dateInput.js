@@ -3,7 +3,7 @@ import { formatDate } from "../utils/date";
 export default {
   props : {
     clearable : Boolean,
-    value : Date,
+    value : [Date , String],
     prefixCls : String,
     placeholder : String,
     format : String,

@@ -17,11 +17,19 @@ export default {
   props : {
     year : [String , Number],
     month : [String , Number],
-    prefixCls : String
+    prefixCls : String,
+    currentValue : Array
   },
   data () {
     return {
-      monthMap : monthMap
+      monthMap : monthMap,
+      showPrevArrow : false,
+      showNextArrow : false
+    }
+  },
+  watch : {
+    currentValue (newVal) {
+      
     }
   },
   methods : {
@@ -34,7 +42,6 @@ export default {
         // 下一月
         month++;
       }
-      console.log(month - 1)
       this.$emit('click-month' , evt , month - 1);
     },
     clickYear (evt , dir) {

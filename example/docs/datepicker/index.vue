@@ -9,15 +9,15 @@
       <div style="margin-bottom:20px;">基础使用</div>
       <DatePicker format="YYYY-MM-DD" />
     </div>
-    <!-- <div class="inner">
+    <div class="inner">
       <div style="margin-bottom:20px;">日期范围</div>
       <RangeDatePicker />
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
 export default {
-  
+
 }
 </script>
 <style lang="less" scoped>

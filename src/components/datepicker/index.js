@@ -30,7 +30,7 @@ export default {
   },
   data () {
     const { defaultValue , value , open } = this.$props;
-    const currentDate = value || defaultValue || new Date();
+    const currentDate = value || defaultValue || '';
     const sOpen = !!open || false;
     return {
       // 日期
@@ -44,6 +44,9 @@ export default {
       this.sVisible = newVal;
     },
     value (newVal) {
+      this.currentDate = newVal;
+    },
+    defaultValue (newVal) {
       this.currentDate = newVal;
     }
   },
@@ -70,7 +73,7 @@ export default {
     const { prefixCls } = this.$props;
     const datePickerProps = {
       props : _extends({} , omit(this.$props , ['value' , 'defaultValue' , 'open']) , {
-        currentDate : this.currentDate,
+        currentDate : this.currentDate || new Date(),
         visible : this.sVisible
       }),
       on : _extends({} , this.$listeners , {
@@ -79,7 +82,7 @@ export default {
     };
     const calendarProps = {
       props : _extends({} , omit(this.$props , ['value' , 'defaultValue' , 'open' , 'clearable']) , {
-        currentDate : this.currentDate,
+        currentDate : this.currentDate || new Date(),
         prefixCls : prefixCls + '-calendar',
       }),
       on : {
