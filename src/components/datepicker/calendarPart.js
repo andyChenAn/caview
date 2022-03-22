@@ -9,8 +9,9 @@ export default {
     format : String
   },
   methods : {
-    onLeftSelect () {},
-    onRightSelect () {}
+    panelChange (dateArr) {
+      this.$emit('panelChange' , dateArr);
+    },
   },
   render () {
     const h = this.$createElement;
@@ -19,20 +20,20 @@ export default {
       props : {
         currentValue : currentValue,
         selectedValue : selectedValue,
-        prefixCls : prefixCls
+        prefixCls : prefixCls,
       },
       on : {
-        select : this.onLeftSelect
+        panelChange : this.panelChange
       }
     };
     const rightPartProps = {
       props : {
-        currentDate : currentValue[1],
+        currentValue : currentValue,
         selectedValue : selectedValue,
-        prefixCls : prefixCls
+        prefixCls : prefixCls,
       },
       on : {
-        select : this.onRightSelect
+        panelChange : this.panelChange
       }
     };
     return h(

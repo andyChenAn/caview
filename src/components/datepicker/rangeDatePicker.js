@@ -86,7 +86,10 @@ export default {
       return date;
     },
     // 清空日期
-    onClear () {}
+    onClear () {},
+    panelChange (dateArr) {
+      this.currentValue = dateArr;
+    }
   },
   render () {
     const h = this.$createElement;
@@ -135,6 +138,9 @@ export default {
         currentValue : currentValue,
         selectedValue : selectedValue,
         format : this.format
+      },
+      on : {
+        panelChange : this.panelChange
       }
     };
     return h(

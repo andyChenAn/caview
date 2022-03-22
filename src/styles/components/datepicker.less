@@ -281,12 +281,22 @@
     line-height: 1.5;
     display: inline-block;
   }
+  &-inner {
+    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+    position: relative;
+  }
   &-calendar-part-panel {
     position: relative;
+    overflow: hidden;
   }
   &-calendar-part-left {
     width: 50%;
     float: left;
+    position: relative;
+  }
+  &-calendar-part-right {
+    width: 50%;
+    float: right;
     position: relative;
   }
   &-calendar-part {
@@ -300,6 +310,7 @@
       position: absolute;
       left: 7px;
       padding: 0 5px;
+      z-index: 1;
       cursor: pointer;
       &:before {
         position: relative;
@@ -334,6 +345,7 @@
       left: 29px;
       padding: 0 5px;
       cursor: pointer;
+      z-index: 1;
       &:before {
         position: relative;
         top: -1px;
@@ -353,6 +365,7 @@
       right: 7px;
       padding: 0 5px;
       cursor: pointer;
+      z-index: 1;
       &:before {
         position: relative;
         top: -1px;
@@ -386,6 +399,7 @@
       padding: 0 5px;
       right: 29px;
       cursor: pointer;
+      z-index: 1;
       &:before {
         position: relative;
         top: -1px;
@@ -407,6 +421,47 @@
         font-weight: 500;
         color: rgba(0,0,0,0.85);
         line-height: 40px;
+      }
+    }
+    &-body {
+      padding: 8px 12px;
+      &-table {
+        text-align: center;
+        width: 100%;
+        border: 0;
+      }
+      &-th {
+        height: 30px;
+      }
+      &-day {
+        text-align: center;
+        height: 30px;
+        padding: 3px 0;
+        &-text {
+          color: rgba(0,0,0,0.65);
+          width: 24px;
+          height: 24px;
+          margin: 0 auto;
+          line-height: 24px;
+          cursor: pointer;
+          border-radius: 2px;
+          border: 1px solid transparent;
+          transition: all 0.3s;
+          &.selected {
+            background-color: #bae7ff;
+          }
+          &.current {
+            color: #1890ff;
+            border-color: #1890ff;
+            font-weight: bold;
+          }
+          &:hover {
+            background-color: #bae7ff;
+          }
+        }
+      }
+      &-text-gray {
+        color: rgba(0,0,0,0.25);
       }
     }
   }
@@ -445,19 +500,6 @@
         &:hover {
           background-color: #bae7ff;
         }
-        // &.clicked {
-        //   color: #fff;
-        //   background-color: #1890ff !important;
-        // }
-        // &.hovered {
-        //   background-color: #e6f7ff;
-        // }
-        // &.actived {
-        //   background-color: #bae7ff;
-        // }
-        // &:hover {
-        //   background-color: #e6f7ff;
-        // }
       }
     }
     &-text-gray {

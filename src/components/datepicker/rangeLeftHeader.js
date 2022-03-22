@@ -14,17 +14,36 @@ const monthMap = {
   12: 'Dec'
 };
 export default {
-  props: {
-    year: [String, Number],
-    month: [String, Number],
-    prefixCls: String,
+  props : {
+    year : [String , Number],
+    month : [String , Number],
+    prefixCls : String,
+    currentValue : Array
   },
   data() {
     return {
       monthMap: monthMap,
+      showArrow : true
     }
   },
-  methods: {
+  watch : {
+    currentValue : {
+      immediate : true,
+      handler (newVal) {
+        const first = newVal[0];
+        const last = newVal[1];
+        if (
+          (first.getFullYear() === last.getFullYear() && first.getMonth() + 1 === last.getMonth()) ||
+          (first.getFullYear() +1 === last.getFullYear() && first.getMonth() === 11 && last.getMonth() === 0)
+        ) {
+          this.showArrow = false;
+        } else {
+          this.showArrow = true;
+        }
+      }
+    }
+  },
+  methods : {
     clickMonth(evt, dir) {
       let { month } = this.$props;
       if (dir === 'prev') {
@@ -100,7 +119,7 @@ export default {
             )
           ]
         ),
-        h(
+        this.showArrow && h(
           'span',
           {
             class: classNames(prefixCls + '-next-month'),
@@ -109,7 +128,7 @@ export default {
             }
           }
         ),
-        h(
+        this.showArrow && h(
           'span',
           {
             class: classNames(prefixCls + '-next-year'),

@@ -37,6 +37,8 @@ export default {
       currentDate : currentDate,
       // 是否显示日期弹框
       sVisible : sOpen,
+      // 选中显示的日期
+      selectedDate : ''
     }
   },
   watch : {
@@ -58,6 +60,7 @@ export default {
     onSelect (date) {
       this.sVisible = false;
       this.currentDate = date;
+      this.selectedDate = date;
       this.$emit('change' , date);
     },
     onClear () {},
@@ -94,7 +97,7 @@ export default {
     const dateInputProps = {
       props : {
         clearable : this.clearable,
-        value : this.currentDate,
+        value : this.selectedDate,
         prefixCls : this.prefixCls,
         placeholder : this.placeholder,
         format : this.format,
