@@ -8,6 +8,16 @@ export default {
     separator : String,
     placeholder : Array
   },
+  data () {
+    return {
+      currentDateArr : this.value
+    }
+  },
+  watch : {
+    value (newVal) {
+      console.log(newVal , 'asdfasf')
+    }
+  },
   methods : {
     onClear () {}
   },
@@ -16,8 +26,11 @@ export default {
     const { value , prefixCls , separator , format , placeholder } = this.$props;
     const startPlaceholder = placeholder[0];
     const endPlaceholder = placeholder[1];
-    const startValue = value[0] ? formatDate(value[0], format) : '';
-    const endValue = value[1] ? formatDate(value[1] , format) : '';
+    let startValue , endValue = null;
+    if (value.length == 2) {
+      startValue = value[0] ? formatDate(value[0], format) : '';
+      endValue = value[1] ? formatDate(value[1] , format) : '';
+    };
     return h(
       'span',
       {

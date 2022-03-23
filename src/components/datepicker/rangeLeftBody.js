@@ -16,6 +16,14 @@ export default {
       const days = this.getCurrentMonthDayNum(newVal[0]);
       const weekOfFirstDay = this.getWeekOfFirstDay(newVal[0]);
       this.dayList = this.getCalendarDays(newVal[0] , days , weekOfFirstDay);
+    },
+    selectedValue (newVal) {
+      if (newVal.length === 0) {
+        this.dayList.map(item => {
+          item.selected = false;
+          return item;
+        })
+      }
     }
   },
   created () {
@@ -217,15 +225,13 @@ export default {
       return rows;
     },
     selectCalendar (evt , data) {
-      const { selectedValue } = this.$props;
+      data.selected = true;
       const date = new Date();
       const hours = date.getHours();
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
       const now = new Date(data.year , data.month , data.date , hours , minutes , seconds);
-      const selectedDateArr = JSON.parse(JSON.stringify(selectedValue));
-      selectedDateArr[0] = now;
-      this.$emit('clickPanel' , selectedDateArr);
+      this.$emit('clickPanel' , now);
     }
   },
   render () {

@@ -217,15 +217,12 @@ export default {
       return rows;
     },
     selectCalendar (evt , data) {
-      const { selectedValue } = this.$props;
       const date = new Date();
       const hours = date.getHours();
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
       const now = new Date(data.year , data.month , data.date , hours , minutes , seconds);
-      const selectedDateArr = JSON.parse(JSON.stringify(selectedValue));
-      selectedDateArr[1] = now;
-      this.$emit('clickPanel' , selectedDateArr);
+      this.$emit('clickPanel' , now);
     }
   },
   render () {

@@ -12,6 +12,11 @@ export default {
       currentHeaderValue : this.currentValue,
     }
   },
+  watch : {
+    currentValue (newVal) {
+      this.currentHeaderValue = newVal;
+    }
+  },
   methods : {
     clickYear (evt , year) {
       evt.stopPropagation();
@@ -58,7 +63,7 @@ export default {
           selectedValue : selectedValue
         },
         on : {
-          select : this.onSelect
+          clickPanel : this.clickPanel
         }
       };
       return h(
@@ -66,8 +71,8 @@ export default {
         bodyProps
       )
     },
-    onSelect (date) {
-      
+    clickPanel (date) {
+      this.$emit('clickPanel' , date);
     }
   },
   render () {

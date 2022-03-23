@@ -12,6 +12,11 @@ export default {
       currentHeaderValue : this.currentValue,
     }
   },
+  watch : {
+    currentValue (newVal) {
+      this.currentHeaderValue = newVal;
+    },
+  },
   methods : {
     getCalendarHeader () {
       const h = this.$createElement;
@@ -48,8 +53,8 @@ export default {
       this.currentHeaderValue.splice(0 , 1 , date);
       this.$emit('panelChange' , this.currentHeaderValue);
     },
-    onSelect (date) {
-      
+    clickPanel (date) {
+      this.$emit('clickPanel' , date);
     },
     getCalendarBody () {
       const h = this.$createElement;
@@ -61,7 +66,7 @@ export default {
           selectedValue : selectedValue
         },
         on : {
-          select : this.onSelect
+          clickPanel : this.clickPanel
         }
       };
       return h(

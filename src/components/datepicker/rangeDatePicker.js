@@ -50,7 +50,11 @@ export default {
       // 当前选中的日期
       selectedValue,
       // 是否显示日期弹框
-      sVisible : sOpen
+      sVisible : sOpen,
+      // 用来保存选择的日期
+      tempDate : [],
+      // 是否已经选择过一次日期
+      isSelectDate : false
     }
   },
   watch : {
@@ -64,6 +68,15 @@ export default {
     defaultValue (newVal) {
       this.currentValue = newVal;
       this.selectedValue = JSON.parse(JSON.stringify(newVal));
+    },
+    sVisible (newVal) {
+      // 当sVisible为false，重置tempDate
+      if (!newVal) {
+        this.tempDate = [];
+        if (this.selectedValue.length < 2) {
+          this.selectedValue = [];
+        }
+      }
     }
   },
   methods : {
@@ -89,6 +102,30 @@ export default {
     onClear () {},
     panelChange (dateArr) {
       this.currentValue = dateArr;
+    },
+    clickPanel (date) {
+      this.tempDate.push(date);
+      this.tempDate = this.tempDate.sort((a , b) => {
+        return a.getTime() - b.getTime();
+      });
+      this.selectedValue = this.tempDate.reduce((arr , item) => {
+        arr.push(new Date(item));
+        return arr;
+      } , []);
+      if (this.tempDate.length === 2) {
+        // 表示选好了开始时间和结束时间
+        this.currentValue = this.getCurrentValue(this.tempDate);
+        this.sVisible = false;
+        this.tempDate = [];
+      };
+    },
+    getCurrentValue (arr) {
+      const first = arr[0];
+      const last = arr[1];
+      if (first.getFullYear() === last.getFullYear() && first.getMonth() === last.getMonth()) {
+        return [first , this.getNextMonth(first)];
+      };
+      return arr;
     }
   },
   render () {
@@ -99,19 +136,22 @@ export default {
     if (currentValue.length === 0) {
       current = [new Date() , this.getNextDate(new Date())]
     };
-    if (!placeholder || placeholder.length === 0) {
-      if (selectedValue.length === 0) {
-        placeholders = ['开始时间' , '结束时间'];
-      } else {
-        selectValue = JSON.parse(JSON.stringify(selectedValue));
-      }
-    } else {
-      if (selectedValue.length === 0) {
-        placeholders = placeholder;
-      } else {
-        selectValue = JSON.parse(JSON.stringify(selectedValue));
-      }
-    }
+    // if (!placeholder || placeholder.length === 0) {
+    //   if (selectedValue.length === 2) {
+    //     this.isSelectDate = true;
+    //     selectValue = JSON.parse(JSON.stringify(selectedValue));
+    //   } else {
+    //     if (!this.isSelectDate) {
+    //       placeholders = ['开始时间' , '结束时间'];
+    //     }
+    //   }
+    // } else {
+    //   if (selectedValue.length === 0) {
+    //     placeholders = placeholder;
+    //   } else {
+    //     selectValue = JSON.parse(JSON.stringify(selectedValue));
+    //   }
+    // }
     const rangePickerProps = {
       props : _extends({} , omit(this.$props , ['defaultValue' , 'value' , 'open']) , {
         visible : this.sVisible
@@ -140,7 +180,8 @@ export default {
         format : this.format
       },
       on : {
-        panelChange : this.panelChange
+        panelChange : this.panelChange,
+        clickPanel : this.clickPanel
       }
     };
     return h(

@@ -12,6 +12,9 @@ export default {
     panelChange (dateArr) {
       this.$emit('panelChange' , dateArr);
     },
+    clickPanel (date) {
+      this.$emit('clickPanel' , date);
+    }
   },
   render () {
     const h = this.$createElement;
@@ -23,7 +26,8 @@ export default {
         prefixCls : prefixCls,
       },
       on : {
-        panelChange : this.panelChange
+        panelChange : this.panelChange,
+        clickPanel : this.clickPanel
       }
     };
     const rightPartProps = {
@@ -33,7 +37,8 @@ export default {
         prefixCls : prefixCls,
       },
       on : {
-        panelChange : this.panelChange
+        panelChange : this.panelChange,
+        clickPanel : this.clickPanel
       }
     };
     return h(
