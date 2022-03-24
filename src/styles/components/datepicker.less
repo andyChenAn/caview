@@ -198,6 +198,10 @@
         border: 1px solid transparent;
         transition: all 0.3s;
         &.selected {
+          transition: all 0.3s;
+          background-color: #bae7ff !important;
+        }
+        &.hover {
           background-color: #bae7ff;
         }
         &.current {
@@ -208,23 +212,13 @@
         &:hover {
           background-color: #bae7ff;
         }
-        // &.clicked {
-        //   color: #fff;
-        //   background-color: #1890ff !important;
-        // }
-        // &.hovered {
-        //   background-color: #e6f7ff;
-        // }
-        // &.actived {
-        //   background-color: #bae7ff;
-        // }
-        // &:hover {
-        //   background-color: #e6f7ff;
-        // }
       }
     }
     &-text-gray {
       color: rgba(0,0,0,0.25);
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
   &-calendar-footer {
@@ -260,6 +254,9 @@
     transition: all 0.3s;
     opacity: 0;
     cursor: pointer;
+    &.show {
+      opacity: 1;
+    }
   }
   &-input-box {
     border: 1px solid #d9d9d9;
@@ -458,9 +455,13 @@
           cursor: pointer;
           border-radius: 2px;
           border: 1px solid transparent;
-          transition: all 0.3s;
           &.selected {
+            transition: all 0.3s;
             background-color: #1890ff !important;
+            color: #fff;
+          }
+          &.hover {
+            background-color: #bae7ff;
           }
           &.current {
             color: #1890ff;
@@ -474,6 +475,9 @@
       }
       &-text-gray {
         color: rgba(0,0,0,0.25);
+        &:hover {
+          background-color: transparent;
+        }
       }
     }
   }
@@ -502,6 +506,11 @@
         border: 1px solid transparent;
         transition: all 0.3s;
         &.selected {
+          transition: all 0.3s;
+          background-color: #bae7ff !important;
+          color: #fff;
+        }
+        &.hover {
           background-color: #bae7ff;
         }
         &.current {

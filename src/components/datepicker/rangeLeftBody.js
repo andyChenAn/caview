@@ -1,10 +1,10 @@
 import classNames from "classnames";
-
 export default {
   props : {
     prefixCls : String,
     currentValue : Array,
-    selectedValue : Array
+    selectedValue : Array,
+    hoverValue : Array
   },
   data () {
     return {
@@ -12,26 +12,31 @@ export default {
     }
   },
   watch : {
-    currentValue (newVal) {
-      const days = this.getCurrentMonthDayNum(newVal[0]);
-      const weekOfFirstDay = this.getWeekOfFirstDay(newVal[0]);
-      this.dayList = this.getCalendarDays(newVal[0] , days , weekOfFirstDay);
+    currentValue () {
+      this.initData();
     },
     selectedValue (newVal) {
-      if (newVal.length === 0) {
-        this.dayList.map(item => {
-          item.selected = false;
-          return item;
-        })
-      }
+      this.initData();
+      // if (newVal.length === 0) {
+      //   this.dayList.map(item => {
+      //     item.selected = false;
+      //     return item;
+      //   })
+      // }
+    },
+    hoverValue () {
+      this.initData();
     }
   },
   created () {
-    const days = this.getCurrentMonthDayNum(this.currentValue[0]);
-    const weekOfFirstDay = this.getWeekOfFirstDay(this.currentValue[0]);
-    this.dayList = this.getCalendarDays(this.currentValue[0] , days , weekOfFirstDay);
+    this.initData();
   },
   methods : {
+    initData () {
+      const days = this.getCurrentMonthDayNum(this.currentValue[0]);
+      const weekOfFirstDay = this.getWeekOfFirstDay(this.currentValue[0]);
+      this.dayList = this.getCalendarDays(this.currentValue[0] , days , weekOfFirstDay);
+    },
     // 获取当月的天数
     getCurrentMonthDayNum (currentDate) {
       let date = new Date(currentDate);
@@ -71,6 +76,7 @@ export default {
           date : prevMonthDays,
           type : 'prev',
           selected : false,
+          hover : false,
           month : (currentDate.getMonth() - 1) < 0 ? 11 : (currentDate.getMonth() - 1),
           year : (currentDate.getMonth() - 1) < 0 ? currentDate.getFullYear() - 1 : currentDate.getFullYear(),
         });
@@ -84,6 +90,7 @@ export default {
         res.push({
           date : i,
           type : 'current',
+          hover : false,
           selected : false,
           month : currentDate.getMonth(),
           year : currentDate.getFullYear()
@@ -97,6 +104,60 @@ export default {
         }
         return item;
       });
+      if (this.selectedValue.length === 1) {
+        const firstValue = this.selectedValue[0];
+        let temp;
+        for (let i = 0 ; i < this.hoverValue.length ; i++) {
+          if (
+            !(this.hoverValue[i].getFullYear() === firstValue.getFullYear() && 
+              this.hoverValue[i].getMonth() === firstValue.getMonth() && 
+              this.hoverValue[i].getDate() === firstValue.getDate())
+            ) {
+            temp = this.hoverValue[i];
+          }
+        }
+        res.map(item => {
+          item.hover = false;
+          item.selected = false;
+          const date = new Date(item.year, item.month , item.date);
+          if (date.getTime() > firstValue.getTime()) {
+            item.hover = true;
+          };
+          if (firstValue.getFullYear() === item.year && firstValue.getMonth() === item.month && firstValue.getDate() === item.date && item.type === 'current') {
+            item.selected = true;
+          };
+          if (temp && temp.getFullYear() === item.year && temp.getMonth() === item.month && temp.getDate() === item.date && item.type === 'current') {
+            item.selected = true;
+          };
+          return item;
+        })
+      };
+      if (this.selectedValue.length === 2) {
+        res.map(item => {
+          item.hover = false;
+          item.selected = false;
+          const date = new Date(item.year, item.month , item.date);
+          if (date.getTime() > this.selectedValue[0].getTime() && date.getTime() < this.selectedValue[1].getTime()) {
+            item.hover = true;
+          };
+          this.selectedValue.map(v => {
+            if (v.getFullYear() === item.year && v.getMonth() === item.month && v.getDate() === item.date && item.type === 'current') {
+              item.selected = true;
+            }
+          })
+          return item;
+        })
+      }
+      if (this.hoverValue.length === 2) {
+        res.map(item => {
+          item.hover = false;
+          const date = new Date(item.year , item.month , item.date);
+          if (date.getTime() > this.hoverValue[0].getTime() && date.getTime() < this.hoverValue[1].getTime() && item.type === 'current') {
+            item.hover = true;
+          };
+          return item;
+        });
+      }
       return res;
     },
     getNextMonthDays (currentDate , days) {
@@ -105,6 +166,7 @@ export default {
         res.push({
           date : i,
           type : 'next',
+          hover : false,
           selected : false,
           month : (currentDate.getMonth() + 1) > 11 ? 0 : (currentDate.getMonth() + 1),
           year : (currentDate.getMonth() + 1) > 11 ? currentDate.getFullYear() + 1 : currentDate.getFullYear(),
@@ -192,9 +254,11 @@ export default {
           },
           this.dayList.slice(i * 7 , (i + 1) * 7).map(day => {
             const dayProps = {
-              class : classNames(prefixCls + '-day-text' , this.isCurrentDate(day) ? 'current' : '' , day.selected ? 'selected' : '' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : ''),
+              class : classNames(prefixCls + '-day-text' , this.isCurrentDate(day) ? 'current' : '' , day.selected ? 'selected' : '' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : '' , day.hover ? 'hover' : ''),
               on : {
-                click : evt => this.selectCalendar(evt , day)
+                click : evt => this.selectCalendar(evt , day),
+                mouseenter : evt => this.handleMouseenter(evt , day),
+                mouseleave : evt => this.handleMouseleave(evt , day)
               }
             };
             return h(
@@ -224,14 +288,47 @@ export default {
       };
       return rows;
     },
+    handleMouseenter (evt , data) {
+      const hoverDate = new Date(data.year , data.month , data.date);
+      // 当鼠标移动的时候，只会和第一个选中的日期去比较范围
+      if (this.selectedValue.length === 1) {
+        let rangeDate = [];
+        if (hoverDate.getTime() > this.selectedValue[0].getTime()) {
+          rangeDate = [this.selectedValue[0] , hoverDate];
+        } else {
+          rangeDate = [hoverDate , this.selectedValue[0]];
+        };
+        this.dayList.map(item => {
+          item.hover = false;
+          const date = new Date(item.year , item.month , item.date);
+          if (date.getTime() > rangeDate[0].getTime() && date.getTime() < rangeDate[1].getTime() && item.type === 'current') {
+            item.hover = true;
+          };
+          return item;
+        });
+        this.$emit('panelHover' , rangeDate);
+      }
+    },
+    handleMouseleave (evt , data) {},
     selectCalendar (evt , data) {
-      data.selected = true;
       const date = new Date();
       const hours = date.getHours();
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
       const now = new Date(data.year , data.month , data.date , hours , minutes , seconds);
       this.$emit('clickPanel' , now);
+      this.dayList.map(item => {
+        item.hover = false;
+        item.selected = false;
+        const date = new Date(item.year , item.month , item.date);
+        if (date.getTime() > now.getTime() && item.type === 'current') {
+          item.hover = true;
+        };
+        if (data.year === item.year && data.month === item.month && data.date === item.date && item.type === 'current') {
+          item.selected = true;
+        };
+        return item;
+      });
     }
   },
   render () {

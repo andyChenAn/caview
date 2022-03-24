@@ -10,26 +10,40 @@ export default {
   },
   data () {
     return {
-      currentDateArr : this.value
+      currentSelectedValue : [],
+      showClearIcon : false
     }
   },
   watch : {
     value (newVal) {
-      console.log(newVal , 'asdfasf')
+      if (newVal.length === 2) {
+        this.currentSelectedValue = newVal;
+      }
     }
   },
   methods : {
-    onClear () {}
+    onClear (evt) {
+      evt.stopPropagation();
+      this.currentSelectedValue = [];
+      this.$emit('clear');
+    },
+    handleMouseenter () {
+      this.showClearIcon = true;
+    },
+    handleMouseleave () {
+      this.showClearIcon = false;
+    }
   },
   render () {
     const h = this.$createElement;
-    const { value , prefixCls , separator , format , placeholder } = this.$props;
+    const { prefixCls , separator , format , placeholder } = this.$props;
     const startPlaceholder = placeholder[0];
     const endPlaceholder = placeholder[1];
     let startValue , endValue = null;
-    if (value.length == 2) {
-      startValue = value[0] ? formatDate(value[0], format) : '';
-      endValue = value[1] ? formatDate(value[1] , format) : '';
+    // 当选择了两个日期的时候，才会显示在输入框中
+    if (this.currentSelectedValue.length == 2) {
+      startValue = this.currentSelectedValue[0] ? formatDate(this.currentSelectedValue[0], format) : '';
+      endValue = this.currentSelectedValue[1] ? formatDate(this.currentSelectedValue[1] , format) : '';
     };
     return h(
       'span',
@@ -40,7 +54,11 @@ export default {
         h(
           'span',
           {
-            class : classNames(prefixCls + '-input-box')
+            class : classNames(prefixCls + '-input-box'),
+            on : {
+              mouseenter : this.handleMouseenter,
+              mouseleave : this.handleMouseleave
+            }
           },
           [
             h(
@@ -79,9 +97,9 @@ export default {
             startValue && endValue && h(
               'i',
               {
-                class : classNames('iconfont icon-error' , prefixCls + '-clearable'),
+                class : classNames('iconfont icon-error' , prefixCls + '-clearable' , this.showClearIcon ? 'show' : ''),
                 on : {
-                  click : this.onClear
+                  click : evt => this.onClear(evt)
                 }
               }
             )

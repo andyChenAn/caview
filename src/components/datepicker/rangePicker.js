@@ -4,7 +4,6 @@ export default {
     prefixCls : String,
     format : String,
     clearable : Boolean,
-    placeholder : String,
     currentDate : Date,
     visible : Boolean,
   },

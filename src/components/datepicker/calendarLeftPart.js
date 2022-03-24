@@ -5,6 +5,7 @@ export default {
   props : {
     currentValue : Array,
     selectedValue : Array,
+    hoverValue : Array,
     prefixCls : String
   },
   data () {
@@ -56,17 +57,22 @@ export default {
     clickPanel (date) {
       this.$emit('clickPanel' , date);
     },
+    panelHover (hoverDate) {
+      this.$emit('panelHover' , hoverDate);
+    },
     getCalendarBody () {
       const h = this.$createElement;
-      const { prefixCls , currentValue , selectedValue } = this.$props;
+      const { prefixCls , currentValue , selectedValue , hoverValue } = this.$props;
       const bodyProps = {
         props : {
           prefixCls : classNames(prefixCls + '-body'),
           currentValue : currentValue,
-          selectedValue : selectedValue
+          selectedValue : selectedValue,
+          hoverValue : hoverValue
         },
         on : {
-          clickPanel : this.clickPanel
+          clickPanel : this.clickPanel,
+          panelHover : this.panelHover
         }
       };
       return h(

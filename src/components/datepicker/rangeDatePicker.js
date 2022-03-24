@@ -34,13 +34,16 @@ export default {
       default : false
     },
     placeholder : {
-      type : [String , Array],
-      default : ''
+      type : Array,
+      default () {
+        return ['开始时间' , '结束时间']
+      }
     }
   },
   data () {
     const { defaultValue , value , open } = this.$props;
     const now = new Date();
+    now.setDate(1);
     const selectedValue = defaultValue.length > 0 ? value.length > 0 ? value : defaultValue : value.length > 0 ? value : [];
     const currentValue = selectedValue.length > 0 ? [selectedValue[0] , this.getNextMonth(selectedValue[0])] : [now , this.getNextMonth(now)];
     const sOpen = !!open || false;
@@ -54,7 +57,11 @@ export default {
       // 用来保存选择的日期
       tempDate : [],
       // 是否已经选择过一次日期
-      isSelectDate : false
+      isSelectDate : false,
+      // 用户hover时的日期
+      hoverValue : [],
+      // 上一次选中的日期
+      prevSelectedValue : []
     }
   },
   watch : {
@@ -70,12 +77,16 @@ export default {
       this.selectedValue = JSON.parse(JSON.stringify(newVal));
     },
     sVisible (newVal) {
-      // 当sVisible为false，重置tempDate
+      // 当sVisible为false，重置数据
       if (!newVal) {
         this.tempDate = [];
         if (this.selectedValue.length < 2) {
           this.selectedValue = [];
+        };
+        if (this.prevSelectedValue.length === 2) {
+          this.selectedValue = this.prevSelectedValue;
         }
+        this.hoverValue = [];
       }
     }
   },
@@ -99,9 +110,16 @@ export default {
       return date;
     },
     // 清空日期
-    onClear () {},
+    onClear () {
+      this.selectedValue = [];
+      this.hoverValue = [];
+      this.prevSelectedValue = [];
+    },
     panelChange (dateArr) {
       this.currentValue = dateArr;
+    },
+    panelHover (hoverDate) {
+      this.hoverValue = hoverDate;
     },
     clickPanel (date) {
       this.tempDate.push(date);
@@ -113,6 +131,7 @@ export default {
         return arr;
       } , []);
       if (this.tempDate.length === 2) {
+        this.prevSelectedValue = [this.selectedValue[0] , this.selectedValue[1]];
         // 表示选好了开始时间和结束时间
         this.currentValue = this.getCurrentValue(this.tempDate);
         this.sVisible = false;
@@ -131,27 +150,7 @@ export default {
   render () {
     const h = this.$createElement;
     const { prefixCls , placeholder } = this.$props;
-    const { currentValue , selectedValue } = this.$data;
-    let current = [] , selectValue = [] , placeholders = [];
-    if (currentValue.length === 0) {
-      current = [new Date() , this.getNextDate(new Date())]
-    };
-    // if (!placeholder || placeholder.length === 0) {
-    //   if (selectedValue.length === 2) {
-    //     this.isSelectDate = true;
-    //     selectValue = JSON.parse(JSON.stringify(selectedValue));
-    //   } else {
-    //     if (!this.isSelectDate) {
-    //       placeholders = ['开始时间' , '结束时间'];
-    //     }
-    //   }
-    // } else {
-    //   if (selectedValue.length === 0) {
-    //     placeholders = placeholder;
-    //   } else {
-    //     selectValue = JSON.parse(JSON.stringify(selectedValue));
-    //   }
-    // }
+    const { currentValue , selectedValue , hoverValue } = this.$data;
     const rangePickerProps = {
       props : _extends({} , omit(this.$props , ['defaultValue' , 'value' , 'open']) , {
         visible : this.sVisible
@@ -162,10 +161,10 @@ export default {
     };
     const rangeInputProps = {
       props : {
-        value : selectValue,
+        value : selectedValue,
         prefixCls : prefixCls,
         format : this.format,
-        placeholder : placeholders,
+        placeholder : placeholder,
         separator : this.separator
       },
       on : {
@@ -177,11 +176,13 @@ export default {
         prefixCls : prefixCls + '-calendar-part',
         currentValue : currentValue,
         selectedValue : selectedValue,
+        hoverValue : hoverValue,
         format : this.format
       },
       on : {
         panelChange : this.panelChange,
-        clickPanel : this.clickPanel
+        clickPanel : this.clickPanel,
+        panelHover : this.panelHover
       }
     };
     return h(
