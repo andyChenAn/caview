@@ -137,7 +137,10 @@ export default {
           item.hover = false;
           item.selected = false;
           const date = new Date(item.year, item.month , item.date);
-          if (date.getTime() > this.selectedValue[0].getTime() && date.getTime() < this.selectedValue[1].getTime()) {
+          if (
+            date.getTime() > this.selectedValue[0].getTime() && 
+            date.getTime() < this.selectedValue[1].getTime()
+          ) {
             item.hover = true;
           };
           this.selectedValue.map(v => {
@@ -151,10 +154,14 @@ export default {
       if (this.hoverValue.length === 2) {
         res.map(item => {
           item.hover = false;
-          const date = new Date(item.year , item.month , item.date);
-          if (date.getTime() > this.hoverValue[0].getTime() && date.getTime() < this.hoverValue[1].getTime() && item.type === 'current') {
+          const date = new Date(item.year, item.month , item.date);
+          if (
+            date.getTime() > this.hoverValue[0].getTime() && 
+            date.getTime() < this.hoverValue[1].getTime() &&
+            item.type === 'current'
+          ) {
             item.hover = true;
-          };
+          }
           return item;
         });
       }
@@ -254,7 +261,7 @@ export default {
           },
           this.dayList.slice(i * 7 , (i + 1) * 7).map(day => {
             const dayProps = {
-              class : classNames(prefixCls + '-day-text' , this.isCurrentDate(day) ? 'current' : '' , day.selected ? 'selected' : '' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : '' , day.hover ? 'hover' : ''),
+              class : classNames(prefixCls + '-day-text' , this.isCurrentDate(day) ? 'current' : '' , day.selected ? 'selected' : '' , day.type === 'prev' || day.type === 'next' ? prefixCls + '-text-gray' : ''),
               on : {
                 click : evt => this.selectCalendar(evt , day),
                 mouseenter : evt => this.handleMouseenter(evt , day),
@@ -271,7 +278,7 @@ export default {
                 h(
                   'div',
                   {
-                    class : classNames(prefixCls + '-day-box')
+                    class : classNames(prefixCls + '-day-box' , day.hover ? 'hover' : '')
                   },
                   [
                     h(
@@ -289,7 +296,7 @@ export default {
       return rows;
     },
     handleMouseenter (evt , data) {
-      const hoverDate = new Date(data.year , data.month , data.date);
+      let hoverDate = new Date(data.year , data.month , data.date);
       // 当鼠标移动的时候，只会和第一个选中的日期去比较范围
       if (this.selectedValue.length === 1) {
         let rangeDate = [];
@@ -318,12 +325,7 @@ export default {
       const now = new Date(data.year , data.month , data.date , hours , minutes , seconds);
       this.$emit('clickPanel' , now);
       this.dayList.map(item => {
-        item.hover = false;
         item.selected = false;
-        const date = new Date(item.year , item.month , item.date);
-        if (date.getTime() > now.getTime() && item.type === 'current') {
-          item.hover = true;
-        };
         if (data.year === item.year && data.month === item.month && data.date === item.date && item.type === 'current') {
           item.selected = true;
         };
