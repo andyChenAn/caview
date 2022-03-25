@@ -11,13 +11,17 @@
     </div>
     <div class="inner">
       <div style="margin-bottom:20px;">日期范围</div>
-      <RangeDatePicker />
+      <RangeDatePicker @change="handleChange" />
     </div>
   </div>
 </template>
 <script>
 export default {
-
+  methods : {
+    handleChange (date) {
+      console.log(date)
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

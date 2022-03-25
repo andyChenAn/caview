@@ -197,10 +197,6 @@
         border-radius: 2px;
         border: 1px solid transparent;
         transition: all 0.3s;
-        &.selected {
-          transition: all 0.3s;
-          background-color: #bae7ff !important;
-        }
         &.hover {
           background-color: #bae7ff;
         }
@@ -208,6 +204,10 @@
           color: #1890ff;
           border-color: #1890ff;
           font-weight: bold;
+        }
+        &.selected {
+          transition: all 0.3s;
+          background-color: #bae7ff !important;
         }
         &:hover {
           background-color: #bae7ff;
@@ -460,11 +460,6 @@
           cursor: pointer;
           border-radius: 2px;
           border: 1px solid transparent;
-          &.selected {
-            transition: all 0.3s;
-            background-color: #1890ff !important;
-            color: #fff;
-          }
           &.hover {
             background-color: #bae7ff;
           }
@@ -472,6 +467,11 @@
             color: #1890ff;
             border-color: #1890ff;
             font-weight: bold;
+          }
+          &.selected {
+            transition: all 0.3s;
+            background-color: #1890ff !important;
+            color: #fff;
           }
           &:hover {
             background-color: #bae7ff;
@@ -515,15 +515,15 @@
         border-radius: 2px;
         border: 1px solid transparent;
         transition: all 0.3s;
-        &.selected {
-          transition: all 0.3s;
-          background-color: #bae7ff !important;
-          color: #fff;
-        }
         &.current {
           color: #1890ff;
           border-color: #1890ff;
           font-weight: bold;
+        }
+        &.selected {
+          transition: all 0.3s;
+          background-color: #bae7ff !important;
+          color: #fff;
         }
         &:hover {
           background-color: #bae7ff;

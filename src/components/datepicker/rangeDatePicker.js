@@ -136,6 +136,7 @@ export default {
         this.currentValue = this.getCurrentValue(this.tempDate);
         this.sVisible = false;
         this.tempDate = [];
+        this.$emit('change' , this.selectedValue);
       };
     },
     getCurrentValue (arr) {

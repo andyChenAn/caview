@@ -13,7 +13,7 @@ export default {
     value : Date,
     clearable : {
       type : Boolean,
-      default : false
+      default : true
     },
     placeholder : {
       type : String,
@@ -63,7 +63,10 @@ export default {
       this.selectedDate = date;
       this.$emit('change' , date);
     },
-    onClear () {},
+    onClear () {
+      this.selectedDate = '';
+      this.currentDate = '';
+    },
     clickYear (date) {
       this.currentDate = date;
     },

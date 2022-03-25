@@ -15,14 +15,8 @@ export default {
     currentValue () {
       this.initData();
     },
-    selectedValue (newVal) {
+    selectedValue () {
       this.initData();
-      // if (newVal.length === 0) {
-      //   this.dayList.map(item => {
-      //     item.selected = false;
-      //     return item;
-      //   })
-      // }
     },
     hoverValue () {
       this.initData();
@@ -137,9 +131,13 @@ export default {
           item.hover = false;
           item.selected = false;
           const date = new Date(item.year, item.month , item.date);
+          let selectDate1 = this.selectedValue[0];
+          let selectDate2 = this.selectedValue[1];
+          selectDate1 = new Date(selectDate1.getFullYear() , selectDate1.getMonth() , selectDate1.getDate());
+          selectDate2 = new Date(selectDate2.getFullYear() , selectDate2.getMonth() , selectDate2.getDate());
           if (
-            date.getTime() > this.selectedValue[0].getTime() && 
-            date.getTime() < this.selectedValue[1].getTime()
+            date.getTime() > selectDate1.getTime() && 
+            date.getTime() < selectDate2.getTime()
           ) {
             item.hover = true;
           };
@@ -155,9 +153,13 @@ export default {
         res.map(item => {
           item.hover = false;
           const date = new Date(item.year, item.month , item.date);
+          let hoverDate1 = this.hoverValue[0];
+          let hoverDate2 = this.hoverValue[1];
+          hoverDate1 = new Date(hoverDate1.getFullYear() , hoverDate1.getMonth() , hoverDate1.getDate());
+          hoverDate2 = new Date(hoverDate2.getFullYear() , hoverDate2.getMonth() , hoverDate2.getDate());
           if (
-            date.getTime() > this.hoverValue[0].getTime() && 
-            date.getTime() < this.hoverValue[1].getTime() &&
+            date.getTime() > hoverDate1.getTime() &&
+            date.getTime() < hoverDate2.getTime() &&
             item.type === 'current'
           ) {
             item.hover = true;
@@ -305,14 +307,14 @@ export default {
         } else {
           rangeDate = [hoverDate , this.selectedValue[0]];
         };
-        this.dayList.map(item => {
-          item.hover = false;
-          const date = new Date(item.year , item.month , item.date);
-          if (date.getTime() > rangeDate[0].getTime() && date.getTime() < rangeDate[1].getTime() && item.type === 'current') {
-            item.hover = true;
-          };
-          return item;
-        });
+        // this.dayList.map(item => {
+        //   item.hover = false;
+        //   const date = new Date(item.year , item.month , item.date);
+        //   if (date.getTime() > rangeDate[0].getTime() && date.getTime() < rangeDate[1].getTime() && item.type === 'current') {
+        //     item.hover = true;
+        //   };
+        //   return item;
+        // });
         this.$emit('panelHover' , rangeDate);
       }
     },

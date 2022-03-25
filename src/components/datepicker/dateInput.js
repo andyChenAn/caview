@@ -8,6 +8,12 @@ export default {
     placeholder : String,
     format : String,
   },
+  methods : {
+    onClear (evt) {
+      evt.stopPropagation();
+      this.$emit('clear')
+    }
+  },
   render () {
     const h = this.$createElement;
     const { prefixCls , placeholder , value , format , clearable } = this.$props;
@@ -41,7 +47,7 @@ export default {
           {
             class : classNames('iconfont icon-error' , prefixCls + '-clearable'),
             on : {
-              click : this.onClear
+              click : evt => this.onClear(evt)
             }
           }
         )
