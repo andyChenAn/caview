@@ -31,6 +31,7 @@ import Checkbox from './components/checkbox';
 import CheckboxGroup from './components/checkbox/checkboxGroup';
 import DatePicker from './components/datepicker';
 import RangeDatePicker from './components/datepicker/rangeDatePicker';
+import TimePicker from './components/timepicker';
 const components = {
   Message,
   Notification,
@@ -64,7 +65,8 @@ const components = {
   Checkbox,
   CheckboxGroup,
   DatePicker,
-  RangeDatePicker
+  RangeDatePicker,
+  TimePicker
 }
 const caview = {
   ...components

@@ -119,6 +119,10 @@ export default [
       {
         name : 'DatePicker 日期选择器',
         path : '/datepicker'
+      },
+      {
+        name : 'TimePicker 时间选择器',
+        path : '/timepicker'
       }
     ]
   }

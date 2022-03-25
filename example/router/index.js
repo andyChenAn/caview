@@ -97,6 +97,10 @@ const routes = [
   {
     path : '/datepicker',
     component : () => import('@example/docs/datepicker')
+  },
+  {
+    path : '/timepicker',
+    component : () => import('@example/docs/timepicker')
   }
 ];
 const router = new VueRouter({
