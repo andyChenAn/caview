@@ -1,3 +1,6 @@
+import TimePicker from './timepicker';
+import omit from 'omit.js';
+import _extends from '@babel/runtime/helpers/extends';
 export default {
   props : {
     prefixCls : {
@@ -28,6 +31,14 @@ export default {
   },
   render () {
     const h = this.$createElement;
-    
+    const timePickerProps = {
+      props : _extends({} , omit(this.$props , ['defaultValue' , 'value' , 'open']) , {
+        currentDate : this.currentDate
+      })
+    }
+    return h(
+      TimePicker,
+      timePickerProps
+    )
   }
 }
