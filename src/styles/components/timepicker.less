@@ -48,4 +48,41 @@
       opacity: 1;
     }
   }
+  &-panel {
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  &-select {
+    float: left;
+    width: 56px;
+    max-height: 192px;
+    overflow: hidden;
+    border-left: 1px solid #d9d9d9;
+    &:first-child {
+      border-left: none;
+    }
+    &:hover {
+      overflow: auto;
+    }
+    & > ul {
+      padding-bottom: 160px;
+    }
+    &-list {
+      height: 32px;
+      width: 100%;
+      line-height: 32px;
+      padding-left: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      &:hover {
+        background-color: #bae7ff;
+      }
+    }
+  }
+  &-inner {
+    position: relative;
+    -webkit-box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  }
 }

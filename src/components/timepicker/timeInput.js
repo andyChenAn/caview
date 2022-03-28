@@ -7,15 +7,6 @@ export default {
     prefixCls : String,
     format : String
   },
-  // computed : {
-  //   currentTime () {
-  //     const hours = this.currentDate.getHours();
-  //     const minutes = this.currentDate.getMinutes();
-  //     const seconds = this.currentDate.getSeconds();
-  //     const len = this.format.split(':').length;
-  //     return [hours , minutes , seconds].slice(0 , len).join(':');
-  //   }
-  // },
   methods : {
     handleInput (evt) {
       this.$emit('input' , evt.target.value.trim())

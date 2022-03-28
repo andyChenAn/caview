@@ -85,7 +85,8 @@ export default {
     const timePanelProps = {
       props : {
         currentDate : this.currentDate,
-        prefixCls : prefixCls
+        prefixCls : prefixCls,
+        format : this.format
       }
     };
     const timeInputProps = {
