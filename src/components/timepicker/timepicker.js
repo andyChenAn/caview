@@ -3,10 +3,8 @@ export default {
   props : {
     prefixCls : String,
     format : String,
-    clearable : Boolean,
-    placeholder : String,
     currentDate : Date,
-    visible : Boolean,
+    visible : Boolean
   },
   methods : {
     popupVisibleChange (visible) {

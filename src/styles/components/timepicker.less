@@ -1,0 +1,51 @@
+.ca-time-picker {
+  display: inline-block;
+  color: rgba(0,0,0,0.65);
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 1.5;
+  position: relative;
+  &-input {
+    outline: none;
+    height: 32px;
+    width: 100%;
+    padding: 4px 11px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    line-height: 1.5;
+    background-color: #fff;
+    color: rgba(0,0,0,.65);
+  }
+  &-time-icon {
+    position: absolute;
+    top: 50%;
+    right: 11px;
+    line-height: 14px;
+    width: 14px;
+    height: 14px;
+    transform: translateY(-50%);
+    transition: all 0.3s;
+    user-select: none;
+    opacity: 1;
+    cursor: pointer;
+    &.hide {
+      opacity: 0;
+    }
+  }
+  &-clear-icon {
+    position: absolute;
+    color: #999;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    user-select: none;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 11px;
+    opacity: 0;
+    cursor: pointer;
+    &.show {
+      opacity: 1;
+    }
+  }
+}

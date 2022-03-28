@@ -7,13 +7,17 @@
     <div class="title2 mb15">代码演示</div>
     <div class="inner">
       <div style="margin-bottom:20px">基本用法</div>
-      <TimePicker />
+      <TimePicker @change="handleChange" />
     </div>
   </div>
 </template>
 <script>
 export default {
-
+  methods : {
+    handleChange (value) {
+      console.log(value)
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
