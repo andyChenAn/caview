@@ -1,5 +1,4 @@
 import classNames from "classnames";
-
 export default {
   props : {
     placeholder : String,
@@ -10,6 +9,10 @@ export default {
   methods : {
     handleInput (evt) {
       this.$emit('input' , evt.target.value.trim())
+    },
+    onClear (evt) {
+      evt.stopPropagation();
+      this.$emit('clear')
     }
   },
   render () {
@@ -45,7 +48,10 @@ export default {
         h(
           'i',
           {
-            class : classNames('iconfont icon-error' , prefixCls + '-clear-icon' , value ? 'show' : '')
+            class : classNames('iconfont icon-error' , prefixCls + '-clear-icon' , value ? 'show' : ''),
+            on : {
+              click : this.onClear
+            }
           }
         )
       ]
